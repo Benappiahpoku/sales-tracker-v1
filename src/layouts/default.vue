@@ -3,8 +3,14 @@
     <!-- Network status indicator for Ghana's intermittent connectivity -->
     <OfflineIndicator v-if="!networkInfo.isOnline" />
 
-  
-    <Navigation />
+
+    <!-- ===== App Header ===== -->
+    <AppHeader :currentPage="currentPage" @openSidebar="sidebarOpen = true" />
+
+    <!-- ===== Navigation Sidebar ===== -->
+    <NavigationSidebar :open="sidebarOpen" @close="sidebarOpen = false" @navigate="handleNavigate"
+      @upgrade="handleUpgrade" />
+
 
     <!-- Main Content -->
     <main class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
@@ -25,6 +31,15 @@
 
 <script setup lang="ts">
 
+// ===== Types & Interfaces =====
+/**
+ * Route meta type definition to ensure proper typing
+ */
+interface RouteMeta {
+  title?: string
+}
+
+
 
   //== To Always See and Edit Donation Control ==//
   // const showDonation = ref(true)
@@ -34,11 +49,48 @@
 
  // ===== File-Level Imports =====
   import { useNetworkStatus } from '@/composables/useNetworkStatus'
-  import { ref } from 'vue'
+import { ref, computed } from 'vue'
+import { useRouter, useRoute } from 'vue-router'
   import OfflineIndicator from '@/components/base/OfflineIndicator.vue'
-  import Navigation from '@/components/common/Navigation.vue'
   import Footer from '@/components/common/Footer.vue'
   import Donation from '@/components/donation/Donation.vue'
+  import AppHeader from '@/components/base/AppHeader.vue'
+  import NavigationSidebar from '@/components/common/NavigationSidebar.vue'
+
+
+
+
+const sidebarOpen = ref(false)
+
+// Dynamically get current page name from route meta.title
+
+const route = useRoute()
+const router = useRouter()
+
+// Properly typed computed ref for currentPage
+const currentPage = computed(() => {
+  const meta = route.meta as RouteMeta
+  return meta.title || 'Dashboard'
+})
+
+
+// ===== Navigation Handlers =====
+/**
+ * Handles navigation from the sidebar.
+ * Navigates to the given route using Vue Router.
+ * @param routePath - The route path to navigate to (e.g., '/dashboard')
+ */
+function handleNavigate(routePath: string) {
+  // Only navigate if not already on the target route
+  if (router.currentRoute.value.path !== routePath) {
+    router.push(routePath)
+  }
+  sidebarOpen.value = false // Always close sidebar after navigation
+}
+
+function handleUpgrade() {
+  // Show upgrade modal or redirect
+}
 
   // ===== Constants & Config =====
   // Keys for localStorage to track donation modal state

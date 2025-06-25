@@ -1,6 +1,6 @@
 <!--
-  StockAdjustmentForm.vue
-  Stratonea/BizPoint - Form for adding/adjusting stock.
+  CustomerForm.vue
+  Stratonea/BizPoint - Form for adding/editing a customer.
   - Mobile-first, Ghana-optimized, offline-friendly
   - Uses Tailwind utility classes for styling
   - Follows Stratonea guidelines (see copilot-instructions.md)
@@ -12,75 +12,73 @@
   <form
     class="bg-white rounded-lg shadow-md p-4 max-w-md mx-auto my-4 flex flex-col gap-4"
     @submit.prevent="onSubmit"
-    aria-label="Stock Adjustment Form"
+    aria-label="Customer Form"
     autocomplete="off"
   >
-    <!-- Product Name (read-only or select) -->
+    <!-- Customer Name -->
     <div>
-      <label for="product-name" class="block text-sm font-medium text-gray-700 mb-1">
-        Product
+      <label for="customer-name" class="block text-sm font-medium text-gray-700 mb-1">
+        Customer Name
       </label>
       <input
-        id="product-name"
+        id="customer-name"
         type="text"
-        v-model="form.productName"
-        readonly
-        class="block w-full px-4 py-3 rounded-lg border border-gray-300 bg-gray-100 text-base shadow-sm min-h-[48px]"
-        aria-label="Product Name"
+        v-model="form.name"
+        required
+        class="block w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-primary focus:border-primary text-base bg-white shadow-sm min-h-[48px]"
+        placeholder="Enter customer name"
+        autocomplete="off"
+        aria-label="Customer Name"
       />
     </div>
 
-    <!-- Adjustment Type -->
+    <!-- Phone -->
     <div>
-      <label for="adjustment-type" class="block text-sm font-medium text-gray-700 mb-1">
-        Adjustment Type
-      </label>
-      <select
-        id="adjustment-type"
-        v-model="form.type"
-        required
-        class="block w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-primary focus:border-primary text-base bg-white shadow-sm min-h-[48px]"
-        aria-label="Adjustment Type"
-      >
-        <option value="" disabled>Select type</option>
-        <option value="restock">Restock</option>
-        <option value="remove">Remove</option>
-        <option value="correction">Correction</option>
-      </select>
-    </div>
-
-    <!-- Quantity -->
-    <div>
-      <label for="adjustment-qty" class="block text-sm font-medium text-gray-700 mb-1">
-        Quantity
+      <label for="customer-phone" class="block text-sm font-medium text-gray-700 mb-1">
+        Phone Number
       </label>
       <input
-        id="adjustment-qty"
-        type="number"
-        v-model.number="form.quantity"
-        min="1"
-        step="1"
+        id="customer-phone"
+        type="tel"
+        v-model="form.phone"
         required
+        pattern="^0\d{9}$"
         class="block w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-primary focus:border-primary text-base bg-white shadow-sm min-h-[48px]"
-        placeholder="Enter quantity"
+        placeholder="e.g. 024 123 4567"
         autocomplete="off"
-        aria-label="Quantity"
+        aria-label="Phone Number"
       />
     </div>
 
-    <!-- Reason (optional) -->
+    <!-- Email -->
     <div>
-      <label for="adjustment-reason" class="block text-sm font-medium text-gray-700 mb-1">
-        Reason (optional)
+      <label for="customer-email" class="block text-sm font-medium text-gray-700 mb-1">
+        Email (optional)
       </label>
       <input
-        id="adjustment-reason"
-        type="text"
-        v-model="form.reason"
+        id="customer-email"
+        type="email"
+        v-model="form.email"
         class="block w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-primary focus:border-primary text-base bg-white shadow-sm min-h-[48px]"
-        placeholder="e.g. Damaged, Expired, Correction"
+        placeholder="Enter email address"
         autocomplete="off"
-        aria-label="Reason"
+        aria-label="Email"
+      />
+    </div>
+
+    <!-- Location -->
+    <div>
+      <label for="customer-location" class="block text-sm font-medium text-gray-700 mb-1">
+        Location (optional)
+      </label>
+      <input
+        id="customer-location"
+        type="text"
+        v-model="form.location"
+        class="block w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-primary focus:border-primary text-base bg-white shadow-sm min-h-[48px]"
+        placeholder="e.g. Kumasi"
+        autocomplete="off"
+        aria-label="Location"
       />
     </div>
 
@@ -92,7 +90,7 @@
       <button
         type="submit"
         class="flex-1 bg-primary text-white font-bold py-3 rounded-lg shadow min-h-[48px] hover:bg-primary-dark transition-colors"
-        aria-label="Save Adjustment"
+        aria-label="Save Customer"
       >
         Save
       </button>
@@ -114,28 +112,28 @@ import { reactive } from 'vue'
 
 // ===== Types & Interfaces =====
 /**
- * Props for StockAdjustmentForm
- * - initial: StockAdjustmentFormData (optional, for editing)
+ * Props for CustomerForm
+ * - initial: CustomerFormData (optional, for editing)
  * - error: string (optional error message)
  */
-interface StockAdjustmentFormData {
-  productName: string
-  type: 'restock' | 'remove' | 'correction' | ''
-  quantity: number
-  reason: string
+interface CustomerFormData {
+  name: string
+  phone: string
+  email: string
+  location: string
 }
 
 const props = withDefaults(
   defineProps<{
-    initial?: StockAdjustmentFormData
+    initial?: CustomerFormData
     error?: string
   }>(),
   {
     initial: () => ({
-      productName: 'Sample Product',
-      type: '',
-      quantity: 1,
-      reason: ''
+      name: '',
+      phone: '',
+      email: '',
+      location: ''
     }),
     error: ''
   }
@@ -146,7 +144,7 @@ const props = withDefaults(
  * Emits events to parent for save/cancel actions.
  */
 const emit = defineEmits<{
-  (e: 'save', data: StockAdjustmentFormData): void
+  (e: 'save', data: CustomerFormData): void
   (e: 'cancel'): void
 }>()
 
@@ -154,7 +152,7 @@ const emit = defineEmits<{
 /**
  * Local reactive form state, initialized from props.initial.
  */
-const form = reactive<StockAdjustmentFormData>({ ...props.initial })
+const form = reactive<CustomerFormData>({ ...props.initial })
 
 /**
  * Handles form submission and emits save event.

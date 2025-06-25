@@ -20,6 +20,46 @@ const routes: RouteRecordRaw[] = [
         path: 'contact',
         name: 'contact',
         component: () => import('../views/ContactView.vue')
+      },
+      {
+        path: 'products',
+        name: 'products',
+        meta: { title: 'Products' },
+        component: () => import('../views/ProductsView.vue')
+      }
+      ,
+      {
+        path: 'customers',
+        name: 'customers',
+        meta: { title: 'Customers' },
+        component: () => import('../views/CustomersView.vue')
+      },
+      {
+        path: 'sales',
+        name: 'sales',
+        meta: { title: 'Sales' },
+        component: () => import('../views/SalesView.vue')
+      }
+      ,
+      {
+        path: 'stock',
+        name: 'stock',
+        meta: { title: 'Stock' },
+        component: () => import('../views/StockView.vue')
+      }
+      ,
+      {
+        path: 'dashboard',
+        name: 'dashboard',
+        meta: { title: 'Dashboard' },
+        component: () => import('../views/DashboardView.vue')
+      }
+      ,
+      {
+        path: 'pos',
+        name: 'pos',
+        meta: { title: 'Point of Sale' },
+        component: () => import('../views/POSView.vue')
       }
     ]
   },
