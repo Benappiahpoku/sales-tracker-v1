@@ -1,6 +1,5 @@
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
-import { faArrowLeft, faBox, faListAlt } from '@fortawesome/free-solid-svg-icons'
 // Import icons you need from each style
 import { 
     faUser, 
@@ -18,11 +17,19 @@ import {
     faTimes,
     faEnvelope,
     faMobileScreen,
+    faEye,
+    faTrash,
+    faTriangleExclamation,
+    faReceipt,
+    faArrowLeft, 
+    faBox, 
+    faListAlt,
+    faCircle as fasCircle,
 } from '@fortawesome/free-solid-svg-icons'
 
 import { 
     faBell as farBell,
-    faCircle 
+    
 } from '@fortawesome/free-regular-svg-icons'
 
 import { 
@@ -51,9 +58,13 @@ library.add(
     faArrowLeft,
     faBox,
     faListAlt,
+    faEye,
+    faTrash,
+    faTriangleExclamation,
+    faReceipt,
     // Regular icons
     farBell,
-    faCircle,
+    fasCircle,
     // Brand icons
     faWhatsapp,
     faGithub

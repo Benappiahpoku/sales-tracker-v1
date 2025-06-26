@@ -37,8 +37,8 @@ const routes: RouteRecordRaw[] = [
       {
         path: 'sales',
         name: 'sales',
-        meta: { title: 'Sales' },
-        component: () => import('../views/SalesView.vue')
+        meta: { title: 'Sales History' },
+        component: () => import('../views/SalesHistoryView.vue')
       }
       ,
       {
@@ -59,7 +59,7 @@ const routes: RouteRecordRaw[] = [
         path: 'new-sale',
         name: 'new-sale',
         meta: { title: 'New Sale' },
-        component: () => import('../views/InvoiceView.vue')
+        component: () => import('../views/NewSaleView.vue')
       }
       ,
       {

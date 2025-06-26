@@ -1,55 +1,30 @@
 <!--
   CustomerList.vue
   Stratonea/Sales Tracker - Responsive customer list with:
-  - Mobile: Vertical card layout
+  - Mobile: Vertical card layout using CustomerCard
   - Desktop: Horizontal table layout
   - Ghana-optimized: offline-friendly, touch targets
   - Uses Tailwind utility classes for styling
 -->
 
 <template>
-  <!-- Mobile Card Layout -->
+  <!-- ===== [New Feature] START ===== -->
+  <!-- Mobile Card Layout: Use CustomerCard for each customer -->
   <div class="block md:hidden">
     <div class="space-y-4 max-w-md mx-auto my-4">
-      <!-- Loop through each customer and render as a card -->
-      <div v-for="customer in customers" :key="customer.phone"
-        class="bg-white rounded-lg shadow-md p-4 flex flex-col gap-2">
-        <!-- Customer Details: Stacked vertically for mobile -->
-        <div class="flex flex-col gap-1 text-sm">
-          <div class="flex justify-between">
-            <span class="font-semibold text-gray-700">Name:</span>
-            <span class="text-gray-900">{{ customer.name }}</span>
-          </div>
-          <div class="flex justify-between">
-            <span class="font-semibold text-gray-700">Phone:</span>
-            <span class="text-gray-900">{{ customer.phone }}</span>
-          </div>
-          <div class="flex justify-between">
-            <span class="font-semibold text-gray-700">Email:</span>
-            <span class="text-gray-900">{{ customer.email }}</span>
-          </div>
-          <div class="flex justify-between">
-            <span class="font-semibold text-gray-700">Location:</span>
-            <span class="text-gray-900">{{ customer.location }}</span>
-          </div>
-        </div>
-
-        <!-- Mobile Action Buttons -->
-        <div class="flex flex-col gap-2 mt-2">
-          <button @click="onEdit(customer)"
-            class="w-full min-h-[48px] bg-primary text-white rounded-lg font-bold text-base shadow-sm hover:bg-primary-dark transition-colors"
-            aria-label="Edit Customer">
-            Edit
-          </button>
-          <button @click="onDelete(customer)"
-            class="w-full min-h-[48px] bg-red-600 text-white rounded-lg font-bold text-base shadow-sm hover:bg-red-700 transition-colors"
-            aria-label="Delete Customer">
-            Delete
-          </button>
-        </div>
-      </div>
+      <CustomerCard
+        v-for="customer in customers"
+        :key="customer.phone"
+        :name="customer.name"
+        :phone="customer.phone"
+        :email="customer.email"
+        :location="customer.location"
+        @edit="onEdit(customer)"
+        @delete="onDelete(customer)"
+      />
     </div>
   </div>
+  <!-- ===== [New Feature] END ===== -->
 
   <!-- Desktop Table Layout -->
   <table class="hidden md:table min-w-full border-separate border-spacing-0">
@@ -110,6 +85,9 @@
 </template>
 
 <script setup lang="ts">
+// ===== Imports =====
+import CustomerCard from '@/components/layout/CustomerCard.vue'
+
 // ===== Types & Interfaces =====
 /**
  * Customer type for the customer list.
@@ -174,3 +152,12 @@ function onDelete(customer: Customer) {
   emit('delete', customer)
 }
 </script>
+
+<!--
+  ===== Styling Notes =====
+  - Uses responsive classes (md:) for desktop/mobile switching
+  - Mobile: Card layout with CustomerCard component
+  - Desktop: Table layout with horizontal rows
+  - Consistent colors and spacing across both layouts
+  - Touch-optimized for mobile, precise for desktop
+-->

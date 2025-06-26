@@ -23,7 +23,7 @@
 
     <!-- Company Summary (mock data) -->
     <div class="bg-white rounded-lg shadow-md p-4 mb-4">
-      <h2 class="text-lg font-bold text-primary mb-2">Company Summary</h2>
+      <h2 class="text-lg font-bold text-primary mb-2">Sales Summary</h2>
       <div class="flex flex-col gap-2">
         <div>
           <span class="font-medium text-gray-700">Company:</span>
@@ -51,20 +51,21 @@
     <!-- Quick Links to Main Features -->
     <!-- ===== [New Feature] START: Responsive grid for mobile-first UX ===== -->
     <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-      <router-link to="/products"
+      <router-link to="/sales"
         class="bg-primary text-white rounded-lg py-4 text-center font-bold shadow min-h-[48px] hover:bg-primary-dark transition-colors"
-        aria-label="Go to Products">
-        Products
+        aria-label="Go to Sales">
+        Sales
       </router-link>
+
       <router-link to="/customers"
         class="bg-primary text-white rounded-lg py-4 text-center font-bold shadow min-h-[48px] hover:bg-primary-dark transition-colors"
         aria-label="Go to Customers">
         Customers
       </router-link>
-      <router-link to="/sales"
+      <router-link to="/products"
         class="bg-primary text-white rounded-lg py-4 text-center font-bold shadow min-h-[48px] hover:bg-primary-dark transition-colors"
-        aria-label="Go to Sales">
-        Sales
+        aria-label="Go to Products">
+        Products
       </router-link>
       <router-link to="/stock"
         class="bg-primary text-white rounded-lg py-4 text-center font-bold shadow min-h-[48px] hover:bg-primary-dark transition-colors"

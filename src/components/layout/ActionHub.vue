@@ -19,7 +19,7 @@
           <span>Home</span>
         </router-link>
         <!-- New Sale -->
-        <router-link to="/new-sales" class="flex items-center space-x-2 text-green-600 hover:text-green-700 min-h-[48px]">
+        <router-link to="/new-sale" class="flex items-center space-x-2 text-green-600 hover:text-green-700 min-h-[48px]">
           <font-awesome-icon icon="fa-solid fa-plus-circle" class="text-xl" />
           <span>New Sale</span>
         </router-link>

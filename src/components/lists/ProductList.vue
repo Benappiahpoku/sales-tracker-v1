@@ -1,78 +1,63 @@
+<!--
+  ProductList.vue
+  Stratonea/Sales Tracker - List of products, mobile-first.
+  - Uses ProductCard.vue for mobile card layout (DRY, maintainable)
+  - Table layout for desktop (per design wireframe)
+  - Follows Stratonea guidelines (see copilot-instructions.md)
+  - All props, emits, and helpers documented for learning
+-->
+
 <template>
-  <!-- Mobile Card Layout -->
+  <!-- ===== [New Feature] START ===== -->
+  <!-- Mobile Card Layout: Use ProductCard.vue for each product, with actions inside card -->
   <div class="block md:hidden">
     <div class="space-y-4 max-w-md mx-auto my-4">
-      <div v-for="product in products" :key="product.sku" class="bg-white rounded-lg shadow-md p-4 flex flex-col gap-2">
-        <!-- Product Details: Stacked vertically for mobile -->
-        <div class="flex flex-col gap-1 text-sm">
-          <div class="flex justify-between">
-            <span class="font-semibold text-gray-700">Product:</span>
-            <span class="text-gray-900">{{ product.name }}</span>
-          </div>
-          <div class="flex justify-between">
-            <span class="font-semibold text-gray-700">SKU:</span>
-            <span class="text-gray-900">{{ product.sku }}</span>
-          </div>
-          <div class="flex justify-between">
-            <span class="font-semibold text-gray-700">Price:</span>
-            <span class="text-gray-900">{{ formatCurrency(product.price) }}</span>
-          </div>
-          <div class="flex justify-between">
-            <span class="font-semibold text-gray-700">Stock:</span>
-            <span class="text-gray-900">{{ product.stock }}</span>
-          </div>
-        </div>
-
-        <!-- Mobile Action Buttons -->
-        <div class="flex flex-col gap-2 mt-2">
-          <button @click="onEdit(product)"
-            class="w-full min-h-[48px] bg-primary text-white rounded-lg font-bold text-base shadow-sm hover:bg-primary-dark transition-colors">
-            Edit
-          </button>
-          <button @click="onDelete(product)"
-            class="w-full min-h-[48px] bg-red-600 text-white rounded-lg font-bold text-base shadow-sm hover:bg-red-700 transition-colors">
-            Delete
-          </button>
-        </div>
-      </div>
+      <ProductCard
+        v-for="product in products"
+        :key="product.sku"
+        :name="product.name"
+        :sku="product.sku"
+        :price="product.price"
+        :stock="product.stock"
+        @edit="onEdit(product)"
+        @delete="onDelete(product)"
+      />
     </div>
   </div>
+  <!-- ===== [New Feature] END ===== -->
 
- 
-
-  <!-- Desktop Table Layout -->
+  <!-- Desktop Table Layout (unchanged, per design) -->
   <table class="hidden md:table min-w-full border-separate border-spacing-0">
     <!-- Table Header -->
     <thead class="bg-gray-50">
-    
-        <tr>
-          <th class="px-6 py-4 text-left">
-            <div class="flex items-center gap-2">
-              <span class="text-xs font-bold uppercase tracking-wider text-gray-600">Product</span>
-            </div>
-          </th>
-          <th class="px-6 py-4 text-left">
-            <div class="flex items-center gap-2">
-              <span class="text-xs font-bold uppercase tracking-wider text-gray-600">SKU</span>
-            </div>
-          </th>
-          <th class="px-6 py-4 text-right">
-            <div class="flex items-center justify-end gap-2">
-              <span class="text-xs font-bold uppercase tracking-wider text-gray-600">Price</span>
-            </div>
-          </th>
-          <th class="px-6 py-4 text-center">
-            <div class="flex items-center justify-center gap-2">
-              <span class="text-xs font-bold uppercase tracking-wider text-gray-600">Stock</span>
-            </div>
-          </th>
-          <th class="px-6 py-4 text-right">
-            <span class="text-xs font-bold uppercase tracking-wider text-gray-600">Actions</span>
-          </th>
-        </tr>
-      </thead>
+      <tr>
+        <th class="px-6 py-4 text-left">
+          <div class="flex items-center gap-2">
+            <span class="text-xs font-bold uppercase tracking-wider text-gray-600">Product</span>
+          </div>
+        </th>
+        <th class="px-6 py-4 text-left">
+          <div class="flex items-center gap-2">
+            <span class="text-xs font-bold uppercase tracking-wider text-gray-600">SKU</span>
+          </div>
+        </th>
+        <th class="px-6 py-4 text-right">
+          <div class="flex items-center justify-end gap-2">
+            <span class="text-xs font-bold uppercase tracking-wider text-gray-600">Price</span>
+          </div>
+        </th>
+        <th class="px-6 py-4 text-center">
+          <div class="flex items-center justify-center gap-2">
+            <span class="text-xs font-bold uppercase tracking-wider text-gray-600">Stock</span>
+          </div>
+        </th>
+        <th class="px-6 py-4 text-right">
+          <span class="text-xs font-bold uppercase tracking-wider text-gray-600">Actions</span>
+        </th>
+      </tr>
+    </thead>
 
-      <!-- Table Body -->
+    <!-- Table Body -->
     <tbody class="divide-y divide-gray-200 bg-white">
       <tr v-for="product in products" :key="product.sku"
         class="hover:bg-gray-50/50 transition-colors duration-150 ease-in-out">
@@ -102,7 +87,6 @@
     </tbody>
   </table>
 
-
   <!-- Empty State -->
   <div v-if="(products?.length ?? 0) === 0" class="text-center py-12 bg-gray-50 border-t border-gray-200">
     <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -112,12 +96,15 @@
     <h3 class="mt-2 text-sm font-medium text-gray-900">No products</h3>
     <p class="mt-1 text-sm text-gray-500">Get started by adding new products.</p>
   </div>
-
 </template>
 
-
-
 <script setup lang="ts">
+// ===== Imports =====
+/**
+ * Import ProductCard for mobile card layout.
+ */
+import ProductCard from '@/components/layout/ProductCard.vue'
+
 // ===== Types & Interfaces =====
 /**
  * Product type for the product list.
@@ -188,4 +175,5 @@ function formatCurrency(amount: number): string {
   - Uses Tailwind for color, spacing, and responsive design
   - Accessible: aria-labels, clear feedback
   - Ghana-optimized: vertical stacking, large touch targets
+  - ProductCard.vue is now the single source of card design for mobile
 -->

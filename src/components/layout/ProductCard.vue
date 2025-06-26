@@ -1,10 +1,10 @@
 <!--
-  ProductItem.vue
-  Stratonea/Sales Tracker - Component for displaying a single product item.
+  ProductCard.vue
+  Stratonea/Sales Tracker - Component for displaying a single product item with actions.
   - Mobile-first, touch-optimized, Ghana-optimized
   - Uses Tailwind utility classes for styling
   - Follows Stratonea guidelines (see copilot-instructions.md)
-  - Uses mock/static data for now (replace with real data later)
+  - Emits 'edit' and 'delete' events for parent handling
 -->
 
 <template>
@@ -26,6 +26,25 @@
         <span class="text-sm text-gray-700">Stock: <span class="font-semibold">{{ stock }}</span></span>
         <span class="text-sm font-bold text-primary">{{ formatCurrency(price ?? 0) }}</span>
       </div>
+      <!-- ===== [New Feature] START ===== -->
+      <!-- Action Buttons: Edit & Delete, touch-optimized -->
+      <div class="flex flex-col gap-2 mt-4">
+        <button
+          @click="onEdit"
+          class="w-full min-h-[48px] bg-primary text-white rounded-lg font-bold text-base shadow-sm hover:bg-primary-dark transition-colors"
+          aria-label="Edit product"
+        >
+          Edit
+        </button>
+        <button
+          @click="onDelete"
+          class="w-full min-h-[48px] bg-red-600 text-white rounded-lg font-bold text-base shadow-sm hover:bg-red-700 transition-colors"
+          aria-label="Delete product"
+        >
+          Delete
+        </button>
+      </div>
+      <!-- ===== [New Feature] END ===== -->
     </div>
   </div>
   <!-- ===== [New Feature] END ===== -->
@@ -34,7 +53,7 @@
 <script setup lang="ts">
 // ===== Types & Interfaces =====
 /**
- * Props for ProductItem
+ * Props for ProductCard
  * - name: string (product name)
  * - sku: string (product SKU/code)
  * - price: number (product price)
@@ -55,6 +74,30 @@ withDefaults(
   }
 )
 
+// ===== Emits =====
+/**
+ * Emits 'edit' and 'delete' events to parent.
+ */
+const emit = defineEmits<{
+  (e: 'edit'): void
+  (e: 'delete'): void
+}>()
+
+// ===== Main Logic =====
+/**
+ * Emit edit event when Edit button is clicked.
+ */
+function onEdit() {
+  emit('edit')
+}
+
+/**
+ * Emit delete event when Delete button is clicked.
+ */
+function onDelete() {
+  emit('delete')
+}
+
 // ===== Helper Functions =====
 /**
  * Formats a number as Ghanaian currency (GHS).
@@ -72,4 +115,5 @@ function formatCurrency(amount: number): string {
   - Uses Tailwind for color, spacing, and responsive design.
   - Accessible: aria-label, role="listitem", semantic markup.
   - Placeholder emoji for product image (replace with real image later).
+  - Buttons are part of the card for full reusability.
 -->

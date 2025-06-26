@@ -12,6 +12,8 @@
 
   <!-- ===== Main Content ===== -->
   <div class="min-h-screen bg-gray-50 px-2 py-4">
+
+    
     <!-- Product List (shows when not adding/editing) -->
     <ProductList v-if="!showForm" :products="products" @add="onAdd" @edit="onEdit" @delete="onDelete" />
 

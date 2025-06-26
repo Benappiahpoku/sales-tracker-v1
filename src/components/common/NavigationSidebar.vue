@@ -84,12 +84,12 @@ const emit = defineEmits<{
  * Update routes as needed for your router.
  */
 const navItems: NavItem[] = [
-  { label: 'Home (Dashboard)', route: '/dashboard' },
+  { label: 'Home ', route: '/dashboard' },
   { label: 'New Sale', route: '/new-sale' },
-  { label: 'Products', route: '/products' },
-  { label: 'Stock', route: '/stock' },
-  { label: 'Sale', route: '/sales' },
   { label: 'Customers', route: '/customers' },
+  { label: 'Products', route: '/products' },
+  { label: 'Sales History', route: '/sales' },
+  { label: 'Stock', route: '/stock' },
   { label: 'Company Settings', route: '/company' }
 ]
 

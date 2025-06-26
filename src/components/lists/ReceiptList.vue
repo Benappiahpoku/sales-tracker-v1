@@ -1,7 +1,7 @@
 <!--
-  SalesList.vue
-  Stratonea/Sales Tracker - Responsive sales list with:
-  - Mobile: Vertical card layout using SalesCard
+  ReceiptList.vue
+  Stratonea/Sales Tracker - Responsive receipt list with:
+  - Mobile: Vertical card layout using ReceiptCard
   - Desktop: Horizontal table layout
   - Ghana-optimized: offline-friendly, touch targets
   - Uses Tailwind utility classes for styling
@@ -9,18 +9,20 @@
 
 <template>
   <!-- ===== [New Feature] START ===== -->
-  <!-- Mobile Card Layout: Use SalesCard for each sale -->
+  <!-- Mobile Card Layout: Use ReceiptCard for each receipt -->
   <div class="block md:hidden">
     <div class="space-y-4 max-w-md mx-auto my-4">
-      <SalesCard
-        v-for="sale in sales"
-        :key="sale.id"
-        :id="sale.id"
-        :date="sale.date"
-        :customer="sale.customer"
-        :amount="sale.amount"
-        @view="onView(sale)"
-        @delete="onDelete(sale)"
+      <ReceiptCard
+        v-for="receipt in receipts"
+        :key="receipt.id"
+        :id="receipt.id"
+        :number="receipt.number"
+        :customer="receipt.customer"
+        :amount="receipt.amount"
+        :date="receipt.date"
+        :item-count="receipt.itemCount"
+        @view="onView(receipt)"
+        @share="onShare(receipt)"
       />
     </div>
   </div>
@@ -33,7 +35,7 @@
       <tr>
         <th class="px-6 py-4 text-left">
           <div class="flex items-center gap-2">
-            <span class="text-xs font-bold uppercase tracking-wider text-gray-600">Date</span>
+            <span class="text-xs font-bold uppercase tracking-wider text-gray-600">Receipt #</span>
           </div>
         </th>
         <th class="px-6 py-4 text-left">
@@ -46,6 +48,16 @@
             <span class="text-xs font-bold uppercase tracking-wider text-gray-600">Amount</span>
           </div>
         </th>
+        <th class="px-6 py-4 text-center">
+          <div class="flex items-center justify-center gap-2">
+            <span class="text-xs font-bold uppercase tracking-wider text-gray-600">Items</span>
+          </div>
+        </th>
+        <th class="px-6 py-4 text-center">
+          <div class="flex items-center justify-center gap-2">
+            <span class="text-xs font-bold uppercase tracking-wider text-gray-600">Date</span>
+          </div>
+        </th>
         <th class="px-6 py-4 text-right">
           <span class="text-xs font-bold uppercase tracking-wider text-gray-600">Actions</span>
         </th>
@@ -54,78 +66,91 @@
 
     <!-- Table Body -->
     <tbody class="divide-y divide-gray-200 bg-white">
-      <tr v-for="sale in sales" :key="sale.id" class="hover:bg-gray-50/50 transition-colors duration-150 ease-in-out">
+      <tr v-for="receipt in receipts" :key="receipt.id"
+        class="hover:bg-gray-50/50 transition-colors duration-150 ease-in-out">
         <td class="px-6 py-4 whitespace-nowrap">
-          <div class="text-sm text-gray-900">{{ formatDate(sale.date) }}</div>
+          <div class="font-medium text-gray-900">#{{ receipt.number }}</div>
         </td>
         <td class="px-6 py-4 whitespace-nowrap">
-          <div class="font-medium text-gray-900">{{ sale.customer }}</div>
+          <div class="text-sm text-gray-900">{{ receipt.customer }}</div>
         </td>
         <td class="px-6 py-4 whitespace-nowrap text-right">
-          <div class="text-sm font-semibold text-gray-900">{{ formatCurrency(sale.amount) }}</div>
+          <div class="text-sm font-medium text-gray-900">{{ formatCurrency(receipt.amount) }}</div>
+        </td>
+        <td class="px-6 py-4 whitespace-nowrap text-center">
+          <div class="text-sm text-gray-900">{{ receipt.itemCount }}</div>
+        </td>
+        <td class="px-6 py-4 whitespace-nowrap text-center">
+          <div class="text-sm text-gray-900">{{ formatDate(receipt.date) }}</div>
         </td>
         <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium space-x-2">
-          <button @click="onView(sale)"
+          <button @click="onView(receipt)"
             class="inline-flex items-center px-3 py-1.5 border border-transparent text-sm font-medium rounded-md text-white bg-primary hover:bg-primary-dark focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary transition-colors duration-150">
             View
           </button>
-          <button @click="onDelete(sale)"
-            class="inline-flex items-center px-3 py-1.5 border border-transparent text-sm font-medium rounded-md text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 transition-colors duration-150">
-            Delete
+          <button @click="onShare(receipt)"
+            class="inline-flex items-center px-3 py-1.5 border border-transparent text-sm font-medium rounded-md text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transition-colors duration-150">
+            Share
           </button>
         </td>
       </tr>
     </tbody>
   </table>
 
-  <!-- Enhanced Empty State -->
-  <div v-if="(sales?.length ?? 0) === 0" class="text-center py-12 bg-gray-50 border-t border-gray-200">
+  <!-- Empty State -->
+  <div v-if="(receipts?.length ?? 0) === 0" class="text-center py-12 bg-gray-50 border-t border-gray-200">
     <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-        d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" />
+        d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
     </svg>
-    <h3 class="mt-2 text-sm font-medium text-gray-900">No sales records</h3>
-    <p class="mt-1 text-sm text-gray-500">Get started by recording your first sale.</p>
+    <h3 class="mt-2 text-sm font-medium text-gray-900">No receipts</h3>
+    <p class="mt-1 text-sm text-gray-500">Get started by creating a new receipt.</p>
   </div>
 </template>
 
 <script setup lang="ts">
 // ===== Imports =====
-import SalesCard from '@/components/layout/SalesCard.vue'
+import ReceiptCard from '@/components/layout/ReceiptCard.vue'
 
 // ===== Types & Interfaces =====
 /**
- * Sale type for the sales list.
+ * Receipt type for the receipt list.
  */
-interface Sale {
+interface Receipt {
   id: string
-  date: string
+  number: string
   customer: string
   amount: number
+  date: string
+  itemCount: number
 }
 
 // ===== Props =====
 /**
- * Props for SalesList
- * - sales: Sale[] (array of sales)
+ * Props for ReceiptList
+ * - receipts: Receipt[] (array of receipts)
  */
 withDefaults(
   defineProps<{
-    sales?: Sale[]
+    receipts?: Receipt[]
   }>(),
   {
-    sales: () => [
+    receipts: () => [
       {
         id: '1',
-        date: '2025-06-25',
+        number: 'RCP-001',
         customer: 'Ama Serwaa',
-        amount: 40
+        amount: 500,
+        date: new Date().toISOString(),
+        itemCount: 3
       },
       {
         id: '2',
-        date: '2025-06-24',
+        number: 'RCP-002',
         customer: 'Kwame Mensah',
-        amount: 100
+        amount: 350,
+        date: new Date().toISOString(),
+        itemCount: 2
       }
     ]
   }
@@ -133,30 +158,31 @@ withDefaults(
 
 // ===== Emits =====
 /**
- * Emits events to parent for view and delete actions.
+ * Emits events to parent for view and share actions.
  */
 const emit = defineEmits<{
-  (e: 'view', sale: Sale): void
-  (e: 'delete', sale: Sale): void
+  (e: 'view', receipt: Receipt): void
+  (e: 'share', receipt: Receipt): void
 }>()
 
 // ===== Main Logic =====
 /**
  * Handles view button click.
- * @param sale - The sale to view
+ * @param receipt - The receipt to view
  */
-function onView(sale: Sale) {
-  emit('view', sale)
+function onView(receipt: Receipt) {
+  emit('view', receipt)
 }
 
 /**
- * Handles delete button click.
- * @param sale - The sale to delete
+ * Handles share button click.
+ * @param receipt - The receipt to share
  */
-function onDelete(sale: Sale) {
-  emit('delete', sale)
+function onShare(receipt: Receipt) {
+  emit('share', receipt)
 }
 
+// ===== Helper Functions =====
 /**
  * Formats a number as Ghanaian currency (GHS).
  * @param amount - The amount to format
@@ -184,7 +210,7 @@ function formatDate(dateString: string): string {
 <!--
   ===== Styling Notes =====
   - Uses responsive classes (md:) for desktop/mobile switching
-  - Mobile: Card layout with SalesCard component
+  - Mobile: Card layout with ReceiptCard component
   - Desktop: Table layout with horizontal rows
   - Consistent colors and spacing across both layouts
   - Touch-optimized for mobile, precise for desktop
