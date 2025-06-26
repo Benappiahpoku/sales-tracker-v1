@@ -1,6 +1,6 @@
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
-
+import { faArrowLeft, faBox, faListAlt } from '@fortawesome/free-solid-svg-icons'
 // Import icons you need from each style
 import { 
     faUser, 
@@ -48,6 +48,9 @@ library.add(
     faTimes,
     faEnvelope,
     faMobileScreen,
+    faArrowLeft,
+    faBox,
+    faListAlt,
     // Regular icons
     farBell,
     faCircle,

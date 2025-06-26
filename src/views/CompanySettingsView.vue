@@ -1,6 +1,6 @@
 <!--
   CompanySettingsView.vue
-  Stratonea/BizPoint - Main view for managing company settings.
+  Stratonea/Sales Tracker - Main view for managing company settings.
   - Ghana-optimized: mobile-first, offline-friendly, simple UI
   - Handles company info with mock data for now
   - Follows Stratonea guidelines and file structure
@@ -39,6 +39,11 @@
         <span class="font-medium text-gray-700">Timezone:</span>
         <span class="ml-2 text-gray-900">{{ company.timezone }}</span>
       </div>
+      <button
+        class="w-full bg-primary text-white font-bold py-3 rounded-lg shadow min-h-[48px] hover:bg-primary-dark transition-colors mt-4"
+        @click="onAdd" aria-label="Edit Company Info">
+        Add Company Info
+      </button>
       <!-- Edit Button -->
       <button
         class="w-full bg-primary text-white font-bold py-3 rounded-lg shadow min-h-[48px] hover:bg-primary-dark transition-colors mt-4"
@@ -164,6 +169,10 @@ function onCancel() {
   editing.value = false
   form.value = { ...company.value }
   formError.value = ''
+}
+
+function onAdd() {
+  alert("Add a new company")
 }
 </script>
 

@@ -1,6 +1,6 @@
 <!--
   ReceiptPreview.vue
-  Stratonea/BizPoint - Component for displaying a generated receipt.
+  Stratonea/Sales Tracker - Component for displaying a generated receipt.
   - Mobile-first, print-friendly, Ghana-optimized
   - Uses Tailwind utility classes for styling
   - Follows Stratonea guidelines (see copilot-instructions.md)
@@ -11,8 +11,7 @@
   <!-- ===== [New Feature] START ===== -->
   <div
     class="bg-white rounded-lg shadow-md p-4 max-w-md mx-auto my-4 print:max-w-full print:shadow-none print:rounded-none"
-    aria-label="Receipt Preview"
-  >
+    aria-label="Receipt Preview">
     <!-- ===== Header: Company Info ===== -->
     <div class="text-center mb-4">
       <h2 class="text-xl font-bold text-primary mb-1">Stratonea</h2>
@@ -92,14 +91,14 @@ interface ReceiptItem {
   price: number
 }
 
- withDefaults(
+withDefaults(
   defineProps<{
     receiptNumber?: string
     date?: string
     time?: string
     customerName?: string
     items?: ReceiptItem[]
-    total?: number 
+    total?: number
     paymentMethod?: string
   }>(),
   {

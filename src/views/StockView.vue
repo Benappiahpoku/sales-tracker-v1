@@ -1,6 +1,6 @@
 <!--
   StockView.vue
-  Stratonea/BizPoint - Main view for managing stock/inventory.
+  Stratonea/Sales Tracker - Main view for managing stock/inventory.
   - Ghana-optimized: mobile-first, offline-friendly, simple UI
   - Uses StockList and StockAdjustmentForm components
   - Handles add/edit stock logic with mock data for now
@@ -11,12 +11,21 @@
 
 
   <!-- ===== Main Content ===== -->
-  <div class="max-w-md mx-auto">
+  <div class="min-h-screen bg-gray-50 px-2 py-4">
     <!-- Stock List (shows when not adding/editing) -->
     <StockList v-if="!showForm" :stock="stock" @add="onAdd" @edit="onEdit" @delete="onDelete" />
 
     <!-- Stock Adjustment Form (shows when adding/editing) -->
     <StockAdjustmentForm v-if="showForm" :initial="formInitial" :error="formError" @save="onSave" @cancel="onCancel" />
+
+    <!-- ===== Floating Action Button (FAB) for Add Invoice ===== -->
+
+    <button
+      class="fixed bottom-20 right-4 md:hidden z-50 bg-green-500 text-white rounded-full shadow-lg w-14 h-14 flex items-center justify-center text-3xl focus:outline-none"
+      @click="onAdd" aria-label="Add Invoice" title="Add Invoice">
+      +
+    </button>
+    <!-- ===== [New Feature] END ===== -->
   </div>
 </template>
 

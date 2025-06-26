@@ -4,8 +4,13 @@
     <OfflineIndicator v-if="!networkInfo.isOnline" />
 
 
+    <!-- ===== App Navigation ===== -->
+    <AppNavigation  @openSidebar="sidebarOpen = true" />
+
     <!-- ===== App Header ===== -->
-    <AppHeader :currentPage="currentPage" @openSidebar="sidebarOpen = true" />
+
+    <AppHeader :currentPage="currentPage" @back="handleBack" />
+
 
     <!-- ===== Navigation Sidebar ===== -->
     <NavigationSidebar :open="sidebarOpen" @close="sidebarOpen = false" @navigate="handleNavigate"
@@ -16,6 +21,9 @@
     <main class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
       <router-view />
     </main>
+
+
+    <ActionHub />
 
     <!-- Donation content -->
     <Donation v-if="showDonation" @close="handleDonationClose" />
@@ -54,8 +62,10 @@ import { useRouter, useRoute } from 'vue-router'
   import OfflineIndicator from '@/components/base/OfflineIndicator.vue'
   import Footer from '@/components/common/Footer.vue'
   import Donation from '@/components/donation/Donation.vue'
-  import AppHeader from '@/components/base/AppHeader.vue'
+  import AppNavigation from '@/components/base/AppNavigation.vue'
   import NavigationSidebar from '@/components/common/NavigationSidebar.vue'
+import AppHeader from '@/components/base/AppHeader.vue'
+import ActionHub from '@/components/layout/ActionHub.vue'
 
 
 
@@ -92,6 +102,15 @@ function handleUpgrade() {
   // Show upgrade modal or redirect
 }
 
+
+
+/**
+ * Handles the 'back' event from AppHeader.
+ * Navigates to the previous page in browser history.
+ */
+function handleBack() {
+  router.back()
+}
   // ===== Constants & Config =====
   // Keys for localStorage to track donation modal state
   const DONATION_MODAL_KEY = 'stratonea_donation_last_closed'

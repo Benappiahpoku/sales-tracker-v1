@@ -56,10 +56,17 @@ const routes: RouteRecordRaw[] = [
       }
       ,
       {
-        path: 'pos',
-        name: 'pos',
-        meta: { title: 'Point of Sale' },
-        component: () => import('../views/POSView.vue')
+        path: 'new-sale',
+        name: 'new-sale',
+        meta: { title: 'New Sale' },
+        component: () => import('../views/InvoiceView.vue')
+      }
+      ,
+      {
+        path: 'company',
+        name: 'company',
+        meta: { title: 'Company Settings' },
+        component: () => import('../views/CompanySettingsView.vue')
       }
     ]
   },

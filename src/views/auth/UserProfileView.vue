@@ -1,6 +1,6 @@
 <!--
   UserProfileView.vue
-  Stratonea/BizPoint - Mobile-first user profile screen.
+  Stratonea/Sales Tracker - Mobile-first user profile screen.
   - Ghana-optimized: simple, clear, offline-friendly
   - Uses Tailwind utility classes for styling
   - Follows Stratonea guidelines (see copilot-instructions.md)
@@ -14,7 +14,7 @@
     <header class="w-full max-w-md mb-8">
       <div class="flex items-center justify-between px-4 py-3 bg-primary text-white shadow-md rounded-lg">
         <StratoneaLogo class="h-10 w-auto" white />
-        <span class="text-lg font-bold tracking-wide">BizPoint</span>
+        <span class="text-lg font-bold tracking-wide">Sales Tracker</span>
       </div>
     </header>
 
@@ -39,16 +39,12 @@
       <div class="flex gap-3 mt-4 w-full">
         <button
           class="flex-1 bg-primary text-white font-bold py-3 rounded-lg shadow min-h-[48px] hover:bg-primary-dark transition-colors"
-          @click="onEdit"
-          aria-label="Edit Profile"
-        >
+          @click="onEdit" aria-label="Edit Profile">
           Edit Profile
         </button>
         <button
           class="flex-1 bg-gray-200 text-gray-800 font-bold py-3 rounded-lg shadow min-h-[48px] hover:bg-gray-300 transition-colors"
-          @click="onLogout"
-          aria-label="Logout"
-        >
+          @click="onLogout" aria-label="Logout">
           Logout
         </button>
       </div>

@@ -1,73 +1,112 @@
 <!--
   CustomerList.vue
-  Stratonea/BizPoint - Table to display customer list.
-  - Mobile-first, Ghana-optimized, offline-friendly
+  Stratonea/Sales Tracker - Responsive customer list with:
+  - Mobile: Vertical card layout
+  - Desktop: Horizontal table layout
+  - Ghana-optimized: offline-friendly, touch targets
   - Uses Tailwind utility classes for styling
-  - Follows Stratonea guidelines (see copilot-instructions.md)
-  - Uses mock/static data for now (replace with real data later)
 -->
 
 <template>
-  <!-- ===== [New Feature] START ===== -->
-  <div class="bg-white rounded-lg shadow-md p-4 max-w-md mx-auto my-4">
-    <!-- Table Header -->
-    <div class="flex justify-between items-center mb-2">
-      <span class="text-lg font-bold text-primary">Customers</span>
-      <button
-        class="bg-primary text-white px-4 py-2 rounded-lg font-bold min-h-[48px] hover:bg-primary-dark transition-colors"
-        @click="onAdd"
-        aria-label="Add Customer"
-      >
-        + Add
-      </button>
+  <!-- Mobile Card Layout -->
+  <div class="block md:hidden">
+    <div class="space-y-4 max-w-md mx-auto my-4">
+      <!-- Loop through each customer and render as a card -->
+      <div v-for="customer in customers" :key="customer.phone"
+        class="bg-white rounded-lg shadow-md p-4 flex flex-col gap-2">
+        <!-- Customer Details: Stacked vertically for mobile -->
+        <div class="flex flex-col gap-1 text-sm">
+          <div class="flex justify-between">
+            <span class="font-semibold text-gray-700">Name:</span>
+            <span class="text-gray-900">{{ customer.name }}</span>
+          </div>
+          <div class="flex justify-between">
+            <span class="font-semibold text-gray-700">Phone:</span>
+            <span class="text-gray-900">{{ customer.phone }}</span>
+          </div>
+          <div class="flex justify-between">
+            <span class="font-semibold text-gray-700">Email:</span>
+            <span class="text-gray-900">{{ customer.email }}</span>
+          </div>
+          <div class="flex justify-between">
+            <span class="font-semibold text-gray-700">Location:</span>
+            <span class="text-gray-900">{{ customer.location }}</span>
+          </div>
+        </div>
+
+        <!-- Mobile Action Buttons -->
+        <div class="flex flex-col gap-2 mt-2">
+          <button @click="onEdit(customer)"
+            class="w-full min-h-[48px] bg-primary text-white rounded-lg font-bold text-base shadow-sm hover:bg-primary-dark transition-colors"
+            aria-label="Edit Customer">
+            Edit
+          </button>
+          <button @click="onDelete(customer)"
+            class="w-full min-h-[48px] bg-red-600 text-white rounded-lg font-bold text-base shadow-sm hover:bg-red-700 transition-colors"
+            aria-label="Delete Customer">
+            Delete
+          </button>
+        </div>
+      </div>
     </div>
-    <!-- Customer Table -->
-    <table class="w-full text-sm">
-      <thead>
-        <tr class="border-b border-gray-200">
-          <th class="text-left py-2">Name</th>
-          <th class="text-left py-2">Phone</th>
-          <th class="text-left py-2">Email</th>
-          <th class="text-left py-2">Location</th>
-          <th class="text-center py-2">Actions</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr
-          v-for="customer in customers"
-          :key="customer.phone"
-          class="border-b border-gray-100 hover:bg-gray-50 transition-colors"
-        >
-          <td class="py-2 font-medium text-gray-900">{{ customer.name }}</td>
-          <td class="py-2 text-gray-500">{{ customer.phone }}</td>
-          <td class="py-2 text-gray-500">{{ customer.email }}</td>
-          <td class="py-2 text-gray-500">{{ customer.location }}</td>
-          <td class="py-2 text-center">
-            <button
-              class="text-primary font-bold px-2"
-              @click="onEdit(customer)"
-              aria-label="Edit"
-            >
-              Edit
-            </button>
-            <button
-              class="text-red-600 font-bold px-2"
-              @click="onDelete(customer)"
-              aria-label="Delete"
-            >
-              Delete
-            </button>
-          </td>
-        </tr>
-        <!-- ===== [New Feature] START: Safe empty check ===== -->
-        <tr v-if="(customers?.length ?? 0) === 0">
-          <td colspan="5" class="text-center text-gray-400 py-4">No customers found.</td>
-        </tr>
-        <!-- ===== [New Feature] END ===== -->
-      </tbody>
-    </table>
   </div>
-  <!-- ===== [New Feature] END ===== -->
+
+  <!-- Desktop Table Layout -->
+  <table class="hidden md:table min-w-full border-separate border-spacing-0">
+    <!-- Table Header -->
+    <thead class="bg-gray-50">
+      <tr>
+        <th class="top-0 py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900">
+          Name
+        </th>
+        <th class="top-0 px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+          Phone
+        </th>
+        <th class="top-0 px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+          Email
+        </th>
+        <th class="top-0 px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+          Location
+        </th>
+        <th class="top-0 py-3.5 pl-3 pr-4 text-right text-sm font-semibold text-gray-900">
+          Actions
+        </th>
+      </tr>
+    </thead>
+
+    <!-- Table Body -->
+    <tbody class="bg-white">
+      <tr v-for="customer in customers" :key="customer.phone" class="hover:bg-gray-50">
+        <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm text-gray-900">
+          {{ customer.name }}
+        </td>
+        <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-600">
+          {{ customer.phone }}
+        </td>
+        <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-900">
+          {{ customer.email }}
+        </td>
+        <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-900">
+          {{ customer.location }}
+        </td>
+        <td class="whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm space-x-2">
+          <button @click="onEdit(customer)"
+            class="inline-flex items-center px-2.5 py-1.5 text-sm font-medium text-white bg-primary rounded hover:bg-primary-dark focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2">
+            Edit
+          </button>
+          <button @click="onDelete(customer)"
+            class="inline-flex items-center px-2.5 py-1.5 text-sm font-medium text-white bg-red-600 rounded hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2">
+            Delete
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- Empty State -->
+  <div v-if="(customers?.length ?? 0) === 0" class="text-center py-12 bg-gray-50">
+    <p class="text-sm text-gray-500">No customers found</p>
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -93,30 +132,32 @@ withDefaults(
   }>(),
   {
     customers: () => [
-      { name: 'Ama Serwaa', phone: '024 123 4567', email: 'ama@example.com', location: 'Kumasi' },
-      { name: 'Kwame Mensah', phone: '020 987 6543', email: 'kwame@example.com', location: 'Accra' }
+      {
+        name: 'Ama Serwaa',
+        phone: '024 123 4567',
+        email: 'ama@example.com',
+        location: 'Kumasi'
+      },
+      {
+        name: 'Kwame Mensah',
+        phone: '020 987 6543',
+        email: 'kwame@example.com',
+        location: 'Accra'
+      }
     ]
   }
 )
 
 // ===== Emits =====
 /**
- * Emits events to parent for add, edit, and delete actions.
+ * Emits events to parent for edit and delete actions.
  */
 const emit = defineEmits<{
-  (e: 'add'): void
   (e: 'edit', customer: Customer): void
   (e: 'delete', customer: Customer): void
 }>()
 
 // ===== Main Logic =====
-/**
- * Handles add button click.
- */
-function onAdd() {
-  emit('add')
-}
-
 /**
  * Handles edit button click.
  * @param customer - The customer to edit
@@ -133,10 +174,3 @@ function onDelete(customer: Customer) {
   emit('delete', customer)
 }
 </script>
-
-<!--
-  ===== Styling Notes =====
-  - Table is mobile-first, touch-optimized (min-h-[48px] for actions).
-  - Uses Tailwind for color, spacing, and responsive design.
-  - Accessible: aria-labels, clear feedback.
--->

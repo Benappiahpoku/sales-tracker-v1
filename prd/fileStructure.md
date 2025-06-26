@@ -1,9 +1,9 @@
-# BizPoint MVP: Vue.js, Supabase, LocalForage - File & Component Structure
+# Sales Tracker MVP: Vue.js, Supabase, LocalForage - File & Component Structure
 
-This document outlines the recommended file and component structure for the BizPoint MVP, leveraging Vue.js for the frontend, Supabase for backend services, and LocalForage for offline data storage and synchronization.
+This document outlines the recommended file and component structure for the Sales Tracker MVP, leveraging Vue.js for the frontend, Supabase for backend services, and LocalForage for offline data storage and synchronization.
 
 1. Overall Project Structure
-bizpoint-app/
+sales-tracker-app/
 ├── public/                 # Static assets (index.html, favicon)
 │   └── index.html          # Main HTML file for the Vue app
 ├── src/                    # Source code for the Vue.js application
@@ -135,9 +135,9 @@ LocalForage Initialization (plugins/localforage.js):
 import localforage from 'localforage';
 
 // Configure and export named LocalForage instances for different data types
-export const productsStore = localforage.createInstance({ name: 'bizpoint_products' });
-export const customersStore = localforage.createInstance({ name: 'bizpoint_customers' });
-export const salesQueueStore = localforage.createInstance({ name: 'bizpoint_sales_queue' }); // Queue for pending sales to sync
+export const productsStore = localforage.createInstance({ name: 'sales_tracker_products' });
+export const customersStore = localforage.createInstance({ name: 'sales_tracker_customers' });
+export const salesQueueStore = localforage.createInstance({ name: 'sales_tracker_sales_queue' }); // Queue for pending sales to sync
 
 export default {
   install(app) {
@@ -165,4 +165,4 @@ On successful Supabase sync, removes the item from the queue.
 After processing the queue (or periodically when online), it performs a full "pull" sync: fetches the latest data for Products, Customers, and Sales from Supabase and updates the respective LocalForage stores (productsStore, customersStore). This ensures the local cache is fresh.
 Conflict Resolution (MVP): For data being pulled from Supabase, the Supabase version is always considered the most authoritative (last write wins on the server). For data being pushed from LocalForage, if the Supabase record was modified after the local modification (check timestamps if available), a simple conflict might be to just overwrite (last local change wins if pushing) or log a warning. For MVP, focus on making sure changes eventually propagate.
 UI Feedback: The stores/offline.js will hold the current network status and potentially sync status (e.g., isSyncing: true/false, lastSyncTime). OnlineStatusIndicator.vue will display this to the user.
-This comprehensive structure provides a clear blueprint for the BizPoint MVP, enabling both online and offline functionality with Supabase and Vue.js.
+This comprehensive structure provides a clear blueprint for the Sales Tracker MVP, enabling both online and offline functionality with Supabase and Vue.js.

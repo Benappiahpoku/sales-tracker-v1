@@ -1,6 +1,6 @@
 <!--
   Search.vue
-  Stratonea/BizPoint - Minimal, mobile-first search input for filtering lists.
+  Stratonea/Sales Tracker - Minimal, mobile-first search input for filtering lists.
   - Large touch targets, clear feedback, Ghana-optimized
   - Uses Tailwind utility classes for styling
   - Follows Stratonea guidelines (see copilot-instructions.md)
@@ -11,21 +11,14 @@
   <!-- ===== [New Feature] START ===== -->
   <div class="w-full mb-3">
     <!-- Label for accessibility -->
-    <label :for="id || ''"   class="block text-sm font-medium text-gray-700 mb-1">
+    <label :for="id || ''" class="block text-sm font-medium text-gray-700 mb-1">
       {{ label }}
     </label>
     <!-- Search Input -->
     <div class="relative">
-      <input
-        :id="id || ''"
-        type="search"
-        :placeholder="placeholder || ''"
-        :value="modelValue || ''"
-        @input="onInput"
+      <input :id="id || ''" type="search" :placeholder="placeholder || ''" :value="modelValue || ''" @input="onInput"
         class="block w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-primary focus:border-primary text-base bg-white shadow-sm min-h-[48px]"
-        autocomplete="off"
-        aria-label="Search"
-      />
+        autocomplete="off" aria-label="Search" />
       <!-- Search Icon (optional, for visual feedback) -->
       <span class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" aria-hidden="true">
         🔍

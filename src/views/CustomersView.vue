@@ -1,6 +1,6 @@
 <!--
   CustomersView.vue
-  Stratonea/BizPoint - Main view for managing customers.
+  Stratonea/Sales Tracker - Main view for managing customers.
   - Ghana-optimized: mobile-first, offline-friendly, simple UI
   - Uses CustomerList and CustomerForm components
   - Handles add/edit customer logic with mock data for now
@@ -11,13 +11,22 @@
 
 
   <!-- ===== Main Content ===== -->
-  <div class="max-w-md mx-auto">
+  <div class="min-h-screen bg-gray-50 px-2 py-4">
     <!-- Customer List (shows when not adding/editing) -->
     <CustomerList v-if="!showForm" :customers="customers" @add="onAdd" @edit="onEdit" @delete="onDelete" />
 
     <!-- Customer Form (shows when adding/editing) -->
     <CustomerForm v-if="showForm" :initial="editingCustomer || emptyCustomer" :error="formError" @save="onSave"
       @cancel="onCancel" />
+
+    <!-- ===== Floating Action Button (FAB) for Add Invoice ===== -->
+
+    <button
+      class="fixed bottom-20 right-4 md:hidden z-50 bg-green-500 text-white rounded-full shadow-lg w-14 h-14 flex items-center justify-center text-3xl focus:outline-none"
+      @click="onAdd" aria-label="Add Invoice" title="Add Invoice">
+      +
+    </button>
+    <!-- ===== [New Feature] END ===== -->
   </div>
 </template>
 

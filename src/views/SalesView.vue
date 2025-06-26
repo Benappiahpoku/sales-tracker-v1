@@ -1,6 +1,6 @@
 <!--
   SalesView.vue
-  Stratonea/BizPoint - Mobile-first sales dashboard/listing page.
+  Stratonea/Sales Tracker - Mobile-first sales dashboard/listing page.
   - Ghana-optimized: simple, clear, offline-friendly
   - Uses Tailwind utility classes for styling
   - Follows Stratonea guidelines (see copilot-instructions.md)
@@ -8,9 +8,9 @@
 -->
 
 <template>
-  <!-- ===== [New Feature] START ===== -->
+
   <div class="min-h-screen bg-gray-50 px-2 py-4">
-   
+
 
     <!-- Sales List Component -->
     <SalesList :sales="sales" @view="onViewSale" @delete="onDeleteSale" />
@@ -18,7 +18,7 @@
     <!-- Add Sale Button -->
     <div class="fixed bottom-6 right-6 z-10">
       <button
-        class="bg-primary text-white rounded-full shadow-lg w-16 h-16 flex items-center justify-center text-3xl font-bold hover:bg-primary-dark transition-colors"
+        class="fixed bottom-20 right-4 md:hidden z-50 bg-green-500 text-white rounded-full shadow-lg w-14 h-14 flex items-center justify-center text-3xl focus:outline-none"
         @click="onAddSale" aria-label="Add Sale">
         +
       </button>

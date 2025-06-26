@@ -1,6 +1,6 @@
 <!--
   StockAdjustmentForm.vue
-  Stratonea/BizPoint - Form for adding/adjusting stock.
+  Stratonea/Sales Tracker - Form for adding/adjusting stock.
   - Mobile-first, Ghana-optimized, offline-friendly
   - Uses Tailwind utility classes for styling
   - Follows Stratonea guidelines (see copilot-instructions.md)
@@ -9,25 +9,16 @@
 
 <template>
   <!-- ===== [New Feature] START ===== -->
-  <form
-    class="bg-white rounded-lg shadow-md p-4 max-w-md mx-auto my-4 flex flex-col gap-4"
-    @submit.prevent="onSubmit"
-    aria-label="Stock Adjustment Form"
-    autocomplete="off"
-  >
+  <form class="bg-white rounded-lg shadow-md p-4 max-w-md mx-auto my-4 flex flex-col gap-4" @submit.prevent="onSubmit"
+    aria-label="Stock Adjustment Form" autocomplete="off">
     <!-- Product Name (read-only or select) -->
     <div>
       <label for="product-name" class="block text-sm font-medium text-gray-700 mb-1">
         Product
       </label>
-      <input
-        id="product-name"
-        type="text"
-        v-model="form.productName"
-        readonly
+      <input id="product-name" type="text" v-model="form.productName" readonly
         class="block w-full px-4 py-3 rounded-lg border border-gray-300 bg-gray-100 text-base shadow-sm min-h-[48px]"
-        aria-label="Product Name"
-      />
+        aria-label="Product Name" />
     </div>
 
     <!-- Adjustment Type -->
@@ -35,13 +26,9 @@
       <label for="adjustment-type" class="block text-sm font-medium text-gray-700 mb-1">
         Adjustment Type
       </label>
-      <select
-        id="adjustment-type"
-        v-model="form.type"
-        required
+      <select id="adjustment-type" v-model="form.type" required
         class="block w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-primary focus:border-primary text-base bg-white shadow-sm min-h-[48px]"
-        aria-label="Adjustment Type"
-      >
+        aria-label="Adjustment Type">
         <option value="" disabled>Select type</option>
         <option value="restock">Restock</option>
         <option value="remove">Remove</option>
@@ -54,18 +41,9 @@
       <label for="adjustment-qty" class="block text-sm font-medium text-gray-700 mb-1">
         Quantity
       </label>
-      <input
-        id="adjustment-qty"
-        type="number"
-        v-model.number="form.quantity"
-        min="1"
-        step="1"
-        required
+      <input id="adjustment-qty" type="number" v-model.number="form.quantity" min="1" step="1" required
         class="block w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-primary focus:border-primary text-base bg-white shadow-sm min-h-[48px]"
-        placeholder="Enter quantity"
-        autocomplete="off"
-        aria-label="Quantity"
-      />
+        placeholder="Enter quantity" autocomplete="off" aria-label="Quantity" />
     </div>
 
     <!-- Reason (optional) -->
@@ -73,15 +51,9 @@
       <label for="adjustment-reason" class="block text-sm font-medium text-gray-700 mb-1">
         Reason (optional)
       </label>
-      <input
-        id="adjustment-reason"
-        type="text"
-        v-model="form.reason"
+      <input id="adjustment-reason" type="text" v-model="form.reason"
         class="block w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-primary focus:border-primary text-base bg-white shadow-sm min-h-[48px]"
-        placeholder="e.g. Damaged, Expired, Correction"
-        autocomplete="off"
-        aria-label="Reason"
-      />
+        placeholder="e.g. Damaged, Expired, Correction" autocomplete="off" aria-label="Reason" />
     </div>
 
     <!-- Error Message -->
@@ -89,19 +61,14 @@
 
     <!-- Action Buttons -->
     <div class="flex gap-3 mt-2">
-      <button
-        type="submit"
+      <button type="submit"
         class="flex-1 bg-primary text-white font-bold py-3 rounded-lg shadow min-h-[48px] hover:bg-primary-dark transition-colors"
-        aria-label="Save Adjustment"
-      >
+        aria-label="Save Adjustment">
         Save
       </button>
-      <button
-        type="button"
+      <button type="button"
         class="flex-1 bg-gray-200 text-gray-800 font-bold py-3 rounded-lg shadow min-h-[48px] hover:bg-gray-300 transition-colors"
-        @click="onCancel"
-        aria-label="Cancel"
-      >
+        @click="onCancel" aria-label="Cancel">
         Cancel
       </button>
     </div>

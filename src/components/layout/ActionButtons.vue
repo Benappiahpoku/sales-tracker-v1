@@ -1,6 +1,6 @@
 <!--
   ActionButtons.vue
-  Stratonea/BizPoint - Action buttons for receipt/invoice actions.
+  Stratonea/Sales Tracker - Action buttons for receipt/invoice actions.
   - Print, WhatsApp Share, Download PDF (can be extended)
   - Ghana-optimized: large touch targets, clear icons, mobile-first
   - WhatsApp integration for sharing receipts
@@ -14,30 +14,21 @@
     <!-- Print Button -->
     <button
       class="flex-1 flex items-center justify-center gap-2 bg-primary text-white font-bold py-3 rounded-lg shadow min-h-[48px] hover:bg-primary-dark transition-colors"
-      @click="onPrint"
-      aria-label="Print Receipt"
-      type="button"
-    >
+      @click="onPrint" aria-label="Print Receipt" type="button">
       <span class="material-icons" aria-hidden="true">print</span>
       Print
     </button>
     <!-- WhatsApp Share Button -->
     <button
       class="flex-1 flex items-center justify-center gap-2 bg-green-600 text-white font-bold py-3 rounded-lg shadow min-h-[48px] hover:bg-green-700 transition-colors"
-      @click="onWhatsApp"
-      aria-label="Share via WhatsApp"
-      type="button"
-    >
+      @click="onWhatsApp" aria-label="Share via WhatsApp" type="button">
       <span class="material-icons" aria-hidden="true">whatsapp</span>
       WhatsApp
     </button>
     <!-- Download PDF Button -->
     <button
       class="flex-1 flex items-center justify-center gap-2 bg-gray-200 text-gray-800 font-bold py-3 rounded-lg shadow min-h-[48px] hover:bg-gray-300 transition-colors"
-      @click="onDownload"
-      aria-label="Download PDF"
-      type="button"
-    >
+      @click="onDownload" aria-label="Download PDF" type="button">
       <span class="material-icons" aria-hidden="true">download</span>
       PDF
     </button>

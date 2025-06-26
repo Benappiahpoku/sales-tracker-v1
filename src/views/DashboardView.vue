@@ -1,20 +1,20 @@
 <!--
   DashboardView.vue
-  Stratonea/BizPoint - Main dashboard/home view.
+  Stratonea/Sales Tracker - Main dashboard/home view.
   - Ghana-optimized: mobile-first, offline-friendly, simple UI
   - Shows company summary and quick links
   - Follows Stratonea guidelines and file structure
 -->
 
 <template>
- 
+
   <!-- ===== Main Content ===== -->
   <div class="max-w-md mx-auto">
     <!-- Welcome Message -->
     <div class="bg-white rounded-lg shadow-md p-6 mb-4">
       <h1 class="text-xl font-bold text-primary mb-2">Welcome, {{ userName }}!</h1>
       <p class="text-gray-700 mb-2">
-        This is your BizPoint dashboard. Manage your business, customers, and sales from one place.
+        This is your Sales Tracker dashboard. Manage your business, customers, and sales from one place.
       </p>
       <div class="text-xs text-gray-400 mb-2">
         Offline mode is supported. Your data will sync when you’re back online.

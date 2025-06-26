@@ -1,79 +1,128 @@
 <!--
   StockList.vue
-  Stratonea/BizPoint - Table to display stock/inventory list.
-  - Ghana-optimized: mobile-first, offline-friendly, simple UI
+  Stratonea/Sales Tracker - Responsive stock list with:
+  - Mobile: Vertical card layout
+  - Desktop: Horizontal table layout
+  - Ghana-optimized: offline-friendly, touch targets
   - Uses Tailwind utility classes for styling
-  - Follows Stratonea guidelines and file structure
-  - Uses mock/static data for now (replace with real data later)
 -->
 
 <template>
-  <!-- ===== [New Feature] START ===== -->
-  <div class="bg-white rounded-lg shadow-md p-4 max-w-md mx-auto my-4">
-    <!-- Table Header -->
-    <div class="flex justify-between items-center mb-2">
-      <span class="text-lg font-bold text-primary">Stock</span>
-      <button
-        class="bg-primary text-white px-4 py-2 rounded-lg font-bold min-h-[48px] hover:bg-primary-dark transition-colors"
-        @click="onAdd"
-        aria-label="Add Stock"
-      >
-        + Add
-      </button>
-    </div>
-    <!-- Stock Table -->
-    <table class="w-full text-sm">
-      <thead>
-        <tr class="border-b border-gray-200">
-          <th class="text-left py-2">Product</th>
-          <th class="text-left py-2">SKU</th>
-          <th class="text-right py-2">Change</th>
-          <th class="text-right py-2">Stock</th>
-          <th class="text-left py-2">Reason</th>
-          <th class="text-center py-2">Actions</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr
-          v-for="item in stock"
-          :key="item.id"
-          class="border-b border-gray-100 hover:bg-gray-50 transition-colors"
-        >
-          <td class="py-2 font-medium text-gray-900">{{ item.productName }}</td>
-          <td class="py-2 text-gray-500">{{ item.sku }}</td>
-          <td class="py-2 text-right">
+  <!-- Mobile Card Layout (default) -->
+  <div class="block md:hidden">
+    <div class="space-y-4 max-w-md mx-auto my-4">
+      <div v-for="item in stock" :key="item.id" class="bg-white rounded-lg shadow-md p-4 flex flex-col gap-2">
+        <!-- Stock Details: Stacked vertically for mobile -->
+        <div class="flex flex-col gap-1 text-sm">
+          <div class="flex justify-between">
+            <span class="font-semibold text-gray-700">Product:</span>
+            <span class="text-gray-900">{{ item.productName }}</span>
+          </div>
+          <div class="flex justify-between">
+            <span class="font-semibold text-gray-700">SKU:</span>
+            <span class="text-gray-900">{{ item.sku }}</span>
+          </div>
+          <div class="flex justify-between">
+            <span class="font-semibold text-gray-700">Current Stock:</span>
+            <span class="text-gray-900">{{ item.stock }}</span>
+          </div>
+          <div class="flex justify-between">
+            <span class="font-semibold text-gray-700">Change:</span>
             <span :class="changeClass(item.change)">
               {{ item.change > 0 ? '+' : '' }}{{ item.change }}
             </span>
-          </td>
-          <td class="py-2 text-right text-gray-700">{{ item.stock }}</td>
-          <td class="py-2 text-gray-500">{{ item.reason }}</td>
-          <td class="py-2 text-center">
-            <button
-              class="text-primary font-bold px-2"
-              @click="onEdit(item)"
-              aria-label="Edit"
-            >
-              Edit
-            </button>
-            <button
-              class="text-red-600 font-bold px-2"
-              @click="onDelete(item)"
-              aria-label="Delete"
-            >
-              Delete
-            </button>
-          </td>
-        </tr>
-        <!-- ===== [New Feature] START: Safe empty check ===== -->
-        <tr v-if="(stock?.length ?? 0) === 0">
-          <td colspan="6" class="text-center text-gray-400 py-4">No stock records found.</td>
-        </tr>
-        <!-- ===== [New Feature] END ===== -->
-      </tbody>
-    </table>
+          </div>
+          <div class="flex justify-between">
+            <span class="font-semibold text-gray-700">Reason:</span>
+            <span class="text-gray-900">{{ item.reason }}</span>
+          </div>
+        </div>
+
+        <!-- Mobile Action Buttons -->
+        <div class="flex flex-col gap-2 mt-2">
+          <button
+            class="w-full min-h-[48px] bg-primary text-white rounded-lg font-bold text-base shadow-sm hover:bg-primary-dark transition-colors"
+            @click="onEdit(item)" aria-label="Edit Stock Item">
+            Edit
+          </button>
+          <button
+            class="w-full min-h-[48px] bg-red-600 text-white rounded-lg font-bold text-base shadow-sm hover:bg-red-700 transition-colors"
+            @click="onDelete(item)" aria-label="Delete Stock Item">
+            Delete
+          </button>
+        </div>
+      </div>
+    </div>
   </div>
-  <!-- ===== [New Feature] END ===== -->
+
+  <!-- Desktop Table Layout -->
+
+  <table class="hidden md:table min-w-full border-separate border-spacing-0">
+    <!-- Table Header -->
+    <thead class="bg-gray-50">
+      <tr>
+        <th class=" top-0 py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900">
+          Product
+        </th>
+        <th class=" top-0 px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+          SKU
+        </th>
+        <th class=" top-0 px-3 py-3.5 text-center text-sm font-semibold text-gray-900">
+          Current Stock
+        </th>
+        <th class=" top-0 px-3 py-3.5 text-center text-sm font-semibold text-gray-900">
+          Change
+        </th>
+        <th class=" top-0 px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+          Reason
+        </th>
+        <th class=" top-0 py-3.5 pl-3 pr-4 text-right text-sm font-semibold text-gray-900">
+          Actions
+        </th>
+      </tr>
+    </thead>
+
+    <!-- Table Body -->
+    <tbody class="bg-white">
+      <tr v-for="item in stock" :key="item.id" class="hover:bg-gray-50">
+        <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm text-gray-900">
+          {{ item.productName }}
+        </td>
+        <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-600">
+          {{ item.sku }}
+        </td>
+        <td class="whitespace-nowrap px-3 py-4 text-sm text-center text-gray-900">
+          {{ item.stock }}
+        </td>
+        <td class="whitespace-nowrap px-3 py-4 text-center">
+          <span :class="[
+            'inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium',
+            changeClass(item.change)
+          ]">
+            {{ item.change > 0 ? '+' : '' }}{{ item.change }}
+          </span>
+        </td>
+        <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-900">
+          {{ item.reason }}
+        </td>
+        <td class="whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm space-x-2">
+          <button @click="onEdit(item)"
+            class="inline-flex items-center px-2.5 py-1.5 text-sm font-medium text-white bg-primary rounded hover:bg-primary-dark focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2">
+            Edit
+          </button>
+          <button @click="onDelete(item)"
+            class="inline-flex items-center px-2.5 py-1.5 text-sm font-medium text-white bg-red-600 rounded hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2">
+            Delete
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- Empty State -->
+  <div v-if="(stock?.length ?? 0) === 0" class="text-center py-12 bg-gray-50">
+    <p class="text-sm text-gray-500">No stock items found</p>
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -110,22 +159,14 @@ withDefaults(
 
 // ===== Emits =====
 /**
- * Emits events to parent for add, edit, and delete actions.
+ * Emits events to parent for edit and delete actions.
  */
 const emit = defineEmits<{
-  (e: 'add'): void
   (e: 'edit', item: StockItem): void
   (e: 'delete', item: StockItem): void
 }>()
 
 // ===== Main Logic =====
-/**
- * Handles add button click.
- */
-function onAdd() {
-  emit('add')
-}
-
 /**
  * Handles edit button click.
  * @param item - The stock item to edit
@@ -143,21 +184,23 @@ function onDelete(item: StockItem) {
 }
 
 /**
- * Returns a Tailwind class for positive or negative stock change.
+ * Returns Tailwind classes for positive or negative stock changes.
  * @param change - The stock change value
- * @returns string
+ * @returns string (Tailwind classes)
  */
+// Update the existing changeClass function
 function changeClass(change: number): string {
-  if (change > 0) return 'text-green-600 font-bold'
-  if (change < 0) return 'text-red-600 font-bold'
-  return 'text-gray-700'
+  if (change > 0) return 'bg-green-100 text-green-800'
+  if (change < 0) return 'bg-red-100 text-red-800'
+  return 'bg-gray-100 text-gray-800'
 }
 </script>
 
 <!--
   ===== Styling Notes =====
-  - Table is mobile-first, touch-optimized (min-h-[48px] for actions).
-  - Uses Tailwind for color, spacing, and responsive design.
-  - Accessible: aria-labels, clear feedback.
-  - Color-coded change: green for positive, red for negative, gray for zero.
+  - Uses responsive classes (md:) for desktop/mobile switching
+  - Mobile: Card layout with full-width buttons
+  - Desktop: Table layout with horizontal rows
+  - Consistent colors and spacing across both layouts
+  - Touch-optimized for mobile, precise for desktop
 -->

@@ -1,9 +1,9 @@
 <!--
   AppHeader.vue
-  Stratonea/BizPoint - Mobile-first app header.
-  - Left: Menu icon (faCog), then current view/page name (centered)
-  - Center: Stratonea logo (SVG or image)
-  - Right: App name (bold, accessible)
+  Stratonea/Sales Tracker - Mobile-first app header.
+  - Left: Back button with FontAwesome left arrow and "Back" text
+  - Center: (Optional) App logo or page title (currently omitted for minimalism)
+  - Right: Online/Offline indicator with color-coded background
   - Ghana-optimized: touch targets, color contrast, mobile sizing
   - Uses Tailwind utility classes for styling
   - Accessible: semantic header, alt text, good contrast
@@ -12,35 +12,56 @@
 
 <template>
   <!-- ===== App Header (Top Bar) ===== -->
-  <header class="flex items-center mb-10 justify-between px-4 py-3 bg-primary text-white shadow-md" role="banner"
-    aria-label="App Header">
-
-    <!-- ===== Center: Stratonea Logo ===== -->
-    <StratoneaLogo class="h-10 w-auto min-h-[32px] max-h-[48px] mx-2" alt="Stratonea Logo" white />
-
-    <!-- ===== Right: App Name ===== -->
-    <span class="text-lg font-bold tracking-wide ml-2" aria-label="App Name">
-      {{ appName }}
-    </span>
-
-
-
-
+  <header
+    class="flex max-w-md mx-auto items-center justify-between px-4 py-3 bg-primary text-white shadow-md min-h-[48px]"
+    role="banner" aria-label="App Header">
     <!-- ===== [New Feature] START ===== -->
+    <!-- Left: Back button with FontAwesome left arrow and "Back" text -->
+    <button
+      class="flex items-center gap-2 px-3 py-2 rounded stratonea:rounded focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-light bg-white bg-opacity-10 hover:bg-opacity-20 transition min-h-[48px]"
+      aria-label="Go Back" @click="$emit('back')" type="button">
+      <!-- FontAwesome left arrow icon -->
+      <FontAwesomeIcon icon="fa-solid fa-arrow-left" class="text-lg" />
+      <span class="font-medium text-base">Back</span>
+    </button>
+    <!-- ===== [New Feature] END ===== -->
+
+    <!-- Center: (Optional) App logo or page title could go here for future expansion -->
     <!-- Center: Current View/Page Name (passed as prop) -->
     <span class="flex-1 text-center text-lg font-semibold tracking-wide" aria-label="Current Page">
       {{ currentPage }}
     </span>
 
-    <button
-      class="flex items-center justify-center min-w-[48px] min-h-[48px] rounded-xl border-2 border-white focus:outline-none focus:ring-2 focus:ring-white transition-all duration-150"
-      aria-label="Open menu" @click="emit('openSidebar')" type="button" style="box-sizing: border-box;">
-      <font-awesome-icon :icon="['fas', 'cog']" class="text-2xl" />
-    </button>
+    <!-- ===== [New Feature] START ===== -->
+    <!-- Right: Online/Offline indicator with color-coded background -->
+    <span class="flex items-center gap-2 px-3 py-2 rounded stratonea:rounded font-bold text-base min-h-[40px]" :class="isOnline
+        ? 'bg-green-500 text-white'
+        : 'bg-red-500 text-white'" aria-live="polite" aria-label="Network Status" role="status">
+      <FontAwesomeIcon :icon="isOnline ? 'fa-solid fa-circle' : 'fa-solid fa-circle'"
+        :class="isOnline ? 'text-white' : 'text-white opacity-80'" class="text-xs" />
+      <span>{{ isOnline ? 'Online' : 'Offline' }}</span>
+    </span>
+    
   </header>
 </template>
 
 <script setup lang="ts">
+// ===== File-Level Documentation =====
+/**
+ * AppHeader.vue
+ * - Ghana-optimized, mobile-first header for Sales Tracker.
+ * - Left: Back button (FontAwesome left arrow + "Back" text)
+ * - Right: Online/Offline indicator (green/red background)
+ * - Uses useNetworkStatus composable for real-time network status.
+ * - Emits 'back' event when back button is clicked.
+ */
+
+// ===== Imports =====
+import {computed} from 'vue'
+import { FontAwesomeIcon } from '@/plugins/fontawesome' // FontAwesome setup
+import { useNetworkStatus } from '@/composables/useNetworkStatus' // Network status composable
+
+
 // ===== Types & Interfaces =====
 /**
  * Props for AppHeader
@@ -56,31 +77,13 @@ withDefaults(
   }
 )
 
-// ===== Emits =====
+// ===== Main Logic =====
 /**
- * Emits openSidebar event to parent to trigger sidebar open.
+ * useNetworkStatus composable provides reactive network info.
+ * We use networkInfo.value.isOnline to determine status.
  */
-const emit = defineEmits<{
-  (e: 'openSidebar'): void
-}>()
-
-// ===== Constants & Config =====
-/**
- * The appName constant is used for the header text.
- * Change this value if you want to reuse the header for another app.
- */
-const appName = 'BizPoint'
-
-// ===== Imports =====
-/**
- * Import the StratoneaLogo component.
- * This should be placed in src/components/base/StratoneaLogo.vue.
- * If not yet created, use a placeholder SVG or image.
- */
-import StratoneaLogo from '@/components/base/StratoneaLogo.vue'
-
-// Import FontAwesomeIcon for the menu icon
-import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+const { networkInfo } = useNetworkStatus()
+const isOnline = computed(() => networkInfo.value.isOnline)
 </script>
 
 <!--
@@ -88,9 +91,10 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
   - All styling is via Tailwind utility classes for mobile-first workflow.
   - bg-primary uses the Stratonea brand color (see tailwind.config.js).
   - min-h-[48px] ensures touch-friendly targets.
-  - text-lg font-bold for clear, readable app name.
+  - text-base font-bold for clear, readable status.
   - shadow-md for subtle elevation.
   - px-4 py-3 for comfortable touch targets (min 48px).
   - Accessible: role="banner", aria-labels, alt text.
-  - Menu icon uses faCog from FontAwesome.
+  - Back button uses FontAwesome left arrow.
+  - Online/Offline indicator uses green/red backgrounds for clarity.
 -->

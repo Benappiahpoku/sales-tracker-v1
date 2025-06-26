@@ -1,6 +1,6 @@
 <!--
   ProductsView.vue
-  Stratonea/BizPoint - Main view for managing products.
+  Stratonea/Sales Tracker - Main view for managing products.
   - Ghana-optimized: mobile-first, offline-friendly, simple UI
   - Uses ProductList and ProductForm components
   - Handles add/edit product logic with mock data for now
@@ -11,13 +11,22 @@
 
 
   <!-- ===== Main Content ===== -->
-  <div class="max-w-md mx-auto">
+  <div class="min-h-screen bg-gray-50 px-2 py-4">
     <!-- Product List (shows when not adding/editing) -->
     <ProductList v-if="!showForm" :products="products" @add="onAdd" @edit="onEdit" @delete="onDelete" />
 
     <!-- Product Form (shows when adding/editing) -->
     <ProductForm v-if="showForm" :initial="editingProduct || emptyProduct" :error="formError" @save="onSave"
       @cancel="onCancel" />
+
+    <!-- ===== Floating Action Button (FAB) for Add Invoice ===== -->
+
+    <button
+      class="fixed bottom-20 right-4 md:hidden z-50 bg-green-500 text-white rounded-full shadow-lg w-14 h-14 flex items-center justify-center text-3xl focus:outline-none"
+      @click="onAdd" aria-label="Add Invoice" title="Add Invoice">
+      +
+    </button>
+    <!-- ===== [New Feature] END ===== -->
   </div>
 </template>
 
@@ -45,10 +54,10 @@ interface Product {
  * Default empty product for new entries.
  */
 const emptyProduct: Product = {
-    name: '',
-    sku: '',
-    price: 0,
-    stock: 0
+  name: '',
+  sku: '',
+  price: 0,
+  stock: 0
 }
 
 // ===== Main Logic =====

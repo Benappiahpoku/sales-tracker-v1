@@ -1,6 +1,6 @@
-# BizPoint MVP Development Task List (Vue.js, Supabase, LocalForage)
+# Sales Tracker MVP Development Task List (Vue.js, Supabase, LocalForage)
 
-This development task list outlines the key steps to build the Minimum Viable Product (MVP) for BizPoint, based on the provided PRD and incorporating the Vue.js, Supabase, and LocalForage technology stack, with an anonymous-first and freemium model.
+This development task list outlines the key steps to build the Minimum Viable Product (MVP) for Sales Tracker, based on the provided PRD and incorporating the Vue.js, Supabase, and LocalForage technology stack, with an anonymous-first and freemium model.
 Phase 1: Project Setup & Core Infrastructure
 Vue.js Project Initialization
 Set up a new Vue.js project (e.g., using Vue CLI or Vite).

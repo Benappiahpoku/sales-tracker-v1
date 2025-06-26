@@ -1,6 +1,6 @@
 <!--
   ProductItem.vue
-  Stratonea/BizPoint - Component for displaying a single product item.
+  Stratonea/Sales Tracker - Component for displaying a single product item.
   - Mobile-first, touch-optimized, Ghana-optimized
   - Uses Tailwind utility classes for styling
   - Follows Stratonea guidelines (see copilot-instructions.md)
@@ -11,9 +11,7 @@
   <!-- ===== [New Feature] START ===== -->
   <div
     class="flex items-center gap-4 bg-white rounded-lg shadow p-4 mb-2 min-h-[64px] hover:bg-gray-50 transition-colors"
-    aria-label="Product Item"
-    role="listitem"
-  >
+    aria-label="Product Item" role="listitem">
     <!-- Product Image (optional, placeholder for now) -->
     <div class="flex-shrink-0 w-12 h-12 bg-gray-200 rounded stratonea flex items-center justify-center">
       <span class="text-gray-400 text-xl" aria-hidden="true">📦</span>

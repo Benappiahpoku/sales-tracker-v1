@@ -1,6 +1,6 @@
 <!--
   StockItem.vue
-  Stratonea/BizPoint - Component for displaying a single stock item (stock movement or product stock).
+  Stratonea/Sales Tracker - Component for displaying a single stock item (stock movement or product stock).
   - Mobile-first, touch-optimized, Ghana-optimized
   - Uses Tailwind utility classes for styling
   - Follows Stratonea guidelines (see copilot-instructions.md)
@@ -11,9 +11,7 @@
   <!-- ===== [New Feature] START ===== -->
   <div
     class="flex items-center gap-4 bg-white rounded-lg shadow p-4 mb-2 min-h-[64px] hover:bg-gray-50 transition-colors"
-    aria-label="Stock Item"
-    role="listitem"
-  >
+    aria-label="Stock Item" role="listitem">
     <!-- Stock Icon (placeholder for now) -->
     <div class="flex-shrink-0 w-12 h-12 bg-gray-200 rounded stratonea flex items-center justify-center">
       <span class="text-gray-400 text-xl" aria-hidden="true">📦</span>
@@ -25,7 +23,8 @@
         <span class="text-xs text-gray-500">{{ sku }}</span>
       </div>
       <div class="flex justify-between items-end mt-1">
-        <span class="text-sm text-gray-700">Change: <span :class="changeClass">{{ change ?? 0 > 0 ? '+' : '' }}{{ change }}</span></span>
+        <span class="text-sm text-gray-700">Change: <span :class="changeClass">{{ change ?? 0 > 0 ? '+' : '' }}{{ change
+            }}</span></span>
         <span class="text-sm font-bold text-primary">Stock: {{ stock }}</span>
       </div>
       <div class="flex justify-between text-xs text-gray-400 mt-1">
@@ -39,7 +38,7 @@
 
 <script setup lang="ts">
 
-import {computed} from 'vue'
+import { computed } from 'vue'
 // ===== Types & Interfaces =====
 /**
  * Props for StockItem

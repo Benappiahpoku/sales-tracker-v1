@@ -1,6 +1,6 @@
-# PRD Review: BizPoint MVP with Vue.js, Supabase, LocalForage
+# PRD Review: Sales Tracker MVP with Vue.js, Supabase, LocalForage
 
-This review examines the BizPoint MVP Product Requirements Document (PRD) in light of the chosen technology stack: Vue.js for the frontend, Supabase for the backend (Auth, Database, API), and LocalForage for offline data storage and synchronization.
+This review examines the Sales Tracker MVP Product Requirements Document (PRD) in light of the chosen technology stack: Vue.js for the frontend, Supabase for the backend (Auth, Database, API), and LocalForage for offline data storage and synchronization.
 
 1. Introduction & Purpose
 Review: The core purpose remains robust. The addition of LocalForage significantly enhances the "user-friendly and efficient" aspect, particularly in areas with intermittent internet connectivity, aligning perfectly with the target audience in Ghana. This offline capability is a key differentiator.
@@ -81,6 +81,6 @@ Error Handling: Implement robust try/catch blocks within services, especially ar
 Security: Supabase's Row Level Security (RLS) can be considered for future granular access control, but for MVP, basic authentication and ensuring proper data handling will be key. Initial setup uses __initial_auth_token for authentication.
 
 Success Metrics for MVP
-Review: Metrics remain highly relevant. The success of "BizPoint" will heavily rely on the seamless operation of the offline sync mechanism to ensure accurate data even with connectivity challenges.
+Review: Metrics remain highly relevant. The success of "Sales Tracker" will heavily rely on the seamless operation of the offline sync mechanism to ensure accurate data even with connectivity challenges.
 
 This detailed review should provide the AI agent with clear instructions on how to leverage Vue.js, Supabase, and LocalForage for each PRD requirement, particularly focusing on the crucial offline-first and synchronization logic.

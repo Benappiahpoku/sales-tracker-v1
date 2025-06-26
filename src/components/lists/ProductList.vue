@@ -1,72 +1,121 @@
-<!--
-  ProductList.vue
-  Stratonea/BizPoint - Table to display product list.
-  - Mobile-first, Ghana-optimized, offline-friendly
-  - Uses Tailwind utility classes for styling
-  - Follows Stratonea guidelines (see copilot-instructions.md)
-  - Uses mock/static data for now (replace with real data later)
--->
-
 <template>
-  <!-- ===== [New Feature] START ===== -->
-  <div class="bg-white rounded-lg shadow-md p-4 max-w-md mx-auto my-4">
-    <!-- Table Header -->
-    <div class="flex justify-between items-center mb-2">
-      <span class="text-lg font-bold text-primary">Products</span>
-      <button
-        class="bg-primary text-white px-4 py-2 rounded-lg font-bold min-h-[48px] hover:bg-primary-dark transition-colors"
-        @click="onAdd"
-        aria-label="Add Product"
-      >
-        + Add
-      </button>
+  <!-- Mobile Card Layout -->
+  <div class="block md:hidden">
+    <div class="space-y-4 max-w-md mx-auto my-4">
+      <div v-for="product in products" :key="product.sku" class="bg-white rounded-lg shadow-md p-4 flex flex-col gap-2">
+        <!-- Product Details: Stacked vertically for mobile -->
+        <div class="flex flex-col gap-1 text-sm">
+          <div class="flex justify-between">
+            <span class="font-semibold text-gray-700">Product:</span>
+            <span class="text-gray-900">{{ product.name }}</span>
+          </div>
+          <div class="flex justify-between">
+            <span class="font-semibold text-gray-700">SKU:</span>
+            <span class="text-gray-900">{{ product.sku }}</span>
+          </div>
+          <div class="flex justify-between">
+            <span class="font-semibold text-gray-700">Price:</span>
+            <span class="text-gray-900">{{ formatCurrency(product.price) }}</span>
+          </div>
+          <div class="flex justify-between">
+            <span class="font-semibold text-gray-700">Stock:</span>
+            <span class="text-gray-900">{{ product.stock }}</span>
+          </div>
+        </div>
+
+        <!-- Mobile Action Buttons -->
+        <div class="flex flex-col gap-2 mt-2">
+          <button @click="onEdit(product)"
+            class="w-full min-h-[48px] bg-primary text-white rounded-lg font-bold text-base shadow-sm hover:bg-primary-dark transition-colors">
+            Edit
+          </button>
+          <button @click="onDelete(product)"
+            class="w-full min-h-[48px] bg-red-600 text-white rounded-lg font-bold text-base shadow-sm hover:bg-red-700 transition-colors">
+            Delete
+          </button>
+        </div>
+      </div>
     </div>
-    <!-- Product Table -->
-    <table class="w-full text-sm">
-      <thead>
-        <tr class="border-b border-gray-200">
-          <th class="text-left py-2">Name</th>
-          <th class="text-left py-2">SKU</th>
-          <th class="text-right py-2">Price</th>
-          <th class="text-right py-2">Stock</th>
-          <th class="text-center py-2">Actions</th>
+  </div>
+
+ 
+
+  <!-- Desktop Table Layout -->
+  <table class="hidden md:table min-w-full border-separate border-spacing-0">
+    <!-- Table Header -->
+    <thead class="bg-gray-50">
+    
+        <tr>
+          <th class="px-6 py-4 text-left">
+            <div class="flex items-center gap-2">
+              <span class="text-xs font-bold uppercase tracking-wider text-gray-600">Product</span>
+            </div>
+          </th>
+          <th class="px-6 py-4 text-left">
+            <div class="flex items-center gap-2">
+              <span class="text-xs font-bold uppercase tracking-wider text-gray-600">SKU</span>
+            </div>
+          </th>
+          <th class="px-6 py-4 text-right">
+            <div class="flex items-center justify-end gap-2">
+              <span class="text-xs font-bold uppercase tracking-wider text-gray-600">Price</span>
+            </div>
+          </th>
+          <th class="px-6 py-4 text-center">
+            <div class="flex items-center justify-center gap-2">
+              <span class="text-xs font-bold uppercase tracking-wider text-gray-600">Stock</span>
+            </div>
+          </th>
+          <th class="px-6 py-4 text-right">
+            <span class="text-xs font-bold uppercase tracking-wider text-gray-600">Actions</span>
+          </th>
         </tr>
       </thead>
-      <tbody>
-        <tr
-          v-for="product in products"
-          :key="product.sku"
-          class="border-b border-gray-100 hover:bg-gray-50 transition-colors"
-        >
-          <td class="py-2 font-medium text-gray-900">{{ product.name }}</td>
-          <td class="py-2 text-gray-500">{{ product.sku }}</td>
-          <td class="py-2 text-right text-gray-700">{{ formatCurrency(product.price) }}</td>
-          <td class="py-2 text-right text-gray-700">{{ product.stock }}</td>
-          <td class="py-2 text-center">
-            <button
-              class="text-primary font-bold px-2"
-              @click="onEdit(product)"
-              aria-label="Edit"
-            >
-              Edit
-            </button>
-            <button
-              class="text-red-600 font-bold px-2"
-              @click="onDelete(product)"
-              aria-label="Delete"
-            >
-              Delete
-            </button>
-          </td>
-        </tr>
-        <tr v-if=" (products?.length ?? 0 ) === 0 ">
-          <td colspan="5" class="text-center text-gray-400 py-4">No products found.</td>
-        </tr>
-      </tbody>
-    </table>
+
+      <!-- Table Body -->
+    <tbody class="divide-y divide-gray-200 bg-white">
+      <tr v-for="product in products" :key="product.sku"
+        class="hover:bg-gray-50/50 transition-colors duration-150 ease-in-out">
+        <td class="px-6 py-4 whitespace-nowrap">
+          <div class="font-medium text-gray-900">{{ product.name }}</div>
+        </td>
+        <td class="px-6 py-4 whitespace-nowrap">
+          <div class="text-sm text-gray-600 font-mono">{{ product.sku }}</div>
+        </td>
+        <td class="px-6 py-4 whitespace-nowrap text-right">
+          <div class="text-sm font-medium text-gray-900">{{ formatCurrency(product.price) }}</div>
+        </td>
+        <td class="px-6 py-4 whitespace-nowrap text-center">
+          <div class="text-sm text-gray-900">{{ product.stock }}</div>
+        </td>
+        <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium space-x-2">
+          <button @click="onEdit(product)"
+            class="inline-flex items-center px-3 py-1.5 border border-transparent text-sm font-medium rounded-md text-white bg-primary hover:bg-primary-dark focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary transition-colors duration-150">
+            Edit
+          </button>
+          <button @click="onDelete(product)"
+            class="inline-flex items-center px-3 py-1.5 border border-transparent text-sm font-medium rounded-md text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 transition-colors duration-150">
+            Delete
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+
+  <!-- Empty State -->
+  <div v-if="(products?.length ?? 0) === 0" class="text-center py-12 bg-gray-50 border-t border-gray-200">
+    <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+        d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4" />
+    </svg>
+    <h3 class="mt-2 text-sm font-medium text-gray-900">No products</h3>
+    <p class="mt-1 text-sm text-gray-500">Get started by adding new products.</p>
   </div>
-  <!-- ===== [New Feature] END ===== -->
+
 </template>
+
+
 
 <script setup lang="ts">
 // ===== Types & Interfaces =====
@@ -99,22 +148,14 @@ withDefaults(
 
 // ===== Emits =====
 /**
- * Emits events to parent for add, edit, and delete actions.
+ * Emits events to parent for edit and delete actions.
  */
 const emit = defineEmits<{
-  (e: 'add'): void
   (e: 'edit', product: Product): void
   (e: 'delete', product: Product): void
 }>()
 
 // ===== Main Logic =====
-/**
- * Handles add button click.
- */
-function onAdd() {
-  emit('add')
-}
-
 /**
  * Handles edit button click.
  * @param product - The product to edit
@@ -143,7 +184,8 @@ function formatCurrency(amount: number): string {
 
 <!--
   ===== Styling Notes =====
-  - Table is mobile-first, touch-optimized (min-h-[48px] for actions).
-  - Uses Tailwind for color, spacing, and responsive design.
-  - Accessible: aria-labels, clear feedback.
+  - Card layout is mobile-first, touch-optimized (min-h-[48px] for actions)
+  - Uses Tailwind for color, spacing, and responsive design
+  - Accessible: aria-labels, clear feedback
+  - Ghana-optimized: vertical stacking, large touch targets
 -->

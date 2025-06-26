@@ -1,6 +1,6 @@
 <!--
   DeleteConfirmModal.vue
-  Stratonea/BizPoint - Generic confirmation dialog for delete actions.
+  Stratonea/Sales Tracker - Generic confirmation dialog for delete actions.
   - Accessible modal with focus trap and keyboard support
   - Ghana-optimized: clear message, large touch targets, mobile-first
   - Uses Tailwind utility classes for styling
@@ -10,16 +10,9 @@
 <template>
   <!-- ===== [New Feature] START ===== -->
   <transition name="fade">
-    <div
-      v-if="open"
-      class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-40"
-      role="dialog"
-      aria-modal="true"
-      aria-labelledby="delete-modal-title"
-      aria-describedby="delete-modal-desc"
-      @keydown.esc="onCancel"
-      tabindex="0"
-    >
+    <div v-if="open" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-40" role="dialog"
+      aria-modal="true" aria-labelledby="delete-modal-title" aria-describedby="delete-modal-desc"
+      @keydown.esc="onCancel" tabindex="0">
       <!-- Modal Panel -->
       <div class="bg-white rounded-lg shadow-lg w-11/12 max-w-sm p-6 flex flex-col items-center">
         <!-- Title -->
@@ -34,19 +27,12 @@
         <div class="flex gap-4 w-full">
           <button
             class="flex-1 py-3 rounded-lg bg-gray-200 text-gray-800 font-medium min-h-[48px] focus:outline-none focus:ring-2 focus:ring-primary"
-            @click="onCancel"
-            aria-label="Cancel"
-            type="button"
-          >
+            @click="onCancel" aria-label="Cancel" type="button">
             Cancel
           </button>
           <button
             class="flex-1 py-3 rounded-lg bg-red-600 text-white font-bold min-h-[48px] hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-400"
-            @click="onConfirm"
-            aria-label="Confirm Delete"
-            type="button"
-            autofocus
-          >
+            @click="onConfirm" aria-label="Confirm Delete" type="button" autofocus>
             Delete
           </button>
         </div>

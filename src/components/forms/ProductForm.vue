@@ -1,6 +1,6 @@
 <!--
   ProductForm.vue
-  Stratonea/BizPoint - Form for adding/editing a product.
+  Stratonea/Sales Tracker - Form for adding/editing a product.
   - Mobile-first, Ghana-optimized, offline-friendly
   - Uses Tailwind utility classes for styling
   - Follows Stratonea guidelines (see copilot-instructions.md)
@@ -9,27 +9,16 @@
 
 <template>
   <!-- ===== [New Feature] START ===== -->
-  <form
-    class="bg-white rounded-lg shadow-md p-4 max-w-md mx-auto my-4 flex flex-col gap-4"
-    @submit.prevent="onSubmit"
-    aria-label="Product Form"
-    autocomplete="off"
-  >
+  <form class="bg-white rounded-lg shadow-md p-4 max-w-md mx-auto my-4 flex flex-col gap-4" @submit.prevent="onSubmit"
+    aria-label="Product Form" autocomplete="off">
     <!-- Product Name -->
     <div>
       <label for="product-name" class="block text-sm font-medium text-gray-700 mb-1">
         Product Name
       </label>
-      <input
-        id="product-name"
-        type="text"
-        v-model="form.name"
-        required
+      <input id="product-name" type="text" v-model="form.name" required
         class="block w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-primary focus:border-primary text-base bg-white shadow-sm min-h-[48px]"
-        placeholder="Enter product name"
-        autocomplete="off"
-        aria-label="Product Name"
-      />
+        placeholder="Enter product name" autocomplete="off" aria-label="Product Name" />
     </div>
 
     <!-- SKU -->
@@ -37,16 +26,9 @@
       <label for="product-sku" class="block text-sm font-medium text-gray-700 mb-1">
         SKU / Code
       </label>
-      <input
-        id="product-sku"
-        type="text"
-        v-model="form.sku"
-        required
+      <input id="product-sku" type="text" v-model="form.sku" required
         class="block w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-primary focus:border-primary text-base bg-white shadow-sm min-h-[48px]"
-        placeholder="Enter SKU or code"
-        autocomplete="off"
-        aria-label="SKU"
-      />
+        placeholder="Enter SKU or code" autocomplete="off" aria-label="SKU" />
     </div>
 
     <!-- Price -->
@@ -54,18 +36,9 @@
       <label for="product-price" class="block text-sm font-medium text-gray-700 mb-1">
         Price (GHS)
       </label>
-      <input
-        id="product-price"
-        type="number"
-        v-model.number="form.price"
-        min="0"
-        step="0.01"
-        required
+      <input id="product-price" type="number" v-model.number="form.price" min="0" step="0.01" required
         class="block w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-primary focus:border-primary text-base bg-white shadow-sm min-h-[48px]"
-        placeholder="Enter price"
-        autocomplete="off"
-        aria-label="Price"
-      />
+        placeholder="Enter price" autocomplete="off" aria-label="Price" />
     </div>
 
     <!-- Stock -->
@@ -73,18 +46,9 @@
       <label for="product-stock" class="block text-sm font-medium text-gray-700 mb-1">
         Stock
       </label>
-      <input
-        id="product-stock"
-        type="number"
-        v-model.number="form.stock"
-        min="0"
-        step="1"
-        required
+      <input id="product-stock" type="number" v-model.number="form.stock" min="0" step="1" required
         class="block w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-primary focus:border-primary text-base bg-white shadow-sm min-h-[48px]"
-        placeholder="Enter stock quantity"
-        autocomplete="off"
-        aria-label="Stock"
-      />
+        placeholder="Enter stock quantity" autocomplete="off" aria-label="Stock" />
     </div>
 
     <!-- Error Message -->
@@ -92,19 +56,14 @@
 
     <!-- Action Buttons -->
     <div class="flex gap-3 mt-2">
-      <button
-        type="submit"
+      <button type="submit"
         class="flex-1 bg-primary text-white font-bold py-3 rounded-lg shadow min-h-[48px] hover:bg-primary-dark transition-colors"
-        aria-label="Save Product"
-      >
+        aria-label="Save Product">
         Save
       </button>
-      <button
-        type="button"
+      <button type="button"
         class="flex-1 bg-gray-200 text-gray-800 font-bold py-3 rounded-lg shadow min-h-[48px] hover:bg-gray-300 transition-colors"
-        @click="onCancel"
-        aria-label="Cancel"
-      >
+        @click="onCancel" aria-label="Cancel">
         Cancel
       </button>
     </div>
@@ -113,7 +72,7 @@
 </template>
 
 <script setup lang="ts">
-import {reactive} from 'vue'
+import { reactive } from 'vue'
 
 // ===== Types & Interfaces =====
 /**

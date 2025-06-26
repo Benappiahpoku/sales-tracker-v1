@@ -3,7 +3,7 @@ interface Config {
 }
 
 const config: Config = {
-  projectName: 'stratonea-POS'
+  projectName: 'sales-tracker-v1'
 };
 
 export default config;

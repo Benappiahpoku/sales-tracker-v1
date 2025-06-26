@@ -1,6 +1,6 @@
 <!--
   NavigationSidebar.vue
-  Stratonea/BizPoint - Mobile-first sidebar navigation.
+  Stratonea/Sales Tracker - Mobile-first sidebar navigation.
   - Slide-in overlay from the left (75% width on mobile)
   - Company name, user status, and main navigation links
   - Prominent Upgrade/Login button for freemium flow
@@ -13,19 +13,10 @@
 <template>
   <!-- ===== Sidebar Overlay ===== -->
   <transition name="fade">
-    <aside
-      v-if="open"
-      class="fixed inset-0 z-40 flex"
-      aria-label="Sidebar Navigation"
-      role="navigation"
-      @keydown.esc="closeSidebar"
-      tabindex="0"
-    >
+    <aside v-if="open" class="fixed inset-0 z-40 flex" aria-label="Sidebar Navigation" role="navigation"
+      @keydown.esc="closeSidebar" tabindex="0">
       <!-- ===== Sidebar Panel ===== -->
-      <nav
-        class="w-3/4 max-w-xs bg-white text-gray-900 shadow-lg h-full flex flex-col"
-        @click.stop
-      >
+      <nav class="w-3/4 max-w-xs bg-white text-gray-900 shadow-lg h-full flex flex-col" @click.stop>
         <!-- ===== Company Name & User Status ===== -->
         <div class="flex flex-col items-start px-4 py-4 border-b border-gray-200">
           <span class="text-xl font-bold mb-1">Stratonea</span>
@@ -37,9 +28,7 @@
           <li v-for="item in navItems" :key="item.label">
             <button
               class="w-full text-left px-3 py-3 rounded-lg hover:bg-primary hover:text-white focus:bg-primary focus:text-white transition-colors min-h-[48px] font-medium"
-              @click="navigate(item.route)"
-              :aria-label="item.label"
-            >
+              @click="navigate(item.route)" :aria-label="item.label">
               {{ item.label }}
             </button>
           </li>
@@ -49,9 +38,7 @@
         <div class="px-4 pb-6">
           <button
             class="w-full bg-primary text-white font-bold py-3 rounded-lg shadow-md min-h-[48px] hover:bg-primary-dark transition-colors"
-            @click="onUpgrade"
-            aria-label="Upgrade or Login"
-          >
+            @click="onUpgrade" aria-label="Upgrade or Login">
             Upgrade / Login
           </button>
         </div>
@@ -98,10 +85,12 @@ const emit = defineEmits<{
  */
 const navItems: NavItem[] = [
   { label: 'Home (Dashboard)', route: '/dashboard' },
+  { label: 'New Sale', route: '/new-sale' },
   { label: 'Products', route: '/products' },
   { label: 'Stock', route: '/stock' },
-  { label: 'Point of Sale', route: '/pos' },
-  { label: 'Customers', route: '/customers' }
+  { label: 'Sale', route: '/sales' },
+  { label: 'Customers', route: '/customers' },
+  { label: 'Company Settings', route: '/company' }
 ]
 
 // ===== Main Logic =====

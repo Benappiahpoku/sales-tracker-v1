@@ -1,6 +1,6 @@
-# BizPoint MVP Mobile Keyboard Wireframe (Anonymous-First & Freemium)
+# Sales Tracker MVP Mobile Keyboard Wireframe (Anonymous-First & Freemium)
 
-This wireframe outlines the layout and interaction flow for the BizPoint MVP on a mobile device, explicitly incorporating the anonymous-first access, offline functionality, and the freemium upgrade path. This document supersedes the previous mobile wireframe for clarity on the initial user experience.
+This wireframe outlines the layout and interaction flow for the Sales Tracker MVP on a mobile device, explicitly incorporating the anonymous-first access, offline functionality, and the freemium upgrade path. This document supersedes the previous mobile wireframe for clarity on the initial user experience.
 
 1. Global Navigation & UI Elements
 Top Bar:
@@ -29,7 +29,7 @@ Centered overlay for confirmations (e.g., "Are you sure you want to delete?").
 1. Module Wireframes (Emphasizing Anonymous & Offline Flow)
 2.1. Initial App Load & Dashboard (The New Landing Page)
 +------------------------------------+
-| BizPoint                           |
+| Sales Tracker                      |
 |------------------------------------|
 | [Menu Icon]   Dashboard    [Online]|  <-- Initial state, assumes online for first load
 |                                    |
@@ -73,7 +73,7 @@ Interaction: User fills form, taps SAVE. Toast confirms local save.
 2.4. POS Page (Main Sales Interface) - Demonstrating Offline Sales)
 +------------------------------------+
 
-| BizPoint                           |
+| Sales Tracker                      |
 |------------------------------------|
 | [Menu Icon] Point of Sale  [Offline]|
 |                                    |
@@ -117,7 +117,7 @@ Interaction: User completes sale while offline. Toast confirms local saving.
 This modal could appear when a user attempts to add their 5th customer, or after 10 sales, etc. This is illustrative, the trigger logic is in the PRD.
 +------------------------------------+
 
-| BizPoint                           |
+| Sales Tracker                      |
 |------------------------------------|
 | [App Overlayed]                    |
 |                                    |
@@ -135,7 +135,7 @@ This modal could appear when a user attempts to add their 5th customer, or after
 |        | to keep your data,  |     |
 |        | sync across devices,|     |
 |        | and continue using  |     |
-|        | BizPoint without    |     |
+|        | Sales Tracker without|     |
 |        | limits.             |     |
 |        |                     |     |
 |        | [  CREATE ACCOUNT   ] |     |
@@ -150,7 +150,7 @@ Interaction: User is presented with this modal. Taps "CREATE ACCOUNT" or "LOGIN"
 This page is a standard authentication flow, accessible from the "Upgrade Your Account" CTA or sidebar.
 +------------------------------------+
 
-| BizPoint                           |
+| Sales Tracker                      |
 |------------------------------------|
 | [Back Icon] Sign Up / Login [Online]|
 |                                    |
@@ -179,9 +179,9 @@ This page is a standard authentication flow, accessible from the "Upgrade Your A
 Interaction: Standard form entry. After successful signup/login, the system should ideally merge/migrate their anonymous data to the new account and then redirect to the Dashboard.
 This updated wireframe set clearly distinguishes the anonymous flow, emphasizes offline resilience, and integrates the freemium upgrade path. This level of detail should give the AI agent a very precise understanding of the desired user experience, Benjamin.
 
-## BizPoint MVP Mobile Keyboard Wireframe
+## Sales Tracker MVP Mobile Keyboard Wireframe
 
-This wireframe outlines the layout and interaction flow for the BizPoint MVP on a mobile device, emphasizing a mobile-first, keyboard-friendly approach.
+This wireframe outlines the layout and interaction flow for the Sales Tracker MVP on a mobile device, emphasizing a mobile-first, keyboard-friendly approach.
 
 1. Global Navigation & UI Elements
 Top Bar:
@@ -209,7 +209,7 @@ Centered overlay for confirmations (e.g., "Are you sure you want to delete?").
 Sidebar Navigation (Opened State)
 +------------------------------------+
 
-| BizPoint                           |
+| Sales Tracker                      |
 |------------------------------------|
 
 | [Menu Icon]   [Current Page]       |  (App's top bar is still visible underneath)
@@ -264,7 +264,7 @@ Sidebar Navigation (Opened State)
 Company Settings Page
 +------------------------------------+
 
-| BizPoint                           |
+| Sales Tracker                      |
 |------------------------------------|
 
 | [Back Icon] Company Settings [Online]|  <-- Navigate back to User Profile/Dashboard
@@ -296,7 +296,7 @@ Company logo Upload:
 1. Module Wireframes
 2.1. Login Page
 +------------------------------------+
-| BizPoint                           |
+| Sales Tracker                      |
 |------------------------------------|
 |              [Menu Icon]           |
 |                                    |
@@ -325,7 +325,7 @@ Interaction: User taps on input fields, mobile keyboard appears. Tabs/navigates 
 2.2. Dashboard Page
 +------------------------------------+
 
-| BizPoint                           |
+| Sales Tracker                      |
 |------------------------------------|
 | [Menu Icon]   Dashboard    [Online]|
 |                                    |
@@ -361,7 +361,7 @@ Interaction: Taps Menu Icon to navigate. Dashboard is a display-only screen, no 
 2.3. Products Page (List)
 +------------------------------------+
 
-| BizPoint                           |
+| Sales Tracker                      |
 |------------------------------------|
 | [Menu Icon]   Products     [Online]|
 |                                    |
@@ -394,7 +394,7 @@ Interaction: Taps "Add New Product" to go to form. Taps "Edit" or "Delete" next 
 2.4. Add/Edit Product Page (Form)
 +------------------------------------+
 
-| BizPoint                           |
+| Sales Tracker                      |
 |------------------------------------|
 | [Back Icon] Add Product    [Online]|
 |                                    |
@@ -433,7 +433,7 @@ Interaction: Taps input fields, uses numeric or text keyboard. Keyboard "Next" b
 2.5. Stock Page (Add/Adjust)
 +------------------------------------+
 
-| BizPoint                           |
+| Sales Tracker                      |
 |------------------------------------|
 | [Menu Icon]   Stock        [Online]|
 |                                    |
@@ -473,7 +473,7 @@ Interaction: Taps dropdown for product selection. Uses numeric/text keyboard for
 2.6. Stock History Page
 +------------------------------------+
 
-| BizPoint                           |
+| Sales Tracker                      |
 |------------------------------------|
 | [Back Icon] Stock History  [Online]|
 |                                    |
@@ -496,7 +496,7 @@ Interaction: Vertically scrollable list. Taps Back Icon to return.
 2.7. Customers Page (List)
 +------------------------------------+
 
-| BizPoint                           |
+| Sales Tracker                      |
 |------------------------------------|
 | [Menu Icon]   Customers    [Online]|
 |                                    |
@@ -526,7 +526,7 @@ Interaction: Taps "Add New Customer" to go to form. Taps "Edit" or "Delete" next
 2.8. Add/Edit Customer Page (Form)
 +------------------------------------+
 
-| BizPoint                           |
+| Sales Tracker                      |
 |------------------------------------|
 | [Back Icon] Add Customer   [Online]|
 |                                    |
@@ -553,7 +553,7 @@ Interaction: Taps input fields, uses numeric or text keyboard. Keyboard "Next" b
 2.9. POS View (Main Sales Interface)
 +------------------------------------+
 
-| BizPoint                           |
+| Sales Tracker                      |
 |------------------------------------|
 | [Menu Icon] Point of Sale  [Online]|
 |                                    |
@@ -601,7 +601,7 @@ Interaction: Taps product search bar, keyboard appears. Taps result to add to ca
 2.10. Receipt PreView (Post-Sale)
 +------------------------------------+
 
-| BizPoint                           |
+| Sales Tracker                      |
 |------------------------------------|
 | [Back Icon] Sale Complete  [Online]|
 |                                    |
@@ -640,7 +640,7 @@ Interaction: Displays automatically. Taps PRINT or DOWNLOAD PDF. Taps Back Icon 
 2.11. Sales / Invoices View (List)
 +------------------------------------+
 
-| BizPoint                           |
+| Sales Tracker                      |
 |------------------------------------|
 | [Back Icon] Sales History  [Online]|
 |                                    |
@@ -667,7 +667,7 @@ Interaction: Vertically scrollable list. Taps "View Invoice" to navigate to invo
 2.12. Invoice PreView (Detail)
 +------------------------------------+
 
-| BizPoint                           |
+| Sales Tracker                      |
 |------------------------------------|
 | [Back Icon] Invoice Detail [Online]|
 |                                    |
@@ -710,7 +710,7 @@ Interaction: Displays historical invoice. Taps PRINT or DOWNLOAD PDF. Taps Back 
 2.13. User Profile Page
 +------------------------------------+
 
-| BizPoint                           |
+| Sales Tracker                      |
 |------------------------------------|
 | [Back Icon] My Profile     [Online]|
 |                                    |
@@ -727,4 +727,11 @@ Interaction: Displays historical invoice. Taps PRINT or DOWNLOAD PDF. Taps Back 
 +------------------------------------+
 
 Interaction: Taps "Change Password" to initiate password change flow (not detailed here, but a separate simple form). Taps Back Icon to return.
-This comprehensive wireframe provides a clear visual and interactive guide for building BizPoint with a mobile-first philosophy, Benjamin. It should give the AI agent a solid foundation for the UI development.
+This comprehensive wireframe provides a clear visual and interactive guide for building Sales Tracker with a mobile-first philosophy, Benjamin. It should give the AI agent a solid foundation for the UI development.
+
+### AppHeader
+
+|------------------------------------|
+| [Back Link]               [Offline]|
+
+|  --------------------------------  |
