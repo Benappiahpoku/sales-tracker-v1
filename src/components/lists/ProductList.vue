@@ -1,150 +1,255 @@
 <!--
   ProductList.vue
-  Stratonea/Sales Tracker - List of products, mobile-first.
-  - Uses ProductCard.vue for mobile card layout (DRY, maintainable)
-  - Table layout for desktop (per design wireframe)
-  - Follows Stratonea guidelines (see copilot-instructions.md)
+  Stratonea/Sales Tracker - Modern product list with responsive table/card layout
+  - Mobile: Modern card layout with ProductCard components
+  - Desktop: Modern table layout with hover effects and color-coded stock
+  - Consistent styling with dashboard design
+  - Ghana-optimized: touch targets, clear pricing, offline support
   - All props, emits, and helpers documented for learning
+  - Follows Stratonea guidelines
 -->
 
 <template>
-  <!-- ===== [New Feature] START ===== -->
-  <!-- Mobile Card Layout: Use ProductCard.vue for each product, with actions inside card -->
-  <div class="block md:hidden">
-    <div class="space-y-4 max-w-md mx-auto my-4">
-      <ProductCard
-        v-for="product in products"
-        :key="product.sku"
-        :name="product.name"
-        :sku="product.sku"
-        :price="product.price"
-        :stock="product.stock"
-        @edit="onEdit(product)"
-        @delete="onDelete(product)"
-      />
+  <div class="product-list-container">
+    <!-- ===== [New Feature] START: Mobile Card View ===== -->
+    <!-- Mobile View: Card Layout -->
+    <div class="block md:hidden">
+      <div class="space-y-4 max-w-md mx-auto my-4">
+        <ProductCard
+          v-for="product in products"
+          :key="product.sku"
+          :name="product.name"
+          :sku="product.sku"
+          :price="product.price"
+          :stock="product.stock"
+          @edit="onEdit(product)"
+          @delete="onDelete(product)"
+          @add-to-sale="onAddToSale(product)"
+        />
+      </div>
     </div>
-  </div>
-  <!-- ===== [New Feature] END ===== -->
+    <!-- ===== [New Feature] END ===== -->
 
-  <!-- Desktop Table Layout (unchanged, per design) -->
-  <table class="hidden md:table min-w-full border-separate border-spacing-0">
-    <!-- Table Header -->
-    <thead class="bg-gray-50">
-      <tr>
-        <th class="px-6 py-4 text-left">
-          <div class="flex items-center gap-2">
-            <span class="text-xs font-bold uppercase tracking-wider text-gray-600">Product</span>
-          </div>
-        </th>
-        <th class="px-6 py-4 text-left">
-          <div class="flex items-center gap-2">
-            <span class="text-xs font-bold uppercase tracking-wider text-gray-600">SKU</span>
-          </div>
-        </th>
-        <th class="px-6 py-4 text-right">
-          <div class="flex items-center justify-end gap-2">
-            <span class="text-xs font-bold uppercase tracking-wider text-gray-600">Price</span>
-          </div>
-        </th>
-        <th class="px-6 py-4 text-center">
-          <div class="flex items-center justify-center gap-2">
-            <span class="text-xs font-bold uppercase tracking-wider text-gray-600">Stock</span>
-          </div>
-        </th>
-        <th class="px-6 py-4 text-right">
-          <span class="text-xs font-bold uppercase tracking-wider text-gray-600">Actions</span>
-        </th>
-      </tr>
-    </thead>
+    <!-- ===== [New Feature] START: Desktop Table View ===== -->
+    <!-- Desktop View: Modern Table Layout -->
+    <div class="hidden md:block">
+      <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+        <!-- Table Header -->
+        <div class="bg-gray-50 px-6 py-4 border-b border-gray-200">
+          <h3 class="text-lg font-semibold text-gray-900">Products</h3>
+        </div>
 
-    <!-- Table Body -->
-    <tbody class="divide-y divide-gray-200 bg-white">
-      <tr v-for="product in products" :key="product.sku"
-        class="hover:bg-gray-50/50 transition-colors duration-150 ease-in-out">
-        <td class="px-6 py-4 whitespace-nowrap">
-          <div class="font-medium text-gray-900">{{ product.name }}</div>
-        </td>
-        <td class="px-6 py-4 whitespace-nowrap">
-          <div class="text-sm text-gray-600 font-mono">{{ product.sku }}</div>
-        </td>
-        <td class="px-6 py-4 whitespace-nowrap text-right">
-          <div class="text-sm font-medium text-gray-900">{{ formatCurrency(product.price) }}</div>
-        </td>
-        <td class="px-6 py-4 whitespace-nowrap text-center">
-          <div class="text-sm text-gray-900">{{ product.stock }}</div>
-        </td>
-        <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium space-x-2">
-          <button @click="onEdit(product)"
-            class="inline-flex items-center px-3 py-1.5 border border-transparent text-sm font-medium rounded-md text-white bg-primary hover:bg-primary-dark focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary transition-colors duration-150">
-            Edit
-          </button>
-          <button @click="onDelete(product)"
-            class="inline-flex items-center px-3 py-1.5 border border-transparent text-sm font-medium rounded-md text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 transition-colors duration-150">
-            Delete
-          </button>
-        </td>
-      </tr>
-    </tbody>
-  </table>
+        <!-- Table Content -->
+        <div class="overflow-x-auto">
+          <table class="w-full">
+            <!-- Table Headers -->
+            <thead class="bg-gray-50">
+              <tr>
+                <th class="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Product
+                </th>
+                <th class="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  SKU
+                </th>
+                <th class="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Price
+                </th>
+                <th class="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Stock
+                </th>
+                <th class="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Status
+                </th>
+                <th class="px-6 py-4 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Actions
+                </th>
+              </tr>
+            </thead>
 
-  <!-- Empty State -->
-  <div v-if="(products?.length ?? 0) === 0" class="text-center py-12 bg-gray-50 border-t border-gray-200">
-    <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-        d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4" />
-    </svg>
-    <h3 class="mt-2 text-sm font-medium text-gray-900">No products</h3>
-    <p class="mt-1 text-sm text-gray-500">Get started by adding new products.</p>
+            <!-- Table Body -->
+            <tbody class="bg-white divide-y divide-gray-200">
+              <tr
+                v-for="product in products"
+                :key="product.sku"
+                class="hover:bg-gray-50 transition-colors duration-150"
+              >
+                <!-- Product Name with Icon -->
+                <td class="px-6 py-4 whitespace-nowrap">
+                  <div class="flex items-center">
+                    <div class="w-10 h-10 bg-primary-100 rounded-lg flex items-center justify-center mr-3">
+                      <font-awesome-icon icon="box" class="text-primary-600" />
+                    </div>
+                    <div>
+                      <div class="text-sm font-medium text-gray-900">{{ product.name }}</div>
+                    </div>
+                  </div>
+                </td>
+
+                <!-- SKU -->
+                <td class="px-6 py-4 whitespace-nowrap">
+                  <div class="text-sm text-gray-900 font-mono">{{ product.sku }}</div>
+                </td>
+
+                <!-- Price - Prominently Displayed -->
+                <td class="px-6 py-4 whitespace-nowrap">
+                  <div class="text-sm font-semibold text-primary-600">
+                    {{ formatCurrency(product.price) }}
+                  </div>
+                </td>
+
+                <!-- Stock Count -->
+                <td class="px-6 py-4 whitespace-nowrap">
+                  <div class="text-sm text-gray-900">{{ product.stock }} units</div>
+                </td>
+
+                <!-- Stock Status with Color-Coded Badge -->
+                <td class="px-6 py-4 whitespace-nowrap">
+                  <span
+                    :class="[
+                      'inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium',
+                      getStockStatusClass(product.stock)
+                    ]"
+                  >
+                    <div 
+                      :class="[
+                        'w-2 h-2 rounded-full mr-1.5',
+                        getStockDotClass(product.stock)
+                      ]"
+                    ></div>
+                    {{ getStockStatusText(product.stock) }}
+                  </span>
+                </td>
+
+                <!-- Action Buttons -->
+                <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                  <div class="flex items-center justify-end gap-2">
+                    <!-- Add to Sale Button -->
+                    <button
+                      @click="onAddToSale(product)"
+                      class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-white bg-primary hover:bg-primary-hover focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary transition-colors duration-150"
+                      :disabled="product.stock <= 0"
+                      :aria-label="`Add ${product.name} to sale`"
+                    >
+                      <font-awesome-icon icon="plus" class="mr-1" />
+                      Add to Sale
+                    </button>
+
+                    <!-- Edit Button -->
+                    <button
+                      @click="onEdit(product)"
+                      class="inline-flex items-center px-3 py-2 border border-gray-300 text-sm leading-4 font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary transition-colors duration-150"
+                      :aria-label="`Edit ${product.name}`"
+                    >
+                      Edit
+                    </button>
+
+                    <!-- Delete Button -->
+                    <button
+                      @click="onDelete(product)"
+                      class="inline-flex items-center px-3 py-2 border border-red-300 text-sm leading-4 font-medium rounded-md text-red-700 bg-red-50 hover:bg-red-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 transition-colors duration-150"
+                      :aria-label="`Delete ${product.name}`"
+                    >
+                      Delete
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Empty State -->
+        <div v-if="products.length === 0" class="text-center py-12">
+          <div class="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
+            <font-awesome-icon icon="box" class="text-gray-400 text-2xl" />
+          </div>
+          <h3 class="text-sm font-medium text-gray-900 mb-2">No products found</h3>
+          <p class="text-sm text-gray-500">Get started by adding your first product.</p>
+        </div>
+      </div>
+    </div>
+    <!-- ===== [New Feature] END ===== -->
   </div>
 </template>
 
 <script setup lang="ts">
+// ===== File-Level Documentation =====
+/**
+ * ProductList.vue - Responsive product list component
+ * - Mobile: Card-based layout using ProductCard components
+ * - Desktop: Modern table layout with hover effects
+ * - Color-coded stock levels and status indicators
+ * - Quick action buttons for Add to Sale, Edit, Delete
+ * - Ghana-optimized: clear GHS pricing, touch-friendly
+ * - Emits events to parent for product management
+ */
+
 // ===== Imports =====
 /**
- * Import ProductCard for mobile card layout.
+ * Import the ProductCard component for mobile card layout
+ * This component handles individual product display on mobile devices
  */
 import ProductCard from '@/components/layout/ProductCard.vue'
 
 // ===== Types & Interfaces =====
 /**
- * Product type for the product list.
+ * Product interface defining the structure of product data
+ * - id: Unique identifier for the product
+ * - name: Display name of the product
+ * - sku: Stock Keeping Unit (unique product code)
+ * - price: Product price in Ghana Cedis
+ * - stock: Current stock level (number of units available)
+ * - description: Optional product description
+ * - category: Optional product category
  */
 interface Product {
+  id: string
   name: string
   sku: string
   price: number
   stock: number
+  description?: string
+  category?: string
 }
 
 // ===== Props =====
 /**
- * Props for ProductList
- * - products: Product[] (array of products)
+ * Component props
+ * - products: Array of products to display
  */
-withDefaults(
+ withDefaults(
   defineProps<{
-    products?: Product[]
+    products: Product[]
   }>(),
   {
-    products: () => [
-      { name: 'Sample Product', sku: 'SKU-001', price: 10, stock: 25 },
-      { name: 'Another Product', sku: 'SKU-002', price: 20, stock: 10 }
-    ]
+    products: () => []
   }
 )
 
 // ===== Emits =====
 /**
- * Emits events to parent for edit and delete actions.
+ * Events emitted by ProductList
+ * - edit: User wants to edit a product
+ * - delete: User wants to delete a product
+ * - addToSale: User wants to add a product to current sale
  */
 const emit = defineEmits<{
   (e: 'edit', product: Product): void
   (e: 'delete', product: Product): void
+  (e: 'addToSale', product: Product): void
 }>()
 
-// ===== Main Logic =====
+// ===== Constants =====
 /**
- * Handles edit button click.
+ * Stock level threshold for determining low stock status
+ * Products with stock at or below this number are considered low stock
+ */
+const LOW_STOCK_THRESHOLD = 10
+
+// ===== Event Handlers =====
+/**
+ * Handle edit product action
+ * Emits edit event to parent component with product data
  * @param product - The product to edit
  */
 function onEdit(product: Product) {
@@ -152,7 +257,8 @@ function onEdit(product: Product) {
 }
 
 /**
- * Handles delete button click.
+ * Handle delete product action
+ * Emits delete event to parent component with product data
  * @param product - The product to delete
  */
 function onDelete(product: Product) {
@@ -160,20 +266,111 @@ function onDelete(product: Product) {
 }
 
 /**
- * Formats a number as Ghanaian currency (GHS).
+ * Handle add to sale action
+ * Emits addToSale event to parent component with product data
+ * @param product - The product to add to sale
+ */
+function onAddToSale(product: Product) {
+  emit('addToSale', product)
+}
+
+// ===== Helper Functions =====
+/**
+ * Formats currency amount in Ghana Cedis format
  * @param amount - The amount to format
- * @returns string (e.g., GHS 10.00)
+ * @returns Formatted currency string (e.g., "GHS 25.50")
  */
 function formatCurrency(amount: number): string {
   return `GHS ${amount.toFixed(2)}`
 }
+
+/**
+ * Gets stock status text based on stock level
+ * @param stock - Current stock level
+ * @returns Stock status text
+ */
+function getStockStatusText(stock: number): string {
+  if (stock <= 0) return 'Out of Stock'
+  if (stock <= LOW_STOCK_THRESHOLD) return 'Low Stock'
+  return 'In Stock'
+}
+
+/**
+ * Gets CSS classes for stock status badge
+ * @param stock - Current stock level
+ * @returns CSS classes for badge styling
+ */
+function getStockStatusClass(stock: number): string {
+  if (stock <= 0) return 'bg-red-100 text-red-800'
+  if (stock <= LOW_STOCK_THRESHOLD) return 'bg-orange-100 text-orange-800'
+  return 'bg-green-100 text-green-800'
+}
+
+/**
+ * Gets CSS classes for stock status dot
+ * @param stock - Current stock level
+ * @returns CSS classes for dot color
+ */
+function getStockDotClass(stock: number): string {
+  if (stock <= 0) return 'bg-red-500'
+  if (stock <= LOW_STOCK_THRESHOLD) return 'bg-orange-500'
+  return 'bg-green-500'
+}
 </script>
 
-<!--
-  ===== Styling Notes =====
-  - Card layout is mobile-first, touch-optimized (min-h-[48px] for actions)
-  - Uses Tailwind for color, spacing, and responsive design
-  - Accessible: aria-labels, clear feedback
-  - Ghana-optimized: vertical stacking, large touch targets
-  - ProductCard.vue is now the single source of card design for mobile
--->
+<style scoped>
+/* ===== [New Feature] START: Modern Table Styling ===== */
+/* Enhanced table row hover effects */
+tbody tr:hover {
+  background-color: theme('colors.gray.50');
+}
+
+/* Smooth transitions for all interactive elements */
+button {
+  transition: all 0.15s ease-in-out;
+}
+
+/* Enhanced focus states for accessibility */
+button:focus-visible {
+  outline: 2px solid theme('colors.primary.500');
+  outline-offset: 2px;
+}
+
+/* Disabled button styling */
+button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+button:disabled:hover {
+  background-color: initial;
+  transform: none;
+}
+
+/* Touch feedback for mobile users */
+@media (max-width: 768px) {
+  button:active {
+    transform: scale(0.98);
+  }
+}
+
+/* Table responsiveness */
+.overflow-x-auto {
+  scrollbar-width: thin;
+  scrollbar-color: theme('colors.gray.400') theme('colors.gray.100');
+}
+
+.overflow-x-auto::-webkit-scrollbar {
+  height: 6px;
+}
+
+.overflow-x-auto::-webkit-scrollbar-track {
+  background: theme('colors.gray.100');
+}
+
+.overflow-x-auto::-webkit-scrollbar-thumb {
+  background: theme('colors.gray.400');
+  border-radius: 3px;
+}
+/* ===== [New Feature] END ===== */
+</style>

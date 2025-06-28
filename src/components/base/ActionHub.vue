@@ -19,20 +19,30 @@
           <span>Home</span>
         </router-link>
         <!-- New Sale -->
-        <router-link to="/new-sale" class="flex items-center space-x-2 text-green-600 hover:text-green-700 min-h-[48px]">
+        <router-link to="/new-sale"
+          class="flex items-center space-x-2 text-green-600 hover:text-green-700 min-h-[48px]">
           <font-awesome-icon icon="fa-solid fa-plus-circle" class="text-xl" />
           <span>New Sale</span>
         </router-link>
         <!-- Products -->
-        <router-link to="/products" class="flex items-center space-x-2 text-primary-600 hover:text-primary-700 min-h-[48px]">
+        <router-link to="/products"
+          class="flex items-center space-x-2 text-primary-600 hover:text-primary-700 min-h-[48px]">
           <font-awesome-icon icon="fa-solid fa-box" class="text-xl" />
           <span>Products</span>
         </router-link>
         <!-- Sales -->
-        <router-link to="/sales" class="flex items-center space-x-2 text-primary-600 hover:text-primary-700 min-h-[48px]">
+        <router-link to="/sales"
+          class="flex items-center space-x-2 text-primary-600 hover:text-primary-700 min-h-[48px]">
           <font-awesome-icon icon="fa-solid fa-list-alt" class="text-xl" />
           <span>Sales</span>
         </router-link>
+        
+        <!-- Menu -->
+        <button @click="emit('openSidebar')"
+          class="flex items-center space-x-2 text-primary-600 hover:text-primary-700 min-h-[48px]">
+          <font-awesome-icon :icon="['fas', 'cog']" class="text-xl" />
+          <span>Menu</span>
+        </button>
       </div>
     </div>
 
@@ -44,41 +54,40 @@
     -->
     <div class="md:hidden flex justify-around items-center h-16">
       <!-- Home -->
-      <router-link
-        to="/"
+      <router-link to="/"
         class="flex flex-col items-center justify-center text-primary-600 hover:text-primary-700 focus:outline-none"
-        aria-label="Home"
-      >
+        aria-label="Home">
         <font-awesome-icon icon="fa-solid fa-home" class="text-2xl" />
         <span class="text-xs mt-1 font-medium">Home</span>
       </router-link>
       <!-- New Sale -->
-      <router-link
-        to="/new-sale"
+      <router-link to="/new-sale"
         class="flex flex-col items-center justify-center text-green-600 hover:text-green-700 focus:outline-none"
-        aria-label="New Sale"
-      >
+        aria-label="New Sale">
         <font-awesome-icon icon="fa-solid fa-plus-circle" class="text-2xl" />
         <span class="text-xs mt-1 font-medium">New Sale</span>
       </router-link>
       <!-- Products -->
-      <router-link
-        to="/products"
+      <router-link to="/products"
         class="flex flex-col items-center justify-center text-primary-600 hover:text-primary-700 focus:outline-none"
-        aria-label="Products"
-      >
+        aria-label="Products">
         <font-awesome-icon icon="fa-solid fa-box" class="text-2xl" />
         <span class="text-xs mt-1 font-medium">Products</span>
       </router-link>
       <!-- Sales -->
-      <router-link
-        to="/sales"
+      <router-link to="/sales"
         class="flex flex-col items-center justify-center text-primary-600 hover:text-primary-700 focus:outline-none"
-        aria-label="Sales"
-      >
+        aria-label="Sales">
         <font-awesome-icon icon="fa-solid fa-list-alt" class="text-2xl" />
         <span class="text-xs mt-1 font-medium">Sales</span>
       </router-link>
+      <!-- Menu -->
+      <button @click="emit('openSidebar')"
+        class="flex flex-col items-center justify-center text-primary-600 hover:text-primary-700 focus:outline-none focus:ring-2 focus:ring-white transition-all duration-150"
+        aria-label="Open-menu" type="button" style="box-sizing: border-box;">
+        <font-awesome-icon :icon="['fas', 'cog']" class="text-2xl" />
+        <span class="text-xs mt-1 font-medium">Menu</span>
+      </button>
     </div>
   </div>
 </template>
@@ -96,5 +105,11 @@
  * - Desktop view: icon left of label, side by side.
  */
 
-// No script logic needed as all navigation is handled by router-link.
+// ===== Emits =====
+/**
+ * Emits openSidebar event to parent to trigger sidebar open.
+ */
+const emit = defineEmits<{
+  (e: 'openSidebar'): void
+}>()
 </script>

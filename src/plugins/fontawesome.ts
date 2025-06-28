@@ -25,6 +25,18 @@ import {
     faBox, 
     faListAlt,
     faCircle as fasCircle,
+    faChartBar,          
+    faUsers,             
+    faWarehouse,         
+    faBuilding,          
+    faChartLine,         
+    faClock,          
+    faExclamationTriangle, 
+    faUserPlus,         
+    faShoppingCart,     
+    faInfoCircle,
+    faEdit,         
+
 } from '@fortawesome/free-solid-svg-icons'
 
 import { 
@@ -62,6 +74,18 @@ library.add(
     faTrash,
     faTriangleExclamation,
     faReceipt,
+    faEdit, 
+    faChartBar,
+    faUsers,
+    faWarehouse,
+    faBuilding,
+    faChartLine,
+    faClock,
+    faExclamationTriangle,
+    faUserPlus,
+    faShoppingCart,
+    faInfoCircle,
+    // ===== [New Icons] END =====
     // Regular icons
     farBell,
     fasCircle,
