@@ -1,112 +1,270 @@
 <!--
   CustomerCard.vue
-  Stratonea/Sales Tracker - Component for displaying a single customer with actions.
-  - Mobile-first, touch-optimized, Ghana-optimized
-  - Uses Tailwind utility classes for styling
-  - Follows Stratonea guidelines (see copilot-instructions.md)
+  Stratonea/Sales Tracker - Modern customer card for mobile view
+  - Card-based design matching dashboard and product card style
+  - Ghana-optimized: phone format, touch targets, offline support
+  - Box icons and hover animations
+  - Prominent customer details with location display
+  - Quick actions: View, Edit, Delete buttons
+  - Follows Stratonea guidelines
 -->
 
 <template>
-  <!-- ===== [New Feature] START ===== -->
-  <div
-    class="flex flex-col bg-white rounded-lg shadow p-4 mb-2 min-h-[64px] hover:bg-gray-50 transition-colors"
-    aria-label="Customer" role="listitem">
-    <!-- Main Info Row -->
-    <div class="flex items-center gap-4">
-      <!-- Customer Icon (placeholder for now) -->
-      <div class="flex-shrink-0 w-12 h-12 bg-gray-200 rounded stratonea flex items-center justify-center">
-        <span class="text-gray-400 text-xl" aria-hidden="true">👤</span>
+  <!-- ===== [New Feature] START: Modern Customer Card ===== -->
+  <div class="bg-white rounded-xl p-6 shadow-sm border border-gray-100 hover:shadow-md hover:border-primary-200 transition-all duration-200 relative group">
+    <!-- Customer Header with Icon -->
+    <div class="flex items-start justify-between mb-4">
+      <div class="flex items-center">
+        <div class="w-12 h-12 bg-primary-100 rounded-lg flex items-center justify-center mr-4">
+          <font-awesome-icon icon="user" class="text-primary-600 text-lg" />
+        </div>
+        <div>
+          <h3 class="text-lg font-semibold text-gray-900 mb-1">{{ name }}</h3>
+          <div class="flex items-center text-sm text-gray-500">
+            <font-awesome-icon icon="map-marker-alt" class="mr-1 text-xs" />
+            <span>{{ location }}</span>
+          </div>
+        </div>
       </div>
-      <!-- Customer Info -->
-      <div class="flex-1 min-w-0">
-        <div class="flex justify-between items-center">
-          <span class="font-bold text-base text-gray-900 truncate">{{ name }}</span>
-          <span class="text-xs text-gray-500">{{ phone }}</span>
+      
+      <!-- Status Badge -->
+      <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+        <div class="w-2 h-2 bg-green-500 rounded-full mr-1.5"></div>
+        Active
+      </span>
+    </div>
+
+    <!-- Customer Details -->
+    <div class="space-y-3 mb-6">
+      <!-- Phone Number -->
+      <div class="flex items-center justify-between py-2 border-b border-gray-100">
+        <div class="flex items-center">
+          <font-awesome-icon icon="phone" class="text-gray-400 mr-3 w-4" />
+          <span class="text-sm text-gray-600">Phone</span>
         </div>
-        <div class="flex justify-between items-end mt-1">
-          <span class="text-sm text-gray-700">Email: <span class="font-semibold">{{ email }}</span></span>
-          <span class="text-sm font-bold text-primary">{{ location }}</span>
+        <span class="text-sm font-medium text-gray-900 font-mono">{{ formattedPhone }}</span>
+      </div>
+
+      <!-- Email -->
+      <div class="flex items-center justify-between py-2 border-b border-gray-100">
+        <div class="flex items-center">
+          <font-awesome-icon icon="envelope" class="text-gray-400 mr-3 w-4" />
+          <span class="text-sm text-gray-600">Email</span>
         </div>
+        <span class="text-sm font-medium text-gray-900 truncate max-w-[150px]" :title="email">{{ email }}</span>
+      </div>
+
+      <!-- Location -->
+      <div class="flex items-center justify-between py-2">
+        <div class="flex items-center">
+          <font-awesome-icon icon="map-marker-alt" class="text-gray-400 mr-3 w-4" />
+          <span class="text-sm text-gray-600">Location</span>
+        </div>
+        <span class="text-sm font-medium text-primary-600">{{ location }}</span>
       </div>
     </div>
 
-    <!-- ===== [New Feature] START ===== -->
-    <!-- Action Buttons: Edit & Delete -->
-    <div class="flex flex-col gap-2 mt-4">
+    <!-- Action Buttons -->
+    <div class="flex gap-2">
+      <!-- View Button -->
+      <button
+        @click="onView"
+        class="flex-1 inline-flex items-center justify-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-white bg-primary hover:bg-primary-hover focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary transition-colors duration-150"
+        :aria-label="`View details for ${name}`"
+      >
+        <font-awesome-icon icon="eye" class="mr-2" />
+        View
+      </button>
+
+      <!-- Edit Button -->
       <button
         @click="onEdit"
-        class="w-full min-h-[48px] bg-primary text-white rounded-lg font-bold text-base shadow-sm hover:bg-primary-dark transition-colors"
-        aria-label="Edit customer"
+        class="flex-1 inline-flex items-center justify-center px-3 py-2 border border-gray-300 text-sm leading-4 font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary transition-colors duration-150"
+        :aria-label="`Edit ${name}`"
       >
+        <font-awesome-icon icon="edit" class="mr-2" />
         Edit
       </button>
+
+      <!-- Delete Button -->
       <button
         @click="onDelete"
-        class="w-full min-h-[48px] bg-red-600 text-white rounded-lg font-bold text-base shadow-sm hover:bg-red-700 transition-colors"
-        aria-label="Delete customer"
+        class="inline-flex items-center justify-center px-3 py-2 border border-red-300 text-sm leading-4 font-medium rounded-md text-red-700 bg-red-50 hover:bg-red-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 transition-colors duration-150"
+        :aria-label="`Delete ${name}`"
       >
-        Delete
+        <font-awesome-icon icon="trash" />
       </button>
     </div>
-    <!-- ===== [New Feature] END ===== -->
+
+    <!-- WhatsApp Quick Action -->
+    <div class="mt-3 pt-3 border-t border-gray-100">
+      <button
+        @click="onWhatsApp"
+        class="w-full inline-flex items-center justify-center px-3 py-2 border border-green-300 text-sm leading-4 font-medium rounded-md text-green-700 bg-green-50 hover:bg-green-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transition-colors duration-150"
+        :aria-label="`Message ${name} on WhatsApp`"
+      >
+        <font-awesome-icon icon="['fab', 'whatsapp']" class="mr-2" />
+        WhatsApp
+      </button>
+    </div>
   </div>
   <!-- ===== [New Feature] END ===== -->
 </template>
 
 <script setup lang="ts">
+// ===== File-Level Documentation =====
+/**
+ * CustomerCard.vue - Modern customer card component
+ * - Displays customer information in card format for mobile view
+ * - Ghana-optimized: phone formatting, WhatsApp integration, touch-friendly
+ * - Hover animations and visual status indicators
+ * - Quick actions: View, Edit, Delete, WhatsApp
+ * - Emits: 'view', 'edit', 'delete', 'whatsapp' for parent handling
+ */
+
+// ===== Imports =====
+import { computed } from 'vue'
+
 // ===== Types & Interfaces =====
 /**
- * Props for CustomerCard
- * - name: string (customer name)
- * - phone: string (customer phone number)
- * - email: string (customer email)
- * - location: string (customer location)
+ * Props for CustomerCard component
+ * - name: Customer's full name
+ * - phone: Customer's phone number (will be formatted for Ghana)
+ * - email: Customer's email address
+ * - location: Customer's location/city
  */
-withDefaults(
-  defineProps<{
-    name?: string
-    phone?: string
-    email?: string
-    location?: string
-  }>(),
-  {
-    name: 'Ama Serwaa',
-    phone: '024 123 4567',
-    email: 'ama@example.com',
-    location: 'Kumasi'
-  }
-)
+interface Props {
+  name: string
+  phone: string
+  email: string
+  location: string
+}
+
+const props = withDefaults(defineProps<Props>(), {
+  name: 'Ama Serwaa',
+  phone: '024 123 4567',
+  email: 'ama@example.com',
+  location: 'Kumasi'
+})
 
 // ===== Emits =====
 /**
- * Emits 'edit' and 'delete' events to parent.
+ * Events emitted by CustomerCard
+ * - view: User wants to view customer details
+ * - edit: User wants to edit this customer
+ * - delete: User wants to delete this customer
+ * - whatsapp: User wants to message customer on WhatsApp
  */
 const emit = defineEmits<{
+  (e: 'view'): void
   (e: 'edit'): void
   (e: 'delete'): void
+  (e: 'whatsapp'): void
 }>()
 
-// ===== Main Logic =====
+// ===== Computed Properties =====
 /**
- * Emit edit event when Edit button is clicked.
+ * Formats phone number for Ghana display
+ * Ensures consistent phone number formatting
+ */
+const formattedPhone = computed(() => {
+  const cleaned = props.phone.replace(/\D/g, '')
+  
+  // Check if it's a valid Ghanaian number format
+  if (cleaned.length === 10 && cleaned.startsWith('0')) {
+    // Format as: 024 123 4567
+    return `${cleaned.slice(0, 3)} ${cleaned.slice(3, 6)} ${cleaned.slice(6)}`
+  } else if (cleaned.length === 12 && cleaned.startsWith('233')) {
+    // Convert +233 format to local format
+    const localNumber = '0' + cleaned.slice(3)
+    return `${localNumber.slice(0, 3)} ${localNumber.slice(3, 6)} ${localNumber.slice(6)}`
+  }
+  
+  // Return original if not a recognized format
+  return props.phone
+})
+
+// ===== Event Handlers =====
+/**
+ * Handle view customer action
+ * Emits view event to parent component
+ */
+function onView() {
+  emit('view')
+}
+
+/**
+ * Handle edit customer action
+ * Emits edit event to parent component
  */
 function onEdit() {
   emit('edit')
 }
 
 /**
- * Emit delete event when Delete button is clicked.
+ * Handle delete customer action
+ * Emits delete event to parent component
  */
 function onDelete() {
   emit('delete')
 }
+
+/**
+ * Handle WhatsApp message action
+ * Opens WhatsApp with customer's phone number
+ * Ghana-optimized: Uses proper phone format for WhatsApp
+ */
+function onWhatsApp() {
+  const cleaned = props.phone.replace(/\D/g, '')
+  let whatsappPhone = ''
+  
+  // Convert to international format for WhatsApp
+  if (cleaned.length === 10 && cleaned.startsWith('0')) {
+    whatsappPhone = '233' + cleaned.slice(1)
+  } else if (cleaned.length === 12 && cleaned.startsWith('233')) {
+    whatsappPhone = cleaned
+  } else {
+    whatsappPhone = cleaned
+  }
+  
+  const message = encodeURIComponent(`Hello ${props.name}, I hope you're doing well!`)
+  const whatsappUrl = `https://wa.me/${whatsappPhone}?text=${message}`
+  
+  window.open(whatsappUrl, '_blank')
+  emit('whatsapp')
+}
 </script>
 
-<!--
-  ===== Styling Notes =====
-  - Card is touch-optimized (min-h-[64px]), large tap area for mobile.
-  - Uses Tailwind for color, spacing, and responsive design.
-  - Accessible: aria-label, role="listitem", semantic markup.
-  - Placeholder emoji for customer icon (replace with real image later).
-  - Action buttons now part of card for full reusability.
--->
+<style scoped>
+/* ===== [New Feature] START: Modern Card Animations ===== */
+/* Smooth transitions for all interactive elements */
+.group {
+  transform: translateZ(0); /* Enable hardware acceleration */
+}
+
+/* Enhanced hover effects */
+.group:hover {
+  transform: translateY(-2px);
+}
+
+/* Touch feedback for mobile users */
+button:active {
+  transform: scale(0.98);
+}
+
+/* Enhanced focus states for accessibility */
+button:focus-visible {
+  outline: 2px solid theme('colors.primary.500');
+  outline-offset: 2px;
+}
+
+/* Smooth icon transitions */
+.fa-icon {
+  transition: transform 0.15s ease-in-out;
+}
+
+button:hover .fa-icon {
+  transform: scale(1.1);
+}
+/* ===== [New Feature] END ===== */
+</style>

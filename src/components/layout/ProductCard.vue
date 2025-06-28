@@ -1,119 +1,269 @@
 <!--
   ProductCard.vue
-  Stratonea/Sales Tracker - Component for displaying a single product item with actions.
-  - Mobile-first, touch-optimized, Ghana-optimized
-  - Uses Tailwind utility classes for styling
-  - Follows Stratonea guidelines (see copilot-instructions.md)
-  - Emits 'edit' and 'delete' events for parent handling
+  Stratonea/Sales Tracker - Modern product card for mobile view
+  - Card-based design matching dashboard style
+  - Color-coded stock levels (green=in stock, orange=low, red=out)
+  - Product placeholder icons and hover animations
+  - Price prominently displayed with Ghana Cedis
+  - Quick "Add to Sale" action button
+  - Ghana-optimized: touch targets, offline support
+  - Follows Stratonea guidelines
 -->
 
 <template>
-  <!-- ===== [New Feature] START ===== -->
-  <div
-    class="flex items-center gap-4 bg-white rounded-lg shadow p-4 mb-2 min-h-[64px] hover:bg-gray-50 transition-colors"
-    aria-label="Product Item" role="listitem">
-    <!-- Product Image (optional, placeholder for now) -->
-    <div class="flex-shrink-0 w-12 h-12 bg-gray-200 rounded stratonea flex items-center justify-center">
-      <span class="text-gray-400 text-xl" aria-hidden="true">📦</span>
+  <!-- ===== [New Feature] START: Modern Product Card ===== -->
+  <div class="bg-white rounded-xl p-6 shadow-sm border border-gray-100 hover:shadow-md hover:border-primary-200 transition-all duration-200 relative group">
+    <!-- Stock Status Badge -->
+    <div class="absolute top-4 right-4">
+      <span
+        :class="[
+          'inline-flex items-center px-2 py-1 rounded-full text-xs font-medium',
+          stockStatusClass
+        ]"
+      >
+        <div 
+          :class="[
+            'w-2 h-2 rounded-full mr-1',
+            stockDotClass
+          ]"
+        ></div>
+        {{ stockStatusText }}
+      </span>
     </div>
-    <!-- Product Info -->
-    <div class="flex-1 min-w-0">
-      <div class="flex justify-between items-center">
-        <span class="font-bold text-base text-gray-900 truncate">{{ name }}</span>
-        <span class="text-xs text-gray-500">{{ sku }}</span>
+
+    <!-- Product Icon -->
+    <div class="flex items-center mb-4">
+      <div class="w-12 h-12 bg-primary-100 rounded-xl flex items-center justify-center group-hover:bg-primary-200 transition-colors duration-200">
+        <font-awesome-icon icon="box" class="text-primary-600 text-xl" />
       </div>
-      <div class="flex justify-between items-end mt-1">
-        <span class="text-sm text-gray-700">Stock: <span class="font-semibold">{{ stock }}</span></span>
-        <span class="text-sm font-bold text-primary">{{ formatCurrency(price ?? 0) }}</span>
+      <div class="ml-3 flex-1">
+        <h3 class="font-semibold text-gray-900 text-base truncate">{{ name }}</h3>
+        <p class="text-sm text-gray-500">SKU: {{ sku }}</p>
       </div>
-      <!-- ===== [New Feature] START ===== -->
-      <!-- Action Buttons: Edit & Delete, touch-optimized -->
-      <div class="flex flex-col gap-2 mt-4">
-        <button
-          @click="onEdit"
-          class="w-full min-h-[48px] bg-primary text-white rounded-lg font-bold text-base shadow-sm hover:bg-primary-dark transition-colors"
-          aria-label="Edit product"
-        >
-          Edit
-        </button>
-        <button
-          @click="onDelete"
-          class="w-full min-h-[48px] bg-red-600 text-white rounded-lg font-bold text-base shadow-sm hover:bg-red-700 transition-colors"
-          aria-label="Delete product"
-        >
-          Delete
-        </button>
+    </div>
+
+    <!-- Price - Prominently Displayed -->
+    <div class="mb-4">
+      <p class="text-2xl font-bold text-primary-600">
+        {{ formatCurrency(price) }}
+      </p>
+    </div>
+
+    <!-- Stock Information -->
+    <div class="mb-4">
+      <div class="flex items-center justify-between">
+        <span class="text-sm text-gray-600">Stock Level</span>
+        <span class="text-sm font-medium text-gray-900">{{ stock }} units</span>
       </div>
-      <!-- ===== [New Feature] END ===== -->
+      <!-- Stock Progress Bar -->
+      <div class="mt-2 w-full bg-gray-200 rounded-full h-2">
+        <div 
+          :class="[
+            'h-2 rounded-full transition-all duration-300',
+            stockProgressClass
+          ]"
+          :style="{ width: `${stockPercentage}%` }"
+        ></div>
+      </div>
+    </div>
+
+    <!-- Action Buttons -->
+    <div class="flex gap-2 mt-4">
+      <!-- Quick Add to Sale Button -->
+      <button
+        @click="emit('addToSale')"
+        class="flex-1 bg-primary text-white px-4 py-3 rounded-lg font-medium hover:bg-primary-hover transition-colors duration-200 min-h-[48px] flex items-center justify-center"
+        :disabled="stock <= 0"
+        aria-label="Add to Sale"
+      >
+        <font-awesome-icon icon="plus" class="mr-2" />
+        Add to Sale
+      </button>
+      
+      <!-- Edit Button -->
+      <button
+        @click="emit('edit')"
+        class="px-4 py-3 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors duration-200 min-h-[48px] flex items-center justify-center"
+        aria-label="Edit Product"
+      >
+        <font-awesome-icon icon="edit" />
+      </button>
+      
+      <!-- Delete Button -->
+      <button
+        @click="emit('delete')"
+        class="px-4 py-3 bg-red-100 text-red-600 rounded-lg hover:bg-red-200 transition-colors duration-200 min-h-[48px] flex items-center justify-center"
+        aria-label="Delete Product"
+      >
+        <font-awesome-icon icon="trash" />
+      </button>
+    </div>
+
+    <!-- Low Stock Warning -->
+    <div v-if="isLowStock" class="mt-3 p-3 bg-orange-50 border border-orange-200 rounded-lg">
+      <div class="flex items-center">
+        <font-awesome-icon icon="exclamation-triangle" class="text-orange-600 mr-2" />
+        <p class="text-sm text-orange-800 font-medium">Low stock - consider restocking</p>
+      </div>
+    </div>
+
+    <!-- Out of Stock Warning -->
+    <div v-if="stock <= 0" class="mt-3 p-3 bg-red-50 border border-red-200 rounded-lg">
+      <div class="flex items-center">
+        <font-awesome-icon icon="exclamation-triangle" class="text-red-600 mr-2" />
+        <p class="text-sm text-red-800 font-medium">Out of stock</p>
+      </div>
     </div>
   </div>
   <!-- ===== [New Feature] END ===== -->
 </template>
 
 <script setup lang="ts">
+// ===== File-Level Documentation =====
+/**
+ * ProductCard.vue - Modern product card component
+ * - Displays product information in card format for mobile view
+ * - Color-coded stock levels with visual indicators
+ * - Hover animations and touch-friendly buttons
+ * - Quick actions: Add to Sale, Edit, Delete
+ * - Ghana-optimized: clear pricing in GHS, offline support
+ * - Emits: 'edit', 'delete', 'addToSale' for parent handling
+ */
+
+// ===== Imports =====
+import { computed } from 'vue'
+
 // ===== Types & Interfaces =====
 /**
- * Props for ProductCard
- * - name: string (product name)
- * - sku: string (product SKU/code)
- * - price: number (product price)
- * - stock: number (current stock)
+ * Props for ProductCard component
+ * - name: Product name
+ * - sku: Stock Keeping Unit identifier
+ * - price: Product price in Ghana Cedis
+ * - stock: Current stock level
  */
-withDefaults(
-  defineProps<{
-    name?: string
-    sku?: string
-    price?: number
-    stock?: number
-  }>(),
-  {
-    name: 'Sample Product',
-    sku: 'SKU-001',
-    price: 10,
-    stock: 25
-  }
-)
+interface Props {
+  name: string
+  sku: string
+  price: number
+  stock: number
+}
+
+const props = defineProps<Props>()
 
 // ===== Emits =====
 /**
- * Emits 'edit' and 'delete' events to parent.
+ * Events emitted by ProductCard
+ * - edit: User wants to edit this product
+ * - delete: User wants to delete this product
+ * - addToSale: User wants to add this product to a sale
  */
 const emit = defineEmits<{
   (e: 'edit'): void
   (e: 'delete'): void
+  (e: 'addToSale'): void
 }>()
 
-// ===== Main Logic =====
+// ===== Constants =====
 /**
- * Emit edit event when Edit button is clicked.
+ * Stock level thresholds for color coding
+ * - LOW_STOCK_THRESHOLD: Below this is considered low stock
+ * - MAX_STOCK_FOR_PERCENTAGE: Maximum stock for percentage calculation
  */
-function onEdit() {
-  emit('edit')
-}
+const LOW_STOCK_THRESHOLD = 10
+const MAX_STOCK_FOR_PERCENTAGE = 100
+
+// ===== Computed Properties =====
+/**
+ * Determines if stock is low based on threshold
+ */
+const isLowStock = computed(() => 
+  props.stock > 0 && props.stock <= LOW_STOCK_THRESHOLD
+)
 
 /**
- * Emit delete event when Delete button is clicked.
+ * Stock percentage for progress bar (0-100%)
  */
-function onDelete() {
-  emit('delete')
-}
+const stockPercentage = computed(() => 
+  Math.min((props.stock / MAX_STOCK_FOR_PERCENTAGE) * 100, 100)
+)
+
+/**
+ * Stock status text for badge
+ */
+const stockStatusText = computed(() => {
+  if (props.stock <= 0) return 'Out of Stock'
+  if (props.stock <= LOW_STOCK_THRESHOLD) return 'Low Stock'
+  return 'In Stock'
+})
+
+/**
+ * CSS classes for stock status badge
+ */
+const stockStatusClass = computed(() => {
+  if (props.stock <= 0) return 'bg-red-100 text-red-800'
+  if (props.stock <= LOW_STOCK_THRESHOLD) return 'bg-orange-100 text-orange-800'
+  return 'bg-green-100 text-green-800'
+})
+
+/**
+ * CSS classes for stock status dot
+ */
+const stockDotClass = computed(() => {
+  if (props.stock <= 0) return 'bg-red-500'
+  if (props.stock <= LOW_STOCK_THRESHOLD) return 'bg-orange-500'
+  return 'bg-green-500'
+})
+
+/**
+ * CSS classes for stock progress bar
+ */
+const stockProgressClass = computed(() => {
+  if (props.stock <= 0) return 'bg-red-500'
+  if (props.stock <= LOW_STOCK_THRESHOLD) return 'bg-orange-500'
+  return 'bg-green-500'
+})
 
 // ===== Helper Functions =====
 /**
- * Formats a number as Ghanaian currency (GHS).
+ * Formats price in Ghana Cedis format
  * @param amount - The amount to format
- * @returns string (e.g., GHS 10.00)
  */
 function formatCurrency(amount: number): string {
   return `GHS ${amount.toFixed(2)}`
 }
 </script>
 
-<!--
-  ===== Styling Notes =====
-  - Card is touch-optimized (min-h-[64px]), large tap area for mobile.
-  - Uses Tailwind for color, spacing, and responsive design.
-  - Accessible: aria-label, role="listitem", semantic markup.
-  - Placeholder emoji for product image (replace with real image later).
-  - Buttons are part of the card for full reusability.
--->
+<style scoped>
+/* ===== [New Feature] START: Modern Card Animations ===== */
+/* Smooth transitions for all interactive elements */
+.group {
+  transition: all 0.2s ease-in-out;
+}
+
+/* Enhanced hover effects */
+.group:hover {
+  transform: translateY(-2px);
+}
+
+/* Touch feedback for mobile users */
+button:active {
+  transform: scale(0.98);
+}
+
+/* Enhanced focus states for accessibility */
+button:focus-visible {
+  outline: 2px solid theme('colors.primary.500');
+  outline-offset: 2px;
+}
+
+/* Disabled button styles */
+button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+button:disabled:hover {
+  transform: none;
+}
+/* ===== [New Feature] END ===== */
+</style>
