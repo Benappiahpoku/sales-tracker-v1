@@ -132,11 +132,11 @@
           <div class="text-center">
             <h3 class="text-2xl font-bold text-gray-900 mb-2">Business</h3>
             <div class="text-4xl font-bold text-gray-900 mb-4">
-              {{ isYearly ? '₵40' : '₵50' }}
+              {{ isYearly ? '₵45' : '₵60' }}
               <span class="text-lg font-normal text-gray-600">/month</span>
             </div>
             <p class="text-gray-600 mb-6">
-              {{ isYearly ? 'Billed yearly (₵480/year)' : 'Perfect for growing businesses' }}
+              {{ isYearly ? 'Billed yearly (₵540/year)' : 'Perfect for growing businesses' }}
             </p>
             
             <!-- Features List -->
