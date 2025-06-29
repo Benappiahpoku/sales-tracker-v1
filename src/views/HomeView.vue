@@ -16,10 +16,9 @@
   <div class="min-h-screen bg-gray-50">
 
     <!-- ===== Hero Section ===== -->
-    <section class="bg-gradient-to-br from-primary to-primary-dark text-white py-16 md:py-24">
+    <section class="bg-gradient-to-br from-primary to-primary-dark text-white py-16 md:py-24 rounded-lg" >
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-
           <!-- Left: Hero Content -->
           <div class="text-center lg:text-left">
             <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight mb-6">

@@ -60,7 +60,7 @@
         class="flex flex-col items-center justify-center text-primary-600 hover:text-primary-700 focus:outline-none"
         aria-label="Home">
         <font-awesome-icon icon="fa-solid fa-home" class="text-2xl" />
-        <span class="text-xs mt-1 font-medium">Home</span>
+        <span class="text-xs mt-1 font-medium">My Biz</span>
       </router-link>
       <!-- New Sale -->
       <router-link to="/new-sale"
