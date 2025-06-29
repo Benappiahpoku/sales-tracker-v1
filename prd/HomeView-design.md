@@ -157,12 +157,6 @@ Small business owners in Ghana who need a lightweight tool to manage sales, stoc
 * **SEO & Load Speed:** Optimized meta tags, preload important assets
 * **Accessibility:** Proper use of ARIA labels and semantic tags
 
-========================================
-
-[ LOGO ] Sales Tracker          [☰]     ← Hamburger Menu
-
-========================================
-
 [ HERO SECTION ]
 
 “Your Offline Sales Companion”
@@ -256,12 +250,6 @@ Built with [Heart Icon] by TekLumen
 Contact: `<salestracker@app.com>`
 
 ## Desktop View
-
-============================================================================
-
-[LOGO] Sales Tracker     | Home | My Biz | Pricing | About | Contact | [Avatar]
-
-============================================================================
 
 [ HERO SECTION ]
 

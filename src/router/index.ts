@@ -9,7 +9,12 @@ const routes: RouteRecordRaw[] = [
       {
         path: '',
         name: 'home',
-        component: () => import('../views/HomeView.vue')
+        component: () => import('../views/HomeView.vue'),
+        meta: {
+          title: 'Home',
+          hideHeader: true  
+        }
+        
       },
       {
         path: 'about',

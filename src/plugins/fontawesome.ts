@@ -37,7 +37,16 @@ import {
     faShoppingCart,     
     faInfoCircle,
     faEdit, 
-    faEllipsisV,        
+    faEllipsisV,    
+    faWifi,
+    faHeart,
+    faFileInvoice,
+    faShieldHalved,
+    faMobileScreenButton,
+    faCheck,
+    faChevronUp,
+    faChevronDown,
+    faRocket         
 
 } from '@fortawesome/free-solid-svg-icons'
 
@@ -89,6 +98,15 @@ library.add(
     faInfoCircle,
     faEllipsisV,
     faUserGroup,
+    faWifi,
+    faHeart,
+    faFileInvoice,
+    faShieldHalved,
+    faMobileScreenButton,
+    faCheck,
+    faChevronUp,
+    faChevronDown,
+    faRocket,      
     // Regular icons
     farBell,
     fasCircle,

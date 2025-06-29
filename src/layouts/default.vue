@@ -17,15 +17,10 @@
     <AppNavigation @openSidebar="toggleSidebar" />
 
     <!-- ===== App Header ===== -->
-    <AppHeader :currentPage="currentPage" @back="handleBack" />
+    <AppHeader v-if="!shouldHideHeader" :currentPage="currentPage" @back="handleBack" @search="handleSearch" />
 
     <!-- ===== Navigation Sidebar ===== -->
-    <NavigationSidebar 
-      :open="sidebarOpen" 
-      @close="closeSidebar" 
-      @navigate="handleNavigate"
-      @upgrade="handleUpgrade" 
-    />
+    <NavigationSidebar :open="sidebarOpen" @close="closeSidebar" @navigate="handleNavigate" @upgrade="handleUpgrade" />
 
     <!-- Main Content -->
     <main class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
@@ -37,11 +32,7 @@
     <ActionHub @openSidebar="toggleSidebar" />
 
     <!-- Overlay for mobile - closes sidebar when clicked -->
-    <div 
-      v-if="sidebarOpen" 
-      class="fixed inset-0 bg-black bg-opacity-50 z-30" 
-      @click="closeSidebar"
-    ></div>
+    <div v-if="sidebarOpen" class="fixed inset-0 bg-black bg-opacity-50 z-30" @click="closeSidebar"></div>
     <!-- ===== [Fix] END ===== -->
   </div>
 </template>
@@ -65,6 +56,12 @@ import NavigationSidebar from '@/components/base/NavigationSidebar.vue'
 import AppHeader from '@/components/base/AppHeader.vue'
 import ActionHub from '@/components/base/ActionHub.vue'
 
+
+interface RouteMeta {
+  title?: string
+  hideHeader?: boolean
+}
+
 // ===== State Management =====
 const sidebarOpen = ref(false)
 
@@ -72,6 +69,11 @@ const sidebarOpen = ref(false)
 const route = useRoute()
 const router = useRouter()
 
+
+const shouldHideHeader = computed(() => {
+  const meta = route.meta as RouteMeta
+  return meta.hideHeader === true
+})
 // Properly typed computed ref for currentPage
 const currentPage = computed(() => {
   const meta = route.meta as RouteMeta
@@ -104,7 +106,17 @@ function toggleSidebar() {
 function closeSidebar() {
   sidebarOpen.value = false
 }
-// ===== [Fix] END ===== 
+
+
+/**
+ * ===== [New Feature] START: Handle Search Event =====
+ * Handles the 'search' event from AppHeader
+ */
+function handleSearch() {
+  console.log('Search clicked')
+  // TODO: Implement search functionality
+  // Could open a search modal, navigate to search page, etc.
+}
 
 // ===== Navigation Handlers =====
 /**
