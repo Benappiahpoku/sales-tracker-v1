@@ -29,7 +29,7 @@
 
     <!-- ===== Action Hub ===== -->
     <!-- ===== [Fix] Use toggle function for consistent behavior ===== -->
-    <ActionHub @openSidebar="toggleSidebar" />
+    <ActionHub @openSidebar="toggleSidebar" v-if="!shouldHideHeader"  />
 
     <!-- Overlay for mobile - closes sidebar when clicked -->
     <div v-if="sidebarOpen" class="fixed inset-0 bg-black bg-opacity-50 z-30" @click="closeSidebar"></div>
