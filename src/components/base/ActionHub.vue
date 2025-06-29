@@ -75,7 +75,7 @@
         class="flex flex-col items-center justify-center text-primary-600 hover:text-primary-700 focus:outline-none"
         aria-label="Sales">
         <font-awesome-icon :icon="['fas', 'user-group']" class="text-xl" />
-        <span>Customers</span>
+        <span class="text-xs mt-1 font-medium">Customers</span>
       </router-link>
 
       <!-- Products -->
@@ -93,7 +93,7 @@
         class="flex flex-col items-center justify-center text-primary-600 hover:text-primary-700 focus:outline-none focus:ring-2 focus:ring-white transition-all duration-150"
         aria-label="Open-menu" type="button" style="box-sizing: border-box;">
         <font-awesome-icon :icon="['fas', 'ellipsis-v']" class="text-xl" />
-        <span>More</span>
+        <span class="text-xs mt-1 font-medium">More</span>
       </button>
     </div>
   </div>
