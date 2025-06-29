@@ -16,7 +16,7 @@
         <!-- Home -->
         <router-link to="/dashboard"
           class="flex items-center space-x-2 text-primary-600 hover:text-primary-700 min-h-[48px]">
-          <font-awesome-icon icon="fa-solid fa-home" class="text-xl" />
+          <font-awesome-icon icon="fa-solid fa-chart-bar" class="text-2xl" />
           <span>My Biz</span>
         </router-link>
         <!-- New Sale -->
@@ -59,7 +59,7 @@
       <router-link to="/dashboard"
         class="flex flex-col items-center justify-center text-primary-600 hover:text-primary-700 focus:outline-none"
         aria-label="Home">
-        <font-awesome-icon icon="fa-solid fa-home" class="text-2xl" />
+        <font-awesome-icon icon="fa-solid fa-chart-bar" class="text-2xl" />
         <span class="text-xs mt-1 font-medium">My Biz</span>
       </router-link>
       <!-- New Sale -->
