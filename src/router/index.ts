@@ -20,11 +20,21 @@ const routes: RouteRecordRaw[] = [
         path: 'about',
         name: 'about',
         component: () => import('../views/AboutView.vue')
+        ,
+        meta: {
+          title: 'About',
+          hideHeader: true
+        }
       },
       {
         path: 'contact',
         name: 'contact',
         component: () => import('../views/ContactView.vue')
+        ,
+        meta: {
+          title: 'Contact',
+          hideHeader: true
+        }
       },
       {
         path: 'products',
@@ -86,6 +96,17 @@ const routes: RouteRecordRaw[] = [
         name: 'userprofile',
         meta: { title: 'User Profile' },
         component: () => import('../views/auth/UserProfileView.vue')
+      }
+      ,
+      {
+        path: 'pricing',
+        name: 'pricing',
+        component: () => import('../views/PricingView.vue')
+        ,
+        meta: {
+          title: 'Pricing',
+          hideHeader: true
+        }
       }
     ]
   },
