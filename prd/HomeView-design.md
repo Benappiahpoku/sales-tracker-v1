@@ -85,7 +85,7 @@ Small business owners in Ghana who need a lightweight tool to manage sales, stoc
   * No sign-in required
   * CTA [ Go to My Biz ] → Routes directly to dashboard (no sign-in)
 
-* **Popular – ₵40/mo or ₵30/mo yearly**
+* **Business (Popular) – ₵40/mo or ₵30/mo yearly**
 
   * Everything in Free
   * 500 invoices
@@ -97,7 +97,7 @@ Small business owners in Ghana who need a lightweight tool to manage sales, stoc
   * Cloud data backup
   * CTA: “Subscribe Now”
 
-* **Enterprise – Contact Sales**
+* **Pro – Contact Sales**
 
   * Everything in Popular
   * Unlimited invoices
