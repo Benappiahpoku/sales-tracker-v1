@@ -63,10 +63,10 @@ const routes: RouteRecordRaw[] = [
       }
       ,
       {
-        path: 'company',
-        name: 'company',
-        meta: { title: 'Company Settings' },
-        component: () => import('../views/CompanySettingsView.vue')
+        path: 'settings',
+        name: 'settings',
+        meta: { title: 'Settings' },
+        component: () => import('../views/SettingsView.vue')
       }
       ,
       {

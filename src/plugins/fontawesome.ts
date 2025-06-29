@@ -26,7 +26,8 @@ import {
     faListAlt,
     faCircle as fasCircle,
     faChartBar,          
-    faUsers,             
+    faUsers,  
+    faUserGroup,           
     faWarehouse,         
     faBuilding,          
     faChartLine,         
@@ -35,7 +36,8 @@ import {
     faUserPlus,         
     faShoppingCart,     
     faInfoCircle,
-    faEdit,         
+    faEdit, 
+    faEllipsisV,        
 
 } from '@fortawesome/free-solid-svg-icons'
 
@@ -85,7 +87,8 @@ library.add(
     faUserPlus,
     faShoppingCart,
     faInfoCircle,
-    // ===== [New Icons] END =====
+    faEllipsisV,
+    faUserGroup,
     // Regular icons
     farBell,
     fasCircle,

@@ -16,7 +16,7 @@
         <!-- Home -->
         <router-link to="/" class="flex items-center space-x-2 text-primary-600 hover:text-primary-700 min-h-[48px]">
           <font-awesome-icon icon="fa-solid fa-home" class="text-xl" />
-          <span>Home</span>
+          <span>My Biz</span>
         </router-link>
         <!-- New Sale -->
         <router-link to="/new-sale"
@@ -24,24 +24,25 @@
           <font-awesome-icon icon="fa-solid fa-plus-circle" class="text-xl" />
           <span>New Sale</span>
         </router-link>
+         <!-- Customers -->
+         <router-link to="/customers"
+          class="flex items-center space-x-2 text-primary-600 hover:text-primary-700 min-h-[48px]">
+          <font-awesome-icon :icon="['fas', 'user-group']" class="text-xl" />
+          <span>Customers</span>
+        </router-link>
         <!-- Products -->
         <router-link to="/products"
           class="flex items-center space-x-2 text-primary-600 hover:text-primary-700 min-h-[48px]">
           <font-awesome-icon icon="fa-solid fa-box" class="text-xl" />
           <span>Products</span>
         </router-link>
-        <!-- Sales -->
-        <router-link to="/sales"
-          class="flex items-center space-x-2 text-primary-600 hover:text-primary-700 min-h-[48px]">
-          <font-awesome-icon icon="fa-solid fa-list-alt" class="text-xl" />
-          <span>Sales</span>
-        </router-link>
+       
         
         <!-- Menu -->
         <button @click="emit('openSidebar')"
           class="flex items-center space-x-2 text-primary-600 hover:text-primary-700 min-h-[48px]">
-          <font-awesome-icon :icon="['fas', 'cog']" class="text-xl" />
-          <span>Menu</span>
+          <font-awesome-icon :icon="['fas', 'ellipsis-v']" class="text-xl" />
+          <span>More</span>
         </button>
       </div>
     </div>

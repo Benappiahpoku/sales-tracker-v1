@@ -100,9 +100,9 @@ const navItems: NavItem[] = [
   { label: 'New Sale', route: '/new-sale' },
   { label: 'Customers', route: '/customers' },
   { label: 'Products', route: '/products' },
-  { label: 'Sales History', route: '/sales' },
   { label: 'Stock', route: '/stock' },
-  { label: 'Company Settings', route: '/company' },
+  { label: 'Sales History', route: '/sales' },
+  { label: 'Settings', route: '/settings' },
   { label: 'Sales Report', route: '/reports' }
 ]
 
