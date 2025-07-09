@@ -10,9 +10,10 @@
 -->
 
 <template>
-  <!-- ===== [New Feature] START: Modern Customer Card ===== -->
+  <!-- ===== Customer Card ===== -->
   <div class="bg-white rounded-xl p-6 shadow-sm border border-gray-100 hover:shadow-md hover:border-primary-200 transition-all duration-200 relative group">
-    <!-- Customer Header with Icon -->
+    
+    <!-- ===== Customer Header ===== -->
     <div class="flex items-start justify-between mb-4">
       <div class="flex items-center">
         <div class="w-12 h-12 bg-primary-100 rounded-lg flex items-center justify-center mr-4">
@@ -34,7 +35,7 @@
       </span>
     </div>
 
-    <!-- Customer Details -->
+    <!-- ===== Customer Details ===== -->
     <div class="space-y-3 mb-6">
       <!-- Phone Number -->
       <div class="flex items-center justify-between py-2 border-b border-gray-100">
@@ -64,7 +65,7 @@
       </div>
     </div>
 
-    <!-- Action Buttons -->
+    <!-- ===== Action Buttons ===== -->
     <div class="flex gap-2">
       <!-- View Button -->
       <button
@@ -96,7 +97,7 @@
       </button>
     </div>
 
-    <!-- WhatsApp Quick Action -->
+    <!-- ===== WhatsApp Quick Action ===== -->
     <div class="mt-3 pt-3 border-t border-gray-100">
       <button
         @click="onWhatsApp"
@@ -108,7 +109,6 @@
       </button>
     </div>
   </div>
-  <!-- ===== [New Feature] END ===== -->
 </template>
 
 <script setup lang="ts">
@@ -119,20 +119,12 @@
  * - Ghana-optimized: phone formatting, WhatsApp integration, touch-friendly
  * - Hover animations and visual status indicators
  * - Quick actions: View, Edit, Delete, WhatsApp
- * - Emits: 'view', 'edit', 'delete', 'whatsapp' for parent handling
  */
 
 // ===== Imports =====
 import { computed } from 'vue'
 
 // ===== Types & Interfaces =====
-/**
- * Props for CustomerCard component
- * - name: Customer's full name
- * - phone: Customer's phone number (will be formatted for Ghana)
- * - email: Customer's email address
- * - location: Customer's location/city
- */
 interface Props {
   name: string
   phone: string
@@ -148,13 +140,6 @@ const props = withDefaults(defineProps<Props>(), {
 })
 
 // ===== Emits =====
-/**
- * Events emitted by CustomerCard
- * - view: User wants to view customer details
- * - edit: User wants to edit this customer
- * - delete: User wants to delete this customer
- * - whatsapp: User wants to message customer on WhatsApp
- */
 const emit = defineEmits<{
   (e: 'view'): void
   (e: 'edit'): void
@@ -163,16 +148,11 @@ const emit = defineEmits<{
 }>()
 
 // ===== Computed Properties =====
-/**
- * Formats phone number for Ghana display
- * Ensures consistent phone number formatting
- */
 const formattedPhone = computed(() => {
   const cleaned = props.phone.replace(/\D/g, '')
   
-  // Check if it's a valid Ghanaian number format
+  // Format Ghana phone numbers: 024 123 4567
   if (cleaned.length === 10 && cleaned.startsWith('0')) {
-    // Format as: 024 123 4567
     return `${cleaned.slice(0, 3)} ${cleaned.slice(3, 6)} ${cleaned.slice(6)}`
   } else if (cleaned.length === 12 && cleaned.startsWith('233')) {
     // Convert +233 format to local format
@@ -180,40 +160,22 @@ const formattedPhone = computed(() => {
     return `${localNumber.slice(0, 3)} ${localNumber.slice(3, 6)} ${localNumber.slice(6)}`
   }
   
-  // Return original if not a recognized format
   return props.phone
 })
 
 // ===== Event Handlers =====
-/**
- * Handle view customer action
- * Emits view event to parent component
- */
 function onView() {
   emit('view')
 }
 
-/**
- * Handle edit customer action
- * Emits edit event to parent component
- */
 function onEdit() {
   emit('edit')
 }
 
-/**
- * Handle delete customer action
- * Emits delete event to parent component
- */
 function onDelete() {
   emit('delete')
 }
 
-/**
- * Handle WhatsApp message action
- * Opens WhatsApp with customer's phone number
- * Ghana-optimized: Uses proper phone format for WhatsApp
- */
 function onWhatsApp() {
   const cleaned = props.phone.replace(/\D/g, '')
   let whatsappPhone = ''
@@ -236,13 +198,11 @@ function onWhatsApp() {
 </script>
 
 <style scoped>
-/* ===== [New Feature] START: Modern Card Animations ===== */
-/* Smooth transitions for all interactive elements */
+/* ===== Modern Card Animations ===== */
 .group {
   transform: translateZ(0); /* Enable hardware acceleration */
 }
 
-/* Enhanced hover effects */
 .group:hover {
   transform: translateY(-2px);
 }
@@ -266,5 +226,4 @@ button:focus-visible {
 button:hover .fa-icon {
   transform: scale(1.1);
 }
-/* ===== [New Feature] END ===== */
 </style>

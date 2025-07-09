@@ -11,27 +11,18 @@
 -->
 
 <template>
-  <!-- ===== [New Feature] START: Modern Sales Card ===== -->
+  <!-- ===== Sales Card ===== -->
   <div class="bg-white rounded-xl p-6 shadow-sm border border-gray-100 hover:shadow-md hover:border-primary-200 transition-all duration-200 relative group">
-    <!-- Payment Status Badge -->
+    
+    <!-- ===== Payment Status Badge ===== -->
     <div class="absolute top-4 right-4">
-      <span
-        :class="[
-          'inline-flex items-center px-2 py-1 rounded-full text-xs font-medium',
-          paymentStatusClass
-        ]"
-      >
-        <div 
-          :class="[
-            'w-2 h-2 rounded-full mr-1',
-            paymentDotClass
-          ]"
-        ></div>
+      <span :class="['inline-flex items-center px-2 py-1 rounded-full text-xs font-medium', paymentStatusClass]">
+        <div :class="['w-2 h-2 rounded-full mr-1', paymentDotClass]"></div>
         {{ paymentStatusText }}
       </span>
     </div>
 
-    <!-- Sale Icon -->
+    <!-- ===== Sale Header ===== -->
     <div class="flex items-center mb-4">
       <div class="w-12 h-12 bg-primary-100 rounded-xl flex items-center justify-center group-hover:bg-primary-200 transition-colors duration-200">
         <font-awesome-icon icon="receipt" class="text-primary-600 text-xl" />
@@ -42,7 +33,7 @@
       </div>
     </div>
 
-    <!-- Total Amount - Prominently Displayed -->
+    <!-- ===== Amount Display ===== -->
     <div class="mb-4">
       <p class="text-2xl font-bold text-primary-600">
         {{ formatCurrency(totalAmount) }}
@@ -50,7 +41,7 @@
       <p class="text-sm text-gray-500">{{ itemCount }} items</p>
     </div>
 
-    <!-- Sale Date and Time -->
+    <!-- ===== Date Information ===== -->
     <div class="mb-4">
       <div class="flex items-center justify-between">
         <span class="text-sm text-gray-600">Sale Date</span>
@@ -62,7 +53,7 @@
       </div>
     </div>
 
-    <!-- Action Buttons -->
+    <!-- ===== Action Buttons ===== -->
     <div class="flex gap-2 mt-4">
       <!-- View Button -->
       <button
@@ -102,7 +93,8 @@
       </button>
     </div>
 
-    <!-- Payment Status Warning -->
+    <!-- ===== Payment Warnings ===== -->
+    <!-- Overdue Warning -->
     <div v-if="isOverdue" class="mt-3 p-3 bg-red-50 border border-red-200 rounded-lg">
       <div class="flex items-center">
         <font-awesome-icon icon="exclamation-triangle" class="text-red-600 mr-2" />
@@ -118,7 +110,6 @@
       </div>
     </div>
   </div>
-  <!-- ===== [New Feature] END ===== -->
 </template>
 
 <script setup lang="ts">
@@ -130,23 +121,12 @@
  * - Hover animations and touch-friendly buttons
  * - Quick actions: View, Edit, Delete, Download
  * - Ghana-optimized: clear pricing in GHS, offline support
- * - Emits: 'view', 'edit', 'delete', 'download' for parent handling
  */
 
 // ===== Imports =====
 import { computed } from 'vue'
 
 // ===== Types & Interfaces =====
-/**
- * Props for SalesCard component
- * - customerName: Name of the customer who made the purchase
- * - invoiceNumber: Unique invoice/receipt number
- * - totalAmount: Total amount of the sale in Ghana Cedis
- * - itemCount: Number of items in the sale
- * - saleDate: Date when the sale was made
- * - dueDate: Payment due date
- * - paymentStatus: Current payment status
- */
 interface Props {
   customerName: string
   invoiceNumber: string
@@ -160,13 +140,6 @@ interface Props {
 const props = defineProps<Props>()
 
 // ===== Emits =====
-/**
- * Events emitted by SalesCard
- * - view: User wants to view sale details
- * - edit: User wants to edit this sale
- * - delete: User wants to delete this sale
- * - download: User wants to download receipt/invoice
- */
 const emit = defineEmits<{
   (e: 'view'): void
   (e: 'edit'): void
@@ -175,19 +148,9 @@ const emit = defineEmits<{
 }>()
 
 // ===== Computed Properties =====
-/**
- * Determines if payment is overdue
- */
 const isOverdue = computed(() => props.paymentStatus === 'overdue')
-
-/**
- * Determines if payment is pending
- */
 const isPending = computed(() => props.paymentStatus === 'pending')
 
-/**
- * Calculate days until payment is due
- */
 const daysUntilDue = computed(() => {
   const today = new Date()
   const due = new Date(props.dueDate)
@@ -196,9 +159,6 @@ const daysUntilDue = computed(() => {
   return Math.max(0, diffDays)
 })
 
-/**
- * Calculate days overdue
- */
 const overdueDays = computed(() => {
   const today = new Date()
   const due = new Date(props.dueDate)
@@ -207,67 +167,38 @@ const overdueDays = computed(() => {
   return Math.max(0, diffDays)
 })
 
-/**
- * Payment status text for badge
- */
 const paymentStatusText = computed(() => {
   switch (props.paymentStatus) {
-    case 'paid':
-      return 'Paid'
-    case 'pending':
-      return 'Pending'
-    case 'overdue':
-      return 'Overdue'
-    default:
-      return 'Unknown'
+    case 'paid': return 'Paid'
+    case 'pending': return 'Pending'
+    case 'overdue': return 'Overdue'
+    default: return 'Unknown'
   }
 })
 
-/**
- * CSS classes for payment status badge
- */
 const paymentStatusClass = computed(() => {
   switch (props.paymentStatus) {
-    case 'paid':
-      return 'bg-green-100 text-green-800'
-    case 'pending':
-      return 'bg-orange-100 text-orange-800'
-    case 'overdue':
-      return 'bg-red-100 text-red-800'
-    default:
-      return 'bg-gray-100 text-gray-800'
+    case 'paid': return 'bg-green-100 text-green-800'
+    case 'pending': return 'bg-orange-100 text-orange-800'
+    case 'overdue': return 'bg-red-100 text-red-800'
+    default: return 'bg-gray-100 text-gray-800'
   }
 })
 
-/**
- * CSS classes for payment status dot
- */
 const paymentDotClass = computed(() => {
   switch (props.paymentStatus) {
-    case 'paid':
-      return 'bg-green-500'
-    case 'pending':
-      return 'bg-orange-500'
-    case 'overdue':
-      return 'bg-red-500'
-    default:
-      return 'bg-gray-500'
+    case 'paid': return 'bg-green-500'
+    case 'pending': return 'bg-orange-500'
+    case 'overdue': return 'bg-red-500'
+    default: return 'bg-gray-500'
   }
 })
 
 // ===== Helper Functions =====
-/**
- * Formats currency amount in Ghana Cedis format
- * @param amount - The amount to format
- */
 function formatCurrency(amount: number): string {
   return `GHS ${amount.toFixed(2)}`
 }
 
-/**
- * Formats date for display
- * @param date - The date to format
- */
 function formatDate(date: string | Date): string {
   const d = new Date(date)
   return d.toLocaleDateString('en-GB', {
@@ -279,13 +210,11 @@ function formatDate(date: string | Date): string {
 </script>
 
 <style scoped>
-/* ===== [New Feature] START: Modern Card Animations ===== */
-/* Smooth transitions for all interactive elements */
+/* ===== Modern Card Animations ===== */
 .group {
   transition: all 0.2s ease-in-out;
 }
 
-/* Enhanced hover effects */
 .group:hover {
   transform: translateY(-2px);
 }
@@ -300,5 +229,4 @@ button:focus-visible {
   outline: 2px solid theme('colors.primary.500');
   outline-offset: 2px;
 }
-/* ===== [New Feature] END ===== */
 </style>

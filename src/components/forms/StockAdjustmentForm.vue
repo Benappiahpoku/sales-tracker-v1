@@ -4,15 +4,13 @@
   - Mobile-first design matching StockCard and dashboard style
   - Ghana-optimized: offline support, touch targets, clear validation
   - Enhanced UX with icons, stock level indicators, and loading states
-  - Comprehensive adjustment types matching StockCard changeType
-  - Real-time stock calculation and visual feedback
   - Follows Stratonea guidelines with comprehensive documentation
 -->
 
 <template>
-  <!-- ===== [New Feature] START: Upgraded Stock Adjustment Form ===== -->
+  <!-- ===== Stock Adjustment Form Card ===== -->
   <div class="bg-white rounded-xl p-6 shadow-sm border border-gray-200">
-    <!-- Form Header -->
+    <!-- ===== Form Header ===== -->
     <div class="flex items-center mb-6">
       <div class="w-10 h-10 bg-primary-100 rounded-lg flex items-center justify-center mr-3">
         <font-awesome-icon :icon="isEditing ? 'box-open' : 'plus'" class="text-primary-600" />
@@ -27,7 +25,7 @@
       </div>
     </div>
 
-    <!-- Form -->
+    <!-- ===== Stock Adjustment Form ===== -->
     <form @submit.prevent="onSubmit" class="space-y-4" autocomplete="off">
       
       <!-- Product Selection/Display -->
@@ -218,7 +216,6 @@
       </div>
     </form>
   </div>
-  <!-- ===== [New Feature] END ===== -->
 </template>
 
 <script setup lang="ts">
@@ -229,18 +226,12 @@
  * - Ghana-optimized: offline support, clear validation messages
  * - Mobile-first design with touch-optimized inputs
  * - Real-time stock calculation and validation
- * - Visual adjustment type selection matching StockCard
- * - Comprehensive adjustment types (restock, sale, damage, etc.)
- * - Proper TypeScript interfaces and validation
  */
 
 // ===== Imports =====
 import { reactive, ref, computed, onMounted } from 'vue'
 
 // ===== Types & Interfaces =====
-/**
- * Stock adjustment form data interface matching StockCard requirements
- */
 interface StockAdjustmentFormData {
   productName: string
   productSku: string
@@ -250,20 +241,12 @@ interface StockAdjustmentFormData {
   timestamp: string
   currentStock: number
 }
-
-/**
- * Product interface for product selection
- */
 interface Product {
   id: string
   name: string
   sku: string
   currentStock: number
 }
-
-/**
- * Adjustment type option interface
- */
 interface AdjustmentType {
   value: 'restock' | 'sale' | 'adjustment' | 'correction' | 'damage' | 'transfer'
   label: string
@@ -271,19 +254,12 @@ interface AdjustmentType {
   color: string
   direction: 'positive' | 'negative' | 'neutral'
 }
-
-/**
- * Form validation errors interface
- */
 interface FormErrors {
   quantity?: string
   changeType?: string
 }
 
 // ===== Props =====
-/**
- * Component props with proper typing and defaults
- */
 const props = withDefaults(defineProps<{
   initial?: Partial<StockAdjustmentFormData>
   isEditing?: boolean
@@ -297,23 +273,13 @@ const props = withDefaults(defineProps<{
 })
 
 // ===== Emits =====
-/**
- * Events emitted by StockAdjustmentForm
- */
 const emit = defineEmits<{
   (e: 'save', data: StockAdjustmentFormData): void
   (e: 'cancel'): void
 }>()
 
 // ===== Constants & Config =====
-/**
- * Stock level threshold for determining low stock status
- */
 const LOW_STOCK_THRESHOLD = 10
-
-/**
- * Adjustment types with visual configuration
- */
 const adjustmentTypes: AdjustmentType[] = [
   { value: 'restock', label: 'Restock', icon: 'plus', color: 'green', direction: 'positive' },
   { value: 'sale', label: 'Sale', icon: 'shopping-cart', color: 'blue', direction: 'negative' },
@@ -324,59 +290,28 @@ const adjustmentTypes: AdjustmentType[] = [
 ]
 
 // ===== State Management =====
-/**
- * Form data with proper initialization
- */
 const form = reactive<StockAdjustmentFormData>({
   productName: '',
   productSku: '',
   changeType: 'restock',
   quantity: 1,
   reason: '',
-  timestamp: new Date().toISOString().slice(0, 16), // datetime-local format
+  timestamp: new Date().toISOString().slice(0, 16),
   currentStock: 0,
   ...props.initial
 })
-
-/**
- * Form validation errors
- */
 const errors = reactive<FormErrors>({})
-
-/**
- * Form submission state
- */
 const isSubmitting = ref(false)
-
-/**
- * Network status (mock for now)
- */
 const isOnline = ref(navigator.onLine)
-
-/**
- * Selected product ID for product selection
- */
 const selectedProductId = ref('')
-
-/**
- * Current stock level (from form or selected product)
- */
 const currentStock = ref(form.currentStock || 0)
 
 // ===== Computed Properties =====
-/**
- * Check if form is valid
- * Fixed: Removed invalid comparison with empty string since changeType has default value
- */
 const isFormValid = computed(() => {
   return form.productName.trim() !== '' && 
          form.quantity > 0 &&
          Object.keys(errors).length === 0
 })
-
-/**
- * Calculate new stock level after adjustment
- */
 const calculatedNewStock = computed(() => {
   if (!form.changeType || !form.quantity) return currentStock.value
 
@@ -396,22 +331,15 @@ const calculatedNewStock = computed(() => {
 })
 
 // ===== Helper Functions =====
-/**
- * Validate entire form and set errors
- */
 function validateForm(): boolean {
-  // Clear previous errors
   Object.keys(errors).forEach(key => delete errors[key as keyof FormErrors])
-  
   let isValid = true
   
-  // Validate quantity
   if (form.quantity <= 0) {
     errors.quantity = 'Quantity must be greater than 0'
     isValid = false
   }
   
-  // Validate for negative stock (except corrections)
   if (form.changeType !== 'correction' && calculatedNewStock.value < 0) {
     errors.quantity = 'This would result in negative stock. Reduce quantity or change adjustment type.'
     isValid = false
@@ -419,10 +347,6 @@ function validateForm(): boolean {
   
   return isValid
 }
-
-/**
- * Handle product selection change
- */
 function onProductChange() {
   const selectedProduct = props.availableProducts.find(p => p.id === selectedProductId.value)
   if (selectedProduct) {
@@ -434,22 +358,14 @@ function onProductChange() {
 }
 
 // ===== Event Handlers =====
-/**
- * Handle form submission
- * Fixed: Removed unused changeAmount variable and simplified logic
- */
 async function onSubmit() {
-  if (!validateForm()) {
-    return
-  }
+  if (!validateForm()) return
   
   isSubmitting.value = true
   
   try {
-    // Simulate async operation (API call)
     await new Promise(resolve => setTimeout(resolve, 1000))
     
-    // Prepare data for submission
     const submissionData: StockAdjustmentFormData = {
       ...form,
       productName: form.productName.trim(),
@@ -464,106 +380,43 @@ async function onSubmit() {
     isSubmitting.value = false
   }
 }
-
-/**
- * Handle form cancellation
- */
 function onCancel() {
   emit('cancel')
 }
 
 // ===== Lifecycle Hooks =====
-/**
- * Initialize form when component mounts
- */
 onMounted(() => {
-  // Listen for online/offline events
-  window.addEventListener('online', () => {
-    isOnline.value = true
-  })
+  window.addEventListener('online', () => { isOnline.value = true })
+  window.addEventListener('offline', () => { isOnline.value = false })
   
-  window.addEventListener('offline', () => {
-    isOnline.value = false
-  })
-  
-  // Set current stock from initial data
   if (props.initial?.currentStock !== undefined) {
     currentStock.value = props.initial.currentStock
   }
   
-  // Focus on first input for better UX
   if (!props.isProductFixed) {
     const productSelect = document.getElementById('product-select')
-    if (productSelect) {
-      productSelect.focus()
-    }
+    if (productSelect) productSelect.focus()
   } else {
     const quantityInput = document.getElementById('adjustment-qty')
-    if (quantityInput) {
-      quantityInput.focus()
-    }
+    if (quantityInput) quantityInput.focus()
   }
 })
 </script>
 
 <style scoped>
-/* ===== [New Feature] START: Modern Form Styling ===== */
-/* Touch feedback for mobile users */
-button:active {
-  transform: scale(0.98);
-}
-
-/* Enhanced focus states for accessibility */
-input:focus-visible,
-select:focus-visible,
-button:focus-visible {
+/* ===== Modern Form Styling ===== */
+button:active { transform: scale(0.98); }
+input:focus-visible, select:focus-visible, button:focus-visible {
   outline: 2px solid theme('colors.primary.500');
   outline-offset: 2px;
 }
-
-/* Smooth transitions for all interactive elements */
-input,
-select,
-button {
-  transition: all 0.2s ease-in-out;
-}
-
-/* Adjustment type hover effects */
-.cursor-pointer:hover div {
-  transform: translateY(-1px);
-}
-
-/* Loading spinner animation */
-.animate-spin {
-  animation: spin 1s linear infinite;
-}
-
-@keyframes spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-/* Responsive adjustments */
+input, select, button { transition: all 0.2s ease-in-out; }
+.cursor-pointer:hover div { transform: translateY(-1px); }
+.animate-spin { animation: spin 1s linear infinite; }
+@keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
 @media (max-width: 640px) {
-  /* Stack form actions vertically on mobile */
-  .flex-col button {
-    width: 100%;
-  }
-  
-  /* Reduce padding on small screens */
-  .p-6 {
-    padding: 1rem;
-  }
-  
-  /* Adjust adjustment type grid on mobile */
-  .grid-cols-2 {
-    grid-template-columns: 1fr 1fr;
-    gap: 0.5rem;
-  }
+  .flex-col button { width: 100%; }
+  .p-6 { padding: 1rem; }
+  .grid-cols-2 { grid-template-columns: 1fr 1fr; gap: 0.5rem; }
 }
-/* ===== [New Feature] END ===== */
 </style>

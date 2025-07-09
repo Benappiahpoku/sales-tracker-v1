@@ -10,8 +10,7 @@
 -->
 
 <template>
-  <!-- ===== [New Feature] START: Customer Details Modal ===== -->
-  <!-- Modal Overlay -->
+  <!-- ===== Customer Details Modal ===== -->
   <div 
     v-if="isOpen" 
     class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black bg-opacity-50"
@@ -311,7 +310,6 @@
       </div>
     </div>
   </div>
-  <!-- ===== [New Feature] END ===== -->
 </template>
 
 <script setup lang="ts">
@@ -330,9 +328,6 @@
 import { computed } from 'vue'
 
 // ===== Types & Interfaces =====
-/**
- * Customer interface matching the data structure from CustomersView
- */
 interface Customer {
   id: string
   name: string
@@ -342,10 +337,6 @@ interface Customer {
   status: 'active' | 'inactive' | 'pending'
   joinDate: string | Date
 }
-
-/**
- * Transaction interface for customer transaction history
- */
 interface Transaction {
   id: string
   description: string
@@ -353,19 +344,11 @@ interface Transaction {
   date: string | Date
   status: 'completed' | 'pending' | 'failed'
 }
-
-/**
- * Customer note interface for storing notes about customers
- */
 interface CustomerNote {
   id: string
   content: string
   createdAt: string | Date
 }
-
-/**
- * Customer statistics interface for transaction summary
- */
 interface CustomerStats {
   totalPurchases: number
   totalSpent: number
@@ -374,9 +357,6 @@ interface CustomerStats {
 }
 
 // ===== Props =====
-/**
- * Component props with proper typing and defaults
- */
 const props = withDefaults(defineProps<{
   isOpen: boolean
   customer: Customer
@@ -385,9 +365,6 @@ const props = withDefaults(defineProps<{
 })
 
 // ===== Emits =====
-/**
- * Events emitted to parent component
- */
 const emit = defineEmits<{
   (e: 'close'): void
   (e: 'edit', customer: Customer): void
@@ -396,9 +373,6 @@ const emit = defineEmits<{
 }>()
 
 // ===== Computed Properties =====
-/**
- * Calculate days since customer joined
- */
 const daysSinceJoin = computed(() => {
   const joinDate = new Date(props.customer.joinDate)
   const today = new Date()
@@ -407,10 +381,7 @@ const daysSinceJoin = computed(() => {
   return Math.max(0, diffDays)
 })
 
-/**
- * Mock customer statistics for demonstration
- * In a real app, this would come from the API or database
- */
+// Mock customer statistics for demonstration
 const customerStats = computed<CustomerStats>(() => ({
   totalPurchases: Math.floor(Math.random() * 20) + 5, // 5-25 purchases
   totalSpent: (Math.random() * 5000) + 500, // GHS 500-5500
@@ -421,10 +392,7 @@ const customerStats = computed<CustomerStats>(() => ({
 // Calculate average order value
 customerStats.value.averageOrder = customerStats.value.totalSpent / customerStats.value.totalPurchases
 
-/**
- * Mock recent transactions for demonstration
- * In a real app, this would come from the API based on customer ID
- */
+// Mock recent transactions for demonstration
 const recentTransactions = computed<Transaction[]>(() => [
   {
     id: '1',
@@ -449,10 +417,7 @@ const recentTransactions = computed<Transaction[]>(() => [
   }
 ])
 
-/**
- * Mock customer notes for demonstration
- * In a real app, this would come from the API
- */
+// Mock customer notes for demonstration
 const customerNotes = computed<CustomerNote[]>(() => [
   {
     id: '1',
@@ -467,20 +432,9 @@ const customerNotes = computed<CustomerNote[]>(() => [
 ])
 
 // ===== Helper Functions =====
-/**
- * Format currency for Ghana Cedi display
- * @param amount - Amount to format
- * @returns Formatted currency string
- */
 function formatCurrency(amount: number): string {
   return `GHS ${amount.toFixed(2)}`
 }
-
-/**
- * Format date for display
- * @param date - Date to format (string or Date object)
- * @returns Formatted date string
- */
 function formatDate(date: string | Date): string {
   const dateObj = typeof date === 'string' ? new Date(date) : date
   return dateObj.toLocaleDateString('en-GB', {
@@ -489,12 +443,6 @@ function formatDate(date: string | Date): string {
     year: 'numeric'
   })
 }
-
-/**
- * Format phone number for Ghana
- * @param phone - Phone number to format
- * @returns Formatted phone number
- */
 function formatPhone(phone: string): string {
   // Remove all non-numeric characters
   const cleaned = phone.replace(/\D/g, '')
@@ -506,15 +454,9 @@ function formatPhone(phone: string): string {
   
   return phone
 }
-
-/**
- * Copy text to clipboard with user feedback
- * @param text - Text to copy
- */
 async function copyToClipboard(text: string) {
   try {
     await navigator.clipboard.writeText(text)
-    // Show toast notification (would implement with toast library)
     alert(`Copied to clipboard: ${text}`)
   } catch (error) {
     console.error('Failed to copy to clipboard:', error)
@@ -523,25 +465,13 @@ async function copyToClipboard(text: string) {
 }
 
 // ===== Event Handlers =====
-/**
- * Handle modal close action
- */
 function onClose() {
   emit('close')
 }
-
-/**
- * Handle edit customer action
- */
 function onEditCustomer() {
   emit('edit', props.customer)
-  emit('close') // Close modal after emitting edit event
+  emit('close')
 }
-
-/**
- * Handle WhatsApp messaging action
- * Creates formatted message and opens WhatsApp
- */
 function onMessageWhatsApp() {
   const cleaned = props.customer.phone.replace(/\D/g, '')
   let whatsappPhone = ''
@@ -565,143 +495,58 @@ function onMessageWhatsApp() {
   
   emit('message-whatsapp', props.customer)
 }
-
-/**
- * Handle view all transactions action
- */
 function viewAllTransactions() {
   emit('view-transactions', props.customer)
   emit('close')
 }
-
-/**
- * Handle call customer action
- */
 function callCustomer() {
   const cleaned = props.customer.phone.replace(/\D/g, '')
   const telUrl = `tel:${cleaned.startsWith('0') ? '+233' + cleaned.slice(1) : cleaned}`
   window.open(telUrl)
 }
-
-/**
- * Handle email customer action
- */
 function emailCustomer() {
   const subject = encodeURIComponent(`Following up - ${props.customer.name}`)
   const body = encodeURIComponent(`Hello ${props.customer.name},\n\nI hope this email finds you well.\n\nBest regards,\nYour Sales Team`)
   const mailtoUrl = `mailto:${props.customer.email}?subject=${subject}&body=${body}`
   window.open(mailtoUrl)
 }
-
-/**
- * Handle open maps action
- */
 function openMaps() {
   const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(props.customer.location + ', Ghana')}`
   window.open(mapsUrl, '_blank')
 }
-
-/**
- * Handle add note action
- */
 function addNote() {
   const noteContent = prompt('Enter a note about this customer:')
   if (noteContent && noteContent.trim()) {
-    // In a real app, this would save to the database
     alert(`Note added: "${noteContent}"\n\nThis will be implemented with the backend.`)
   }
 }
 </script>
 
 <style scoped>
-/* ===== [New Feature] START: Customer Details Modal Styling ===== */
-/* Touch feedback for mobile users */
-button:active {
-  transform: scale(0.98);
-}
-
-/* Enhanced focus states for accessibility */
+/* ===== Modern Modal Styling ===== */
+button:active { transform: scale(0.98); }
 button:focus-visible {
   outline: 2px solid theme('colors.primary.500');
   outline-offset: 2px;
 }
-
-/* Smooth transitions for all interactive elements */
-button {
-  transition: all 0.2s ease-in-out;
-}
-
-/* Modal animations */
-.modal-overlay {
-  animation: fadeIn 0.3s ease-out;
-}
-
-.modal-content {
-  animation: slideUp 0.3s ease-out;
-}
-
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
-
-@keyframes slideUp {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
+button { transition: all 0.2s ease-in-out; }
 
 /* Custom scrollbar for modal body */
-.overflow-y-auto::-webkit-scrollbar {
-  width: 6px;
-}
-
+.overflow-y-auto::-webkit-scrollbar { width: 6px; }
 .overflow-y-auto::-webkit-scrollbar-track {
   background: #f1f5f9;
   border-radius: 3px;
 }
-
 .overflow-y-auto::-webkit-scrollbar-thumb {
   background: #cbd5e1;
   border-radius: 3px;
 }
-
-.overflow-y-auto::-webkit-scrollbar-thumb:hover {
-  background: #94a3b8;
-}
-
-/* Hover effects for transaction items */
-.hover\:bg-gray-100:hover {
-  background-color: #f3f4f6;
-  cursor: pointer;
-}
+.overflow-y-auto::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
 
 /* Responsive adjustments */
 @media (max-width: 640px) {
-  /* Stack action buttons vertically on mobile */
-  .flex-col button {
-    width: 100%;
-  }
-  
-  /* Reduce modal padding on small screens */
-  .p-6 {
-    padding: 1rem;
-  }
-  
-  /* Adjust grid layout on mobile */
-  .grid-cols-2 {
-    grid-template-columns: 1fr;
-    gap: 0.75rem;
-  }
+  .flex-col button { width: 100%; }
+  .p-6 { padding: 1rem; }
+  .grid-cols-2 { grid-template-columns: 1fr; gap: 0.75rem; }
 }
-/* ===== [New Feature] END ===== */
 </style>

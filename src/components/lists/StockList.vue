@@ -1,8 +1,8 @@
 <!--
   StockList.vue
   Stratonea/Sales Tracker - Modern stock list with responsive table/card layout
-  - Mobile: Modern card layout with StockCard components
-  - Desktop: Modern table layout with hover effects and color-coded change status
+  - Mobile: Modern card layout with StockCard components (3 buttons: View, Edit, Delete)
+  - Desktop: Modern table layout with simplified action buttons
   - Consistent styling with dashboard and product list design
   - Ghana-optimized: touch targets, clear change display, offline support
   - All props, emits, and helpers documented for learning
@@ -11,7 +11,7 @@
 
 <template>
   <div class="stock-list-container">
-    <!-- ===== [New Feature] START: Mobile Card View ===== -->
+    <!-- ===== Mobile Card View ===== -->
     <!-- Mobile View: Card Layout -->
     <div class="block md:hidden">
       <div class="space-y-4 max-w-md mx-auto my-4">
@@ -28,14 +28,12 @@
           @view="onView(stockEntry)"
           @edit="onEdit(stockEntry)"
           @delete="onDelete(stockEntry)"
-          @restock="onRestock(stockEntry)"
-          @adjust="onAdjust(stockEntry)"
+          @quickRestock="onQuickRestock(stockEntry)"
         />
       </div>
     </div>
-    <!-- ===== [New Feature] END ===== -->
 
-    <!-- ===== [New Feature] START: Desktop Table View ===== -->
+    <!-- ===== Desktop Table View ===== -->
     <!-- Desktop View: Modern Table Layout -->
     <div class="hidden md:block">
       <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
@@ -89,6 +87,17 @@
                     </div>
                     <div>
                       <div class="text-sm font-medium text-gray-900">{{ stockEntry.productName }}</div>
+                      <!-- Show stock warning indicators -->
+                      <div class="flex items-center mt-1" v-if="stockEntry.currentStock <= 10">
+                        <font-awesome-icon 
+                          :icon="stockEntry.currentStock <= 0 ? 'exclamation-triangle' : 'exclamation-triangle'"
+                          :class="stockEntry.currentStock <= 0 ? 'text-red-500' : 'text-orange-500'"
+                          class="text-xs mr-1" 
+                        />
+                        <span :class="stockEntry.currentStock <= 0 ? 'text-red-600' : 'text-orange-600'" class="text-xs font-medium">
+                          {{ stockEntry.currentStock <= 0 ? 'Out of stock' : 'Low stock' }}
+                        </span>
+                      </div>
                     </div>
                   </div>
                 </td>
@@ -132,18 +141,6 @@
                 <td class="px-6 py-4 whitespace-nowrap">
                   <div class="flex items-center">
                     <span class="text-sm text-gray-900 mr-2">{{ stockEntry.currentStock }} units</span>
-                    <font-awesome-icon 
-                      v-if="stockEntry.currentStock <= 0"
-                      icon="exclamation-triangle" 
-                      class="text-red-500 text-xs" 
-                      title="Out of stock"
-                    />
-                    <font-awesome-icon 
-                      v-else-if="stockEntry.currentStock <= 10"
-                      icon="exclamation-triangle" 
-                      class="text-orange-500 text-xs" 
-                      title="Low stock"
-                    />
                   </div>
                 </td>
 
@@ -152,7 +149,7 @@
                   <div class="text-sm text-gray-900">{{ formatTimestamp(stockEntry.timestamp) }}</div>
                 </td>
 
-                <!-- Action Buttons -->
+                <!-- ===== Simplified Action Buttons (3 instead of 5) ===== -->
                 <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                   <div class="flex items-center justify-end gap-2">
                     <!-- View Button -->
@@ -171,25 +168,8 @@
                       class="inline-flex items-center px-3 py-2 border border-gray-300 text-sm leading-4 font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary transition-colors duration-150"
                       :aria-label="`Edit stock entry for ${stockEntry.productName}`"
                     >
+                      <font-awesome-icon icon="edit" class="mr-1" />
                       Edit
-                    </button>
-
-                    <!-- Restock Button -->
-                    <button
-                      @click="onRestock(stockEntry)"
-                      class="inline-flex items-center px-3 py-2 border border-green-300 text-sm leading-4 font-medium rounded-md text-green-700 bg-green-50 hover:bg-green-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transition-colors duration-150"
-                      :aria-label="`Restock ${stockEntry.productName}`"
-                    >
-                      Restock
-                    </button>
-
-                    <!-- Adjust Button -->
-                    <button
-                      @click="onAdjust(stockEntry)"
-                      class="inline-flex items-center px-3 py-2 border border-blue-300 text-sm leading-4 font-medium rounded-md text-blue-700 bg-blue-50 hover:bg-blue-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors duration-150"
-                      :aria-label="`Adjust stock for ${stockEntry.productName}`"
-                    >
-                      Adjust
                     </button>
 
                     <!-- Delete Button -->
@@ -198,7 +178,19 @@
                       class="inline-flex items-center px-3 py-2 border border-red-300 text-sm leading-4 font-medium rounded-md text-red-700 bg-red-50 hover:bg-red-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 transition-colors duration-150"
                       :aria-label="`Delete stock entry for ${stockEntry.productName}`"
                     >
+                      <font-awesome-icon icon="trash" class="mr-1" />
                       Delete
+                    </button>
+
+                    <!-- Quick Restock Button (only for low/out of stock) -->
+                    <button
+                      v-if="stockEntry.currentStock <= 10"
+                      @click="onQuickRestock(stockEntry)"
+                      class="inline-flex items-center px-3 py-2 border border-green-300 text-sm leading-4 font-medium rounded-md text-green-700 bg-green-50 hover:bg-green-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transition-colors duration-150"
+                      :aria-label="`Quick restock ${stockEntry.productName}`"
+                    >
+                      <font-awesome-icon icon="plus" class="mr-1" />
+                      Quick Restock
                     </button>
                   </div>
                 </td>
@@ -217,42 +209,25 @@
         </div>
       </div>
     </div>
-    <!-- ===== [New Feature] END ===== -->
   </div>
 </template>
 
 <script setup lang="ts">
 // ===== File-Level Documentation =====
 /**
- * StockList.vue - Responsive stock list component
- * - Mobile: Card-based layout using StockCard components
- * - Desktop: Modern table layout with hover effects
+ * StockList.vue - Responsive stock list component (SIMPLIFIED)
+ * - Mobile: Card-based layout using simplified StockCard components
+ * - Desktop: Modern table layout with 3 core actions + optional quick restock
  * - Color-coded change status and stock level indicators
- * - Quick action buttons for View, Edit, Delete, Restock, Adjust
+ * - Quick action buttons: View, Edit, Delete, Quick Restock (when needed)
  * - Ghana-optimized: clear change display, touch-friendly
  * - Emits events to parent for stock management
  */
 
 // ===== Imports =====
-/**
- * Import the StockCard component for mobile card layout
- * This component handles individual stock entry display on mobile devices
- */
 import StockCard from '@/components/layout/StockCard.vue'
 
 // ===== Types & Interfaces =====
-/**
- * StockEntry interface defining the structure of stock movement data
- * - id: Unique identifier for the stock entry
- * - productName: Name of the product
- * - productSku: SKU of the product
- * - changeAmount: Amount of stock change (positive for add, negative for remove)
- * - changeType: Type of change (restock, sale, adjustment, etc.)
- * - currentStock: Current stock level after the change
- * - reason: Reason for the stock change (optional)
- * - timestamp: When the change was made
- * - productPrice: Price per unit (optional, for calculations)
- */
 interface StockEntry {
   id: string
   productName: string
@@ -266,11 +241,7 @@ interface StockEntry {
 }
 
 // ===== Props =====
-/**
- * Component props
- * - stockEntries: Array of stock entries to display
- */
- withDefaults(
+withDefaults(
   defineProps<{
     stockEntries: StockEntry[]
   }>(),
@@ -281,86 +252,43 @@ interface StockEntry {
 
 // ===== Emits =====
 /**
- * Events emitted by StockList
+ * Events emitted by StockList (SIMPLIFIED)
  * - view: User wants to view stock entry details
  * - edit: User wants to edit a stock entry
  * - delete: User wants to delete a stock entry
- * - restock: User wants to restock a product
- * - adjust: User wants to adjust stock levels
+ * - quickRestock: User wants to quickly restock a low/out of stock product
  */
 const emit = defineEmits<{
   (e: 'view', stockEntry: StockEntry): void
   (e: 'edit', stockEntry: StockEntry): void
   (e: 'delete', stockEntry: StockEntry): void
-  (e: 'restock', stockEntry: StockEntry): void
-  (e: 'adjust', stockEntry: StockEntry): void
+  (e: 'quickRestock', stockEntry: StockEntry): void
 }>()
 
 // ===== Event Handlers =====
-/**
- * Handle view stock entry action
- * Emits view event to parent component with stock entry data
- * @param stockEntry - The stock entry to view
- */
 function onView(stockEntry: StockEntry) {
   emit('view', stockEntry)
 }
 
-/**
- * Handle edit stock entry action
- * Emits edit event to parent component with stock entry data
- * @param stockEntry - The stock entry to edit
- */
 function onEdit(stockEntry: StockEntry) {
   emit('edit', stockEntry)
 }
 
-/**
- * Handle delete stock entry action
- * Emits delete event to parent component with stock entry data
- * @param stockEntry - The stock entry to delete
- */
 function onDelete(stockEntry: StockEntry) {
   emit('delete', stockEntry)
 }
 
-/**
- * Handle restock product action
- * Emits restock event to parent component with stock entry data
- * @param stockEntry - The stock entry to restock
- */
-function onRestock(stockEntry: StockEntry) {
-  emit('restock', stockEntry)
-}
-
-/**
- * Handle adjust stock action
- * Emits adjust event to parent component with stock entry data
- * @param stockEntry - The stock entry to adjust
- */
-function onAdjust(stockEntry: StockEntry) {
-  emit('adjust', stockEntry)
+function onQuickRestock(stockEntry: StockEntry) {
+  emit('quickRestock', stockEntry)
 }
 
 // ===== Helper Functions =====
-/**
- * Formats change amount with + or - prefix
- * @param amount - The change amount
- */
 function formatChangeAmount(amount: number): string {
-  if (amount > 0) {
-    return `+${amount} units`
-  } else if (amount < 0) {
-    return `${amount} units`
-  } else {
-    return '±0 units'
-  }
+  if (amount > 0) return `+${amount} units`
+  if (amount < 0) return `${amount} units`
+  return '±0 units'
 }
 
-/**
- * Formats timestamp for display
- * @param timestamp - The timestamp to format
- */
 function formatTimestamp(timestamp: string | Date): string {
   const d = new Date(timestamp)
   return d.toLocaleString('en-GB', {
@@ -372,109 +300,64 @@ function formatTimestamp(timestamp: string | Date): string {
   })
 }
 
-/**
- * Gets change type text based on type
- * @param changeType - Current change type
- * @returns Change type text
- */
 function getChangeTypeText(changeType: StockEntry['changeType']): string {
   switch (changeType) {
-    case 'restock':
-      return 'Restocked'
-    case 'sale':
-      return 'Sale'
-    case 'adjustment':
-      return 'Adjusted'
-    case 'correction':
-      return 'Corrected'
-    case 'damage':
-      return 'Damaged'
-    case 'transfer':
-      return 'Transferred'
-    default:
-      return 'Changed'
+    case 'restock': return 'Restocked'
+    case 'sale': return 'Sale'
+    case 'adjustment': return 'Adjusted'
+    case 'correction': return 'Corrected'
+    case 'damage': return 'Damaged'
+    case 'transfer': return 'Transferred'
+    default: return 'Changed'
   }
 }
 
-/**
- * Gets CSS classes for change amount display
- * @param amount - The change amount
- * @returns CSS classes for amount styling
- */
 function getChangeAmountClass(amount: number): string {
-  if (amount > 0) {
-    return 'text-green-600'
-  } else if (amount < 0) {
-    return 'text-red-600'
-  } else {
-    return 'text-orange-600'
-  }
+  if (amount > 0) return 'text-green-600'
+  if (amount < 0) return 'text-red-600'
+  return 'text-orange-600'
 }
 
-/**
- * Gets CSS classes for change type badge
- * @param changeType - Current change type
- * @returns CSS classes for badge styling
- */
 function getChangeTypeClass(changeType: StockEntry['changeType']): string {
   switch (changeType) {
-    case 'restock':
-      return 'bg-green-100 text-green-800'
-    case 'sale':
-      return 'bg-blue-100 text-blue-800'
+    case 'restock': return 'bg-green-100 text-green-800'
+    case 'sale': return 'bg-blue-100 text-blue-800'
     case 'adjustment':
-    case 'correction':
-      return 'bg-orange-100 text-orange-800'
+    case 'correction': return 'bg-orange-100 text-orange-800'
     case 'damage':
-    case 'transfer':
-      return 'bg-red-100 text-red-800'
-    default:
-      return 'bg-gray-100 text-gray-800'
+    case 'transfer': return 'bg-red-100 text-red-800'
+    default: return 'bg-gray-100 text-gray-800'
   }
 }
 
-/**
- * Gets CSS classes for change status dot
- * @param amount - The change amount
- * @returns CSS classes for dot color
- */
 function getChangeDotClass(amount: number): string {
-  if (amount > 0) {
-    return 'bg-green-500'
-  } else if (amount < 0) {
-    return 'bg-red-500'
-  } else {
-    return 'bg-orange-500'
-  }
+  if (amount > 0) return 'bg-green-500'
+  if (amount < 0) return 'bg-red-500'
+  return 'bg-orange-500'
 }
 </script>
 
 <style scoped>
-/* ===== [New Feature] START: Modern Table Styling ===== */
-/* Enhanced table row hover effects */
+/* ===== Modern Table Styling ===== */
 tbody tr:hover {
   background-color: theme('colors.gray.50');
 }
 
-/* Smooth transitions for all interactive elements */
 button {
   transition: all 0.15s ease-in-out;
 }
 
-/* Enhanced focus states for accessibility */
 button:focus-visible {
   outline: 2px solid theme('colors.primary.500');
   outline-offset: 2px;
 }
 
-/* Touch feedback for mobile users */
 @media (max-width: 768px) {
   button:active {
     transform: scale(0.98);
   }
 }
 
-/* Table responsiveness */
 .overflow-x-auto {
   scrollbar-width: thin;
   scrollbar-color: theme('colors.gray.400') theme('colors.gray.100');
@@ -492,5 +375,4 @@ button:focus-visible {
   background: theme('colors.gray.400');
   border-radius: 3px;
 }
-/* ===== [New Feature] END ===== */
 </style>

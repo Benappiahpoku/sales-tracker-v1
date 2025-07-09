@@ -1,8 +1,15 @@
+<!--
+  PricingSection.vue
+  Stratonea/Sales Tracker - Pricing section for Ghanaian SMEs
+  - Mobile-first, touch-friendly, Ghana-optimized
+  - Simple pricing toggle, WhatsApp integration, clear feature lists
+-->
+
 <template>
   <!-- ===== Pricing Section ===== -->
   <section class="py-16 md:py-20 bg-white">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <!-- Section Header -->
+      <!-- ===== Section Header ===== -->
       <div class="text-center mb-12">
         <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
           Simple, Transparent Pricing
@@ -10,15 +17,11 @@
         <p class="text-xl text-gray-600 mb-8">
           Choose the plan that works best for your business
         </p>
-        
-        <!-- ===== [Updated Feature] START: Fixed Pricing Toggle ===== -->
-        <!-- Pricing Toggle with fixed functionality -->
+        <!-- ===== Pricing Toggle ===== -->
         <div class="flex items-center justify-center mb-8">
           <span :class="['text-lg font-medium mr-4', !isYearly ? 'text-primary' : 'text-gray-500']">
             Monthly
           </span>
-          
-          <!-- Fixed Toggle Switch Design -->
           <div class="relative">
             <input
               id="pricing-toggle"
@@ -29,37 +32,31 @@
             <label
               for="pricing-toggle"
               :class="[
-                'flex items-center cursor-pointer relative w-20 h-10 rounded-full p-1 transition-colors duration-300 ease-in-out',
+                'flex items-center cursor-pointer relative w-20 h-10 rounded-full p-1 transition-colors duration-300',
                 isYearly ? 'bg-primary' : 'bg-gray-300'
               ]"
             >
-              <!-- Toggle Slider -->
               <div
                 :class="[
-                  'bg-white w-8 h-8 rounded-full shadow-lg transform transition-transform duration-300 ease-in-out flex items-center justify-center',
+                  'bg-white w-8 h-8 rounded-full shadow-lg transform transition-transform duration-300 flex items-center justify-center',
                   isYearly ? 'translate-x-10' : 'translate-x-0'
                 ]"
               >
-                <!-- Optional: Add icons inside the toggle -->
                 <span class="text-xs font-bold text-gray-600">
                   {{ isYearly ? 'Y' : 'M' }}
                 </span>
               </div>
             </label>
           </div>
-          
           <span :class="['text-lg font-medium ml-4', isYearly ? 'text-primary' : 'text-gray-500']">
             Yearly 
             <span class="text-green-600 text-sm font-normal block md:inline">(Save 25%)</span>
           </span>
         </div>
-        <!-- ===== [Updated Feature] END ===== -->
       </div>
 
-      <!-- ===== [Updated Feature] START: 3-Card Layout ===== -->
-      <!-- Pricing Cards - Stacked on mobile, 3 columns on desktop -->
+      <!-- ===== Pricing Cards ===== -->
       <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
-        
         <!-- ===== Free Forever Card ===== -->
         <div class="bg-white rounded-xl p-8 shadow-lg border-2 border-gray-200 hover:shadow-xl transition-all duration-200 transform hover:-translate-y-1">
           <div class="text-center">
@@ -69,47 +66,13 @@
               <span class="text-lg font-normal text-gray-600">/month</span>
             </div>
             <p class="text-gray-600 mb-6">Perfect for getting started</p>
-            
             <!-- Features List -->
             <ul class="text-left space-y-3 mb-8">
-              <li class="flex items-center">
+              <li v-for="item in freeFeatures" :key="item" class="flex items-center">
                 <font-awesome-icon icon="check" class="text-green-600 mr-3 flex-shrink-0" />
-                <span class="text-gray-700">50 invoices</span>
-              </li>
-              <li class="flex items-center">
-                <font-awesome-icon icon="check" class="text-green-600 mr-3 flex-shrink-0" />
-                <span class="text-gray-700">50 customers</span>
-              </li>
-              <li class="flex items-center">
-                <font-awesome-icon icon="check" class="text-green-600 mr-3 flex-shrink-0" />
-                <span class="text-gray-700">50 products</span>
-              </li>
-              <li class="flex items-center">
-                <font-awesome-icon icon="check" class="text-green-600 mr-3 flex-shrink-0" />
-                <span class="text-gray-700">50 stock</span>
-              </li>
-              <li class="flex items-center">
-                <font-awesome-icon icon="check" class="text-green-600 mr-3 flex-shrink-0" />
-                <span class="text-gray-700">1 company</span>
-              </li>
-              <li class="flex items-center">
-                <font-awesome-icon icon="check" class="text-green-600 mr-3 flex-shrink-0" />
-                <span class="text-gray-700">Offline use only</span>
-              </li>
-              <li class="flex items-center">
-                <font-awesome-icon icon="check" class="text-green-600 mr-3 flex-shrink-0" />
-                <span class="text-gray-700">Local storage in browser</span>
-              </li>
-              <li class="flex items-center">
-                <font-awesome-icon icon="check" class="text-green-600 mr-3 flex-shrink-0" />
-                <span class="text-gray-700">Manual data backup</span>
-              </li>
-              <li class="flex items-center">
-                <font-awesome-icon icon="check" class="text-green-600 mr-3 flex-shrink-0" />
-                <span class="text-gray-700">No sign-in required</span>
+                <span class="text-gray-700">{{ item }}</span>
               </li>
             </ul>
-
             <!-- CTA Button -->
             <router-link
               to="/dashboard"
@@ -128,7 +91,6 @@
               Most Popular
             </span>
           </div>
-          
           <div class="text-center">
             <h3 class="text-2xl font-bold text-gray-900 mb-2">Business</h3>
             <div class="text-4xl font-bold text-gray-900 mb-4">
@@ -138,44 +100,14 @@
             <p class="text-gray-600 mb-6">
               {{ isYearly ? 'Billed yearly (₵540/year)' : 'Perfect for growing businesses' }}
             </p>
-            
             <!-- Features List -->
             <ul class="text-left space-y-3 mb-8">
-              <li class="flex items-center">
+              <li v-for="item in businessFeatures" :key="item" class="flex items-center">
                 <font-awesome-icon icon="check" class="text-green-600 mr-3 flex-shrink-0" />
-                <span class="text-gray-700">Everything in Free</span>
-              </li>
-              <li class="flex items-center">
-                <font-awesome-icon icon="check" class="text-green-600 mr-3 flex-shrink-0" />
-                <span class="text-gray-700">500 invoices</span>
-              </li>
-              <li class="flex items-center">
-                <font-awesome-icon icon="check" class="text-green-600 mr-3 flex-shrink-0" />
-                <span class="text-gray-700">500 customers</span>
-              </li>
-              <li class="flex items-center">
-                <font-awesome-icon icon="check" class="text-green-600 mr-3 flex-shrink-0" />
-                <span class="text-gray-700">500 products</span>
-              </li>
-              <li class="flex items-center">
-                <font-awesome-icon icon="check" class="text-green-600 mr-3 flex-shrink-0" />
-                <span class="text-gray-700">500 stock</span>
-              </li>
-              <li class="flex items-center">
-                <font-awesome-icon icon="check" class="text-green-600 mr-3 flex-shrink-0" />
-                <span class="text-gray-700">5 companies</span>
-              </li>
-              <li class="flex items-center">
-                <font-awesome-icon icon="check" class="text-green-600 mr-3 flex-shrink-0" />
-                <span class="text-gray-700">Sign-in required</span>
-              </li>
-              <li class="flex items-center">
-                <font-awesome-icon icon="check" class="text-green-600 mr-3 flex-shrink-0" />
-                <span class="text-gray-700">Cloud data backup</span>
+                <span class="text-gray-700">{{ item }}</span>
               </li>
             </ul>
-
-            <!-- CTA Button -->
+            <!-- WhatsApp CTA -->
             <a
               href="https://wa.me/233594093926?text=Hi! I'm interested in the Business plan for Sales Tracker"
               target="_blank"
@@ -196,44 +128,14 @@
               Contact Sales
             </div>
             <p class="text-gray-600 mb-6">For enterprise businesses</p>
-            
             <!-- Features List -->
             <ul class="text-left space-y-3 mb-8">
-              <li class="flex items-center">
+              <li v-for="item in proFeatures" :key="item" class="flex items-center">
                 <font-awesome-icon icon="check" class="text-green-600 mr-3 flex-shrink-0" />
-                <span class="text-gray-700">Everything in Popular</span>
-              </li>
-              <li class="flex items-center">
-                <font-awesome-icon icon="check" class="text-green-600 mr-3 flex-shrink-0" />
-                <span class="text-gray-700">Unlimited invoices</span>
-              </li>
-              <li class="flex items-center">
-                <font-awesome-icon icon="check" class="text-green-600 mr-3 flex-shrink-0" />
-                <span class="text-gray-700">Unlimited customers</span>
-              </li>
-              <li class="flex items-center">
-                <font-awesome-icon icon="check" class="text-green-600 mr-3 flex-shrink-0" />
-                <span class="text-gray-700">Unlimited products</span>
-              </li>
-              <li class="flex items-center">
-                <font-awesome-icon icon="check" class="text-green-600 mr-3 flex-shrink-0" />
-                <span class="text-gray-700">Unlimited stock</span>
-              </li>
-              <li class="flex items-center">
-                <font-awesome-icon icon="check" class="text-green-600 mr-3 flex-shrink-0" />
-                <span class="text-gray-700">Unlimited everything</span>
-              </li>
-              <li class="flex items-center">
-                <font-awesome-icon icon="check" class="text-green-600 mr-3 flex-shrink-0" />
-                <span class="text-gray-700">Cloud storage</span>
-              </li>
-              <li class="flex items-center">
-                <font-awesome-icon icon="check" class="text-green-600 mr-3 flex-shrink-0" />
-                <span class="text-gray-700">Full support</span>
+                <span class="text-gray-700">{{ item }}</span>
               </li>
             </ul>
-
-            <!-- CTA Button -->
+            <!-- WhatsApp CTA -->
             <a
               href="https://wa.me/233594093926?text=Hi! I'm interested in the Pro plan for Sales Tracker"
               target="_blank"
@@ -246,23 +148,59 @@
           </div>
         </div>
       </div>
-      <!-- ===== [Updated Feature] END ===== -->
     </div>
   </section>
 </template>
 
 <script setup lang="ts">
+// ===== File-Level Documentation =====
+/**
+ * PricingSection.vue
+ * - Ghana-optimized, mobile-first pricing section with toggle and WhatsApp integration
+ * - All features and plans are clearly listed for user clarity
+ */
+
+// ===== Imports =====
 import { ref } from 'vue'
 
-// ===== Types & Interfaces =====
+// ===== State: Pricing Toggle =====
 /**
- * Pricing toggle state - switches between monthly and yearly pricing
- * When true, shows yearly pricing with discount
- * When false, shows monthly pricing
+ * isYearly: true = yearly pricing, false = monthly pricing
  */
 const isYearly = ref(false)
 
-// ===== Main Logic =====
-// Note: We removed the togglePricing function since v-model handles the state automatically
-// The reactive `isYearly` ref will update automatically when the checkbox is clicked
+// ===== Constants: Features Lists =====
+const freeFeatures = [
+  '50 invoices',
+  '50 customers',
+  '50 products',
+  '50 stock',
+  '1 company',
+  'Offline use only',
+  'Local storage in browser',
+  'Manual data backup',
+  'No sign-in required'
+]
+
+const businessFeatures = [
+  'Everything in Free',
+  '500 invoices',
+  '500 customers',
+  '500 products',
+  '500 stock',
+  '5 companies',
+  'Sign-in required',
+  'Cloud data backup'
+]
+
+const proFeatures = [
+  'Everything in Popular',
+  'Unlimited invoices',
+  'Unlimited customers',
+  'Unlimited products',
+  'Unlimited stock',
+  'Unlimited everything',
+  'Cloud storage',
+  'Full support'
+]
 </script>

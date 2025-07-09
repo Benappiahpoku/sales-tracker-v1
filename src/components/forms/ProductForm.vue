@@ -1,17 +1,16 @@
 <!--
   ProductForm.vue
   Stratonea/Sales Tracker - Modern product form for adding/editing products
-  - Mobile-first design matching ProductCard and dashboard style
-  - Ghana-optimized: Ghana Cedis currency, offline support, touch targets
+  - Mobile-first, Ghana-optimized: Cedis currency, offline support, touch targets
   - Stock level validation and visual feedback
   - Enhanced UX with icons, validation, and loading states
   - Follows Stratonea guidelines with comprehensive documentation
 -->
 
 <template>
-  <!-- ===== [New Feature] START: Upgraded Product Form ===== -->
+  <!-- ===== Product Form Card ===== -->
   <div class="bg-white rounded-xl p-6 shadow-sm border border-gray-200">
-    <!-- Form Header -->
+    <!-- ===== Form Header ===== -->
     <div class="flex items-center mb-6">
       <div class="w-10 h-10 bg-primary-100 rounded-lg flex items-center justify-center mr-3">
         <font-awesome-icon :icon="isEditing ? 'box-open' : 'plus'" class="text-primary-600" />
@@ -26,18 +25,17 @@
       </div>
     </div>
 
-    <!-- Form -->
+    <!-- ===== Product Form ===== -->
     <form @submit.prevent="onSubmit" class="space-y-4" autocomplete="off">
-      
       <!-- Product Name -->
       <div>
         <label for="product-name" class="flex items-center text-sm font-medium text-gray-700 mb-2">
           <font-awesome-icon icon="box" class="mr-2 text-gray-400 w-4" />
           Product Name *
         </label>
-        <input 
-          id="product-name" 
-          type="text" 
+        <input
+          id="product-name"
+          type="text"
           v-model="form.name"
           required
           class="block w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-primary focus:border-primary text-base bg-white shadow-sm min-h-[48px] transition-colors duration-200"
@@ -54,9 +52,9 @@
           <font-awesome-icon icon="barcode" class="mr-2 text-gray-400 w-4" />
           SKU / Product Code *
         </label>
-        <input 
-          id="product-sku" 
-          type="text" 
+        <input
+          id="product-sku"
+          type="text"
           v-model="form.sku"
           required
           class="block w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-primary focus:border-primary text-base bg-white shadow-sm min-h-[48px] font-mono transition-colors duration-200"
@@ -78,9 +76,9 @@
           <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
             <span class="text-gray-500 font-medium">GHS</span>
           </div>
-          <input 
-            id="product-price" 
-            type="number" 
+          <input
+            id="product-price"
+            type="number"
             v-model.number="form.price"
             min="0"
             step="0.01"
@@ -104,9 +102,9 @@
           <font-awesome-icon icon="warehouse" class="mr-2 text-gray-400 w-4" />
           Current Stock *
         </label>
-        <input 
-          id="product-stock" 
-          type="number" 
+        <input
+          id="product-stock"
+          type="number"
           v-model.number="form.stock"
           min="0"
           step="1"
@@ -118,7 +116,6 @@
         />
         <p class="text-xs text-gray-500 mt-1">Number of units available for sale</p>
         <p v-if="errors.stock" class="text-xs text-red-600 mt-1">{{ errors.stock }}</p>
-        
         <!-- Stock Level Indicator -->
         <div v-if="form.stock >= 0" class="mt-2">
           <div class="flex items-center justify-between text-xs">
@@ -126,7 +123,7 @@
             <span :class="stockLevelTextColor">{{ stockLevelText }}</span>
           </div>
           <div class="mt-1 w-full bg-gray-200 rounded-full h-2">
-            <div 
+            <div
               :class="stockLevelBarColor"
               class="h-2 rounded-full transition-all duration-300"
               :style="{ width: `${Math.min(stockPercentage, 100)}%` }"
@@ -135,15 +132,15 @@
         </div>
       </div>
 
-      <!-- Category (Optional Enhancement) -->
+      <!-- Category (Optional) -->
       <div>
         <label for="product-category" class="flex items-center text-sm font-medium text-gray-700 mb-2">
           <font-awesome-icon icon="folder" class="mr-2 text-gray-400 w-4" />
           Category
           <span class="text-gray-400 ml-1">(optional)</span>
         </label>
-        <select 
-          id="product-category" 
+        <select
+          id="product-category"
           v-model="form.category"
           class="block w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-primary focus:border-primary text-base bg-white shadow-sm min-h-[48px] transition-colors duration-200"
         >
@@ -156,21 +153,20 @@
       <!-- Form Actions -->
       <div class="flex flex-col sm:flex-row gap-3 pt-6 border-t border-gray-200">
         <!-- Save Button -->
-        <button 
+        <button
           type="submit"
           :disabled="isSubmitting || !isFormValid"
           class="flex-1 inline-flex items-center justify-center px-6 py-3 border border-transparent text-base font-medium rounded-lg text-white bg-primary hover:bg-primary-hover focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary disabled:opacity-50 disabled:cursor-not-allowed min-h-[48px] transition-all duration-200 active:scale-98"
         >
-          <font-awesome-icon 
-            :icon="isSubmitting ? 'spinner' : 'save'" 
+          <font-awesome-icon
+            :icon="isSubmitting ? 'spinner' : 'save'"
             :class="{ 'animate-spin': isSubmitting }"
-            class="mr-2" 
+            class="mr-2"
           />
           {{ isSubmitting ? 'Saving...' : (isEditing ? 'Update Product' : 'Add Product') }}
         </button>
-
         <!-- Cancel Button -->
-        <button 
+        <button
           type="button"
           @click="onCancel"
           :disabled="isSubmitting"
@@ -188,29 +184,20 @@
       </div>
     </form>
   </div>
-  <!-- ===== [New Feature] END ===== -->
 </template>
 
 <script setup lang="ts">
 // ===== File-Level Documentation =====
 /**
  * ProductForm.vue - Modern product form component
- * - Comprehensive form for adding/editing products
- * - Ghana-optimized: Ghana Cedis formatting, offline support
- * - Mobile-first design with touch-optimized inputs
- * - Real-time validation with helpful error messages
- * - Stock level indicators matching ProductCard display
- * - Category selection for better organization
- * - Proper TypeScript interfaces and validation
+ * - Ghana-optimized: Cedis formatting, offline support, mobile-first
+ * - Real-time validation, stock level indicators, category selection
  */
 
 // ===== Imports =====
 import { reactive, ref, computed, onMounted } from 'vue'
 
 // ===== Types & Interfaces =====
-/**
- * Product form data interface matching ProductCard requirements
- */
 interface ProductFormData {
   name: string
   sku: string
@@ -218,10 +205,6 @@ interface ProductFormData {
   stock: number
   category: string
 }
-
-/**
- * Form validation errors interface
- */
 interface FormErrors {
   name?: string
   sku?: string
@@ -230,9 +213,6 @@ interface FormErrors {
 }
 
 // ===== Props =====
-/**
- * Component props with proper typing and defaults
- */
 const props = withDefaults(defineProps<{
   initial?: Partial<ProductFormData>
   isEditing?: boolean
@@ -242,40 +222,20 @@ const props = withDefaults(defineProps<{
 })
 
 // ===== Emits =====
-/**
- * Events emitted by ProductForm
- */
 const emit = defineEmits<{
   (e: 'save', data: ProductFormData): void
   (e: 'cancel'): void
 }>()
 
 // ===== Constants & Config =====
-/**
- * Product categories for dropdown selection
- */
 const productCategories = [
-  'Food & Beverages',
-  'Household Items',
-  'Personal Care',
-  'Electronics',
-  'Clothing',
-  'Health & Medicine',
-  'Stationery',
-  'Tools & Hardware',
-  'Other'
+  'Food & Beverages', 'Household Items', 'Personal Care', 'Electronics',
+  'Clothing', 'Health & Medicine', 'Stationery', 'Tools & Hardware', 'Other'
 ]
-
-/**
- * Stock level thresholds matching ProductCard logic
- */
 const LOW_STOCK_THRESHOLD = 10
 const MAX_STOCK_FOR_PERCENTAGE = 100
 
 // ===== State Management =====
-/**
- * Form data with proper initialization
- */
 const form = reactive<ProductFormData>({
   name: '',
   sku: '',
@@ -284,62 +244,31 @@ const form = reactive<ProductFormData>({
   category: '',
   ...props.initial
 })
-
-/**
- * Form validation errors
- */
 const errors = reactive<FormErrors>({})
-
-/**
- * Form submission state
- */
 const isSubmitting = ref(false)
-
-/**
- * Network status (mock for now)
- */
 const isOnline = ref(navigator.onLine)
 
 // ===== Computed Properties =====
-/**
- * Check if form is valid
- */
-const isFormValid = computed(() => {
-  return form.name.trim() !== '' && 
-         form.sku.trim() !== '' && 
-         form.price > 0 && 
-         form.stock >= 0 &&
-         Object.keys(errors).length === 0
-})
-
-/**
- * Stock percentage for progress bar (matching ProductCard logic)
- */
-const stockPercentage = computed(() => 
+const isFormValid = computed(() =>
+  form.name.trim() !== '' &&
+  form.sku.trim() !== '' &&
+  form.price > 0 &&
+  form.stock >= 0 &&
+  Object.keys(errors).length === 0
+)
+const stockPercentage = computed(() =>
   Math.min((form.stock / MAX_STOCK_FOR_PERCENTAGE) * 100, 100)
 )
-
-/**
- * Stock level text for indicator
- */
 const stockLevelText = computed(() => {
   if (form.stock <= 0) return 'Out of Stock'
   if (form.stock <= LOW_STOCK_THRESHOLD) return 'Low Stock'
   return 'Good Stock Level'
 })
-
-/**
- * CSS classes for stock level text color
- */
 const stockLevelTextColor = computed(() => {
   if (form.stock <= 0) return 'text-red-600 font-medium'
   if (form.stock <= LOW_STOCK_THRESHOLD) return 'text-orange-600 font-medium'
   return 'text-green-600 font-medium'
 })
-
-/**
- * CSS classes for stock level progress bar
- */
 const stockLevelBarColor = computed(() => {
   if (form.stock <= 0) return 'bg-red-500'
   if (form.stock <= LOW_STOCK_THRESHOLD) return 'bg-orange-500'
@@ -347,67 +276,37 @@ const stockLevelBarColor = computed(() => {
 })
 
 // ===== Helper Functions =====
-/**
- * Format currency for Ghana Cedi display
- * @param amount - Amount to format
- * @returns Formatted currency string
- */
 function formatCurrency(amount: number): string {
   return `GHS ${amount.toFixed(2)}`
 }
-
-/**
- * Validate entire form and set errors
- */
 function validateForm(): boolean {
-  // Clear previous errors
   Object.keys(errors).forEach(key => delete errors[key as keyof FormErrors])
-  
   let isValid = true
-  
-  // Validate name
   if (!form.name.trim()) {
     errors.name = 'Product name is required'
     isValid = false
   }
-  
-  // Validate SKU
   if (!form.sku.trim()) {
     errors.sku = 'SKU/Product code is required'
     isValid = false
   }
-  
-  // Validate price
   if (form.price <= 0) {
     errors.price = 'Price must be greater than 0'
     isValid = false
   }
-  
-  // Validate stock
   if (form.stock < 0) {
     errors.stock = 'Stock cannot be negative'
     isValid = false
   }
-  
   return isValid
 }
 
 // ===== Event Handlers =====
-/**
- * Handle form submission
- */
 async function onSubmit() {
-  if (!validateForm()) {
-    return
-  }
-  
+  if (!validateForm()) return
   isSubmitting.value = true
-  
   try {
-    // Simulate async operation (API call)
     await new Promise(resolve => setTimeout(resolve, 1000))
-    
-    // Clean up form data
     const cleanedData: ProductFormData = {
       name: form.name.trim(),
       sku: form.sku.trim().toUpperCase(),
@@ -415,7 +314,6 @@ async function onSubmit() {
       stock: Math.floor(form.stock),
       category: form.category.trim()
     }
-    
     emit('save', cleanedData)
   } catch (error) {
     console.error('Form submission error:', error)
@@ -423,83 +321,31 @@ async function onSubmit() {
     isSubmitting.value = false
   }
 }
-
-/**
- * Handle form cancellation
- */
 function onCancel() {
   emit('cancel')
 }
 
 // ===== Lifecycle Hooks =====
-/**
- * Initialize form when component mounts
- */
 onMounted(() => {
-  // Listen for online/offline events
-  window.addEventListener('online', () => {
-    isOnline.value = true
-  })
-  
-  window.addEventListener('offline', () => {
-    isOnline.value = false
-  })
-  
-  // Focus on first input for better UX
+  window.addEventListener('online', () => { isOnline.value = true })
+  window.addEventListener('offline', () => { isOnline.value = false })
   const nameInput = document.getElementById('product-name')
-  if (nameInput) {
-    nameInput.focus()
-  }
+  if (nameInput) nameInput.focus()
 })
 </script>
 
 <style scoped>
-/* ===== [New Feature] START: Modern Form Styling ===== */
-/* Touch feedback for mobile users */
-button:active {
-  transform: scale(0.98);
-}
-
-/* Enhanced focus states for accessibility */
-input:focus-visible,
-select:focus-visible,
-button:focus-visible {
+/* ===== Modern Form Styling ===== */
+button:active { transform: scale(0.98); }
+input:focus-visible, select:focus-visible, button:focus-visible {
   outline: 2px solid theme('colors.primary.500');
   outline-offset: 2px;
 }
-
-/* Smooth transitions for all interactive elements */
-input,
-select,
-button {
-  transition: all 0.2s ease-in-out;
-}
-
-/* Loading spinner animation */
-.animate-spin {
-  animation: spin 1s linear infinite;
-}
-
-@keyframes spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-/* Responsive adjustments */
+input, select, button { transition: all 0.2s ease-in-out; }
+.animate-spin { animation: spin 1s linear infinite; }
+@keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
 @media (max-width: 640px) {
-  /* Stack form actions vertically on mobile */
-  .flex-col button {
-    width: 100%;
-  }
-  
-  /* Reduce padding on small screens */
-  .p-6 {
-    padding: 1rem;
-  }
+  .flex-col button { width: 100%; }
+  .p-6 { padding: 1rem; }
 }
-/* ===== [New Feature] END ===== */
 </style>

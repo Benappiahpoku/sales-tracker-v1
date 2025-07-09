@@ -1,12 +1,12 @@
 <!--
   StockView.vue
-  Stratonea/Sales Tracker - Stock management page
+  Stratonea/Sales Tracker - Stock management page (SIMPLIFIED)
   - Modern card-based design matching dashboard and products style
   - Mobile-first responsive layout with floating action button
-  - Handles stock CRUD operations and inventory adjustments
+  - Handles simplified stock actions: View, Edit, Delete, Quick Restock
   - Ghana-optimized: touch targets, clear stock displays, offline support
   - All TypeScript interfaces properly defined for learning
-  - Follows Stratonea guidelines
+  - Follows Stratonea guidelines with simplified UX
 -->
 
 <template>
@@ -29,8 +29,7 @@
       </button>
     </div>
 
-    <!-- ===== [New Feature] START: Quick Stats Header ===== -->
-    <!-- Quick Stats - matches dashboard card style -->
+    <!-- ===== Quick Stats Header ===== -->
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
       <!-- Total Stock Value -->
       <div class="bg-white rounded-xl p-4 shadow-sm border border-gray-200">
@@ -84,17 +83,15 @@
         </div>
       </div>
     </div>
-    <!-- ===== [New Feature] END ===== -->
 
-    <!-- Stock List - passes stock entries with proper typing -->
+    <!-- ===== Stock List with Simplified Events ===== -->
     <StockList 
       v-if="!showForm" 
       :stock-entries="stockEntries" 
       @view="onView" 
       @edit="onEdit" 
       @delete="onDelete" 
-      @restock="onRestock"
-      @adjust="onAdjust"
+      @quickRestock="onQuickRestock"
     />
 
     <!-- Stock Form (Add/Edit) - Placeholder for future implementation -->
@@ -134,8 +131,7 @@
       </button>
     </div>
 
-    <!-- ===== [New Feature] START: Floating Action Button ===== -->
-    <!-- Floating Action Button for mobile users -->
+    <!-- ===== Floating Action Button ===== -->
     <button
       @click="showAddForm"
       class="fixed bottom-6 right-6 bg-primary text-white w-14 h-14 rounded-full shadow-lg hover:bg-primary-hover focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 transition-all duration-200 flex items-center justify-center md:hidden"
@@ -143,21 +139,20 @@
     >
       <font-awesome-icon icon="plus" class="text-xl" />
     </button>
-    <!-- ===== [New Feature] END ===== -->
   </div>
 </template>
 
 <script setup lang="ts">
 // ===== File-Level Documentation =====
 /**
- * StockView.vue - Main stock management page
+ * StockView.vue - Main stock management page (SIMPLIFIED)
  * - Displays stock list with modern card/table layout
  * - Shows quick stats matching dashboard design
- * - Handles stock CRUD operations and inventory adjustments
+ * - Handles simplified stock actions: View, Edit, Delete, Quick Restock
  * - Manages form state for adding/editing stock entries
  * - Ghana-optimized: clear stock displays, offline support
  * - Proper TypeScript interfaces for all stock data
- * - Emits events for parent components to handle data persistence
+ * - Simplified UX with focus on core functionality
  */
 
 // ===== Imports =====
@@ -165,18 +160,6 @@ import { ref, computed } from 'vue'
 import StockList from '@/components/lists/StockList.vue'
 
 // ===== Types & Interfaces =====
-/**
- * StockEntry interface matching StockList component interface
- * - id: Unique identifier for the stock entry
- * - productName: Name of the product
- * - productSku: SKU of the product
- * - changeAmount: Amount of stock change (positive for add, negative for remove)
- * - changeType: Type of change (restock, sale, adjustment, etc.)
- * - currentStock: Current stock level after the change
- * - reason: Reason for the stock change (optional)
- * - timestamp: When the change was made
- * - productPrice: Price per unit (optional, for calculations)
- */
 interface StockEntry {
   id: string
   productName: string
@@ -186,14 +169,10 @@ interface StockEntry {
   currentStock: number
   reason?: string
   timestamp: string | Date
-  productPrice?: number // ===== [Fix] Made optional to match StockList interface =====
+  productPrice?: number
 }
 
 // ===== State Management =====
-/**
- * Stock entries array with mock data for demonstration
- * Each entry includes all required fields for proper TypeScript compliance
- */
 const stockEntries = ref<StockEntry[]>([
   {
     id: '1',
@@ -241,33 +220,18 @@ const stockEntries = ref<StockEntry[]>([
   }
 ])
 
-/**
- * Form state management
- * - showForm: Controls visibility of add/edit form
- * - selectedStockEntry: Currently selected stock entry for editing
- * - isEditing: Determines if form is in edit mode or add mode
- */
 const showForm = ref(false)
 const selectedStockEntry = ref<StockEntry | null>(null)
 const isEditing = computed(() => selectedStockEntry.value !== null)
 
 // ===== Constants =====
-/**
- * Stock level threshold for determining low stock status
- */
 const LOW_STOCK_THRESHOLD = 10
 
 // ===== Computed Properties for Quick Stats =====
-/**
- * Calculate total stock value across all products
- * Only includes entries that have productPrice defined
- */
 const totalStockValue = computed(() => {
-  // Get unique products and their current stock levels
   const uniqueProducts = new Map<string, { stock: number; price: number }>()
   
   stockEntries.value.forEach(entry => {
-    // ===== [Fix] Handle optional productPrice =====
     if (entry.productPrice !== undefined) {
       uniqueProducts.set(entry.productSku, {
         stock: entry.currentStock,
@@ -280,9 +244,6 @@ const totalStockValue = computed(() => {
     .reduce((total, product) => total + (product.stock * product.price), 0)
 })
 
-/**
- * Count products with low stock levels
- */
 const lowStockCount = computed(() => {
   const uniqueProducts = new Map<string, number>()
   stockEntries.value.forEach(entry => {
@@ -293,9 +254,6 @@ const lowStockCount = computed(() => {
     .filter(stock => stock > 0 && stock <= LOW_STOCK_THRESHOLD).length
 })
 
-/**
- * Count products that are out of stock
- */
 const outOfStockCount = computed(() => {
   const uniqueProducts = new Map<string, number>()
   stockEntries.value.forEach(entry => {
@@ -306,9 +264,6 @@ const outOfStockCount = computed(() => {
     .filter(stock => stock <= 0).length
 })
 
-/**
- * Count today's stock changes
- */
 const todaysChangesCount = computed(() => {
   const today = new Date().toISOString().split('T')[0]
   return stockEntries.value.filter(entry => {
@@ -318,48 +273,25 @@ const todaysChangesCount = computed(() => {
 })
 
 // ===== Helper Functions =====
-/**
- * Formats currency amount in Ghana Cedis format
- * @param amount - The amount to format
- */
 function formatCurrency(amount: number): string {
   return `GHS ${amount.toFixed(2)}`
 }
 
-// ===== Event Handlers =====
-/**
- * Shows the add stock entry form
- * Resets selected stock entry and shows form
- */
+// ===== Event Handlers (SIMPLIFIED) =====
 function showAddForm() {
   selectedStockEntry.value = null
   showForm.value = true
 }
 
-/**
- * Handles view stock entry action
- * In a real app, this would show stock entry details
- * @param stockEntry - The stock entry to view
- */
 function onView(stockEntry: StockEntry) {
   alert(`Viewing stock entry for ${stockEntry.productName}\nChange: ${stockEntry.changeAmount > 0 ? '+' : ''}${stockEntry.changeAmount} units\nCurrent Stock: ${stockEntry.currentStock} units\nReason: ${stockEntry.reason || 'Not specified'}`)
 }
 
-/**
- * Handles edit stock entry action
- * Sets selected stock entry and shows form in edit mode
- * @param stockEntry - The stock entry to edit
- */
 function onEdit(stockEntry: StockEntry) {
   selectedStockEntry.value = { ...stockEntry }
   showForm.value = true
 }
 
-/**
- * Handles delete stock entry action
- * Shows confirmation dialog and removes stock entry if confirmed
- * @param stockEntry - The stock entry to delete
- */
 function onDelete(stockEntry: StockEntry) {
   if (confirm(`Are you sure you want to delete this stock entry for "${stockEntry.productName}"?\nChange: ${stockEntry.changeAmount > 0 ? '+' : ''}${stockEntry.changeAmount} units`)) {
     const index = stockEntries.value.findIndex(s => s.id === stockEntry.id)
@@ -370,46 +302,50 @@ function onDelete(stockEntry: StockEntry) {
 }
 
 /**
- * Handles restock product action
- * In a real app, this would open a restock form
- * @param stockEntry - The stock entry to restock
+ * NEW: Handles quick restock action for low/out of stock items
+ * This replaces the separate restock/adjust buttons with one simplified action
+ * FIXED: Handle optional productPrice properly to avoid TypeScript errors
  */
-function onRestock(stockEntry: StockEntry) {
-  const amount = prompt(`How many units of "${stockEntry.productName}" would you like to restock?`, '10')
-  if (amount && !isNaN(Number(amount))) {
-    // TODO: Implement actual restock functionality
-    alert(`Restocking ${amount} units of ${stockEntry.productName}. This will be implemented in the stock form.`)
+function onQuickRestock(stockEntry: StockEntry) {
+  const amount = prompt(`${stockEntry.productName} currently has ${stockEntry.currentStock} units.\n\nHow many units would you like to add?`, '10')
+  if (amount && !isNaN(Number(amount)) && Number(amount) > 0) {
+    // ===== NEW: Create entry with proper optional price handling =====
+    const newEntry: StockEntry = {
+      id: Date.now().toString(),
+      productName: stockEntry.productName,
+      productSku: stockEntry.productSku,
+      changeAmount: Number(amount),
+      changeType: 'restock',
+      currentStock: stockEntry.currentStock + Number(amount),
+      reason: `Quick restock - added ${amount} units`,
+      timestamp: new Date().toISOString()
+    }
+    
+    // Only add productPrice if it exists on the original entry
+    if (stockEntry.productPrice !== undefined) {
+      newEntry.productPrice = stockEntry.productPrice
+    }
+    
+    // Add the new entry
+    stockEntries.value.unshift(newEntry)
+    
+    // Update all other entries for this product to reflect new stock level
+    stockEntries.value.forEach(entry => {
+      if (entry.productSku === stockEntry.productSku && entry.id !== newEntry.id) {
+        entry.currentStock = newEntry.currentStock
+      }
+    })
+    
+    alert(`Added ${amount} units to ${stockEntry.productName}.\nNew stock level: ${newEntry.currentStock} units`)
   }
 }
 
-/**
- * Handles adjust stock action
- * In a real app, this would open a stock adjustment form
- * @param stockEntry - The stock entry to adjust
- */
-function onAdjust(stockEntry: StockEntry) {
-  const newStock = prompt(`Current stock: ${stockEntry.currentStock} units.\nWhat should the new stock level be for "${stockEntry.productName}"?`, stockEntry.currentStock.toString())
-  if (newStock && !isNaN(Number(newStock))) {
-    // TODO: Implement actual stock adjustment functionality
-    alert(`Adjusting stock of ${stockEntry.productName} to ${newStock} units. This will be implemented in the stock form.`)
-  }
-}
-
-/**
- * Handles save stock entry action from form
- * Creates new stock entry or updates existing based on editing state
- */
 function onSave() {
-  // TODO: Implement save logic when StockForm is created
   alert('Save functionality will be implemented when the StockForm component is created.')
   showForm.value = false
   selectedStockEntry.value = null
 }
 
-/**
- * Handles cancel form action
- * Hides form and resets selected stock entry
- */
 function onCancel() {
   showForm.value = false
   selectedStockEntry.value = null
@@ -422,29 +358,25 @@ function onCancel() {
   max-width: 7xl;
   margin: 0 auto;
   padding: 1.5rem;
-  position: relative; /* For floating action button positioning */
+  position: relative;
 }
 
-/* Responsive adjustments */
 @media (max-width: 768px) {
   .stock-page {
     padding: 1rem;
-    padding-bottom: 5rem; /* Extra space for floating button */
+    padding-bottom: 5rem;
   }
 }
 
-/* Touch feedback for mobile users */
 button:active {
   transform: scale(0.98);
 }
 
-/* Enhanced focus states for accessibility */
 button:focus-visible {
   outline: 2px solid theme('colors.primary.500');
   outline-offset: 2px;
 }
 
-/* Floating action button animation */
 .fixed.bottom-6.right-6 {
   animation: fadeInUp 0.3s ease-out;
 }

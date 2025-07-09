@@ -22,19 +22,19 @@
         <!-- New Sale -->
         <router-link to="/new-sale"
           class="flex items-center space-x-2 text-green-600 hover:text-green-700 min-h-[48px]">
-          <font-awesome-icon icon="fa-solid fa-plus-circle" class="text-xl" />
+          <font-awesome-icon icon="fa-solid fa-plus-circle" class="text-2xl" />
           <span>New Sale</span>
         </router-link>
         <!-- Customers -->
         <router-link to="/customers"
           class="flex items-center space-x-2 text-primary-600 hover:text-primary-700 min-h-[48px]">
-          <font-awesome-icon :icon="['fas', 'user-group']" class="text-xl" />
+          <font-awesome-icon :icon="['fas', 'user-group']" class="text-2xl" />
           <span>Customers</span>
         </router-link>
         <!-- Products -->
         <router-link to="/products"
           class="flex items-center space-x-2 text-primary-600 hover:text-primary-700 min-h-[48px]">
-          <font-awesome-icon icon="fa-solid fa-box" class="text-xl" />
+          <font-awesome-icon icon="fa-solid fa-box" class="text-2xl" />
           <span>Products</span>
         </router-link>
 
@@ -42,7 +42,7 @@
         <!-- Menu -->
         <button @click="emit('openSidebar')"
           class="flex items-center space-x-2 text-primary-600 hover:text-primary-700 min-h-[48px]">
-          <font-awesome-icon :icon="['fas', 'ellipsis-v']" class="text-xl" />
+          <font-awesome-icon :icon="['fas', 'ellipsis-v']" class="text-2xl" />
           <span>More</span>
         </button>
       </div>
@@ -74,7 +74,7 @@
       <router-link to="/customers"
         class="flex flex-col items-center justify-center text-primary-600 hover:text-primary-700 focus:outline-none"
         aria-label="Sales">
-        <font-awesome-icon :icon="['fas', 'user-group']" class="text-xl" />
+        <font-awesome-icon :icon="['fas', 'user-group']" class="text-2xl" />
         <span class="text-xs mt-1 font-medium">Customers</span>
       </router-link>
 
@@ -92,7 +92,7 @@
       <button @click="emit('openSidebar')"
         class="flex flex-col items-center justify-center text-primary-600 hover:text-primary-700 focus:outline-none focus:ring-2 focus:ring-white transition-all duration-150"
         aria-label="Open-menu" type="button" style="box-sizing: border-box;">
-        <font-awesome-icon :icon="['fas', 'ellipsis-v']" class="text-xl" />
+        <font-awesome-icon :icon="['fas', 'ellipsis-v']" class="text-2xl" />
         <span class="text-xs mt-1 font-medium">More</span>
       </button>
     </div>

@@ -11,27 +11,18 @@
 -->
 
 <template>
-  <!-- ===== [New Feature] START: Modern Product Card ===== -->
+  <!-- ===== Product Card ===== -->
   <div class="bg-white rounded-xl p-6 shadow-sm border border-gray-100 hover:shadow-md hover:border-primary-200 transition-all duration-200 relative group">
-    <!-- Stock Status Badge -->
+    
+    <!-- ===== Stock Status Badge ===== -->
     <div class="absolute top-4 right-4">
-      <span
-        :class="[
-          'inline-flex items-center px-2 py-1 rounded-full text-xs font-medium',
-          stockStatusClass
-        ]"
-      >
-        <div 
-          :class="[
-            'w-2 h-2 rounded-full mr-1',
-            stockDotClass
-          ]"
-        ></div>
+      <span :class="['inline-flex items-center px-2 py-1 rounded-full text-xs font-medium', stockStatusClass]">
+        <div :class="['w-2 h-2 rounded-full mr-1', stockDotClass]"></div>
         {{ stockStatusText }}
       </span>
     </div>
 
-    <!-- Product Icon -->
+    <!-- ===== Product Header ===== -->
     <div class="flex items-center mb-4">
       <div class="w-12 h-12 bg-primary-100 rounded-xl flex items-center justify-center group-hover:bg-primary-200 transition-colors duration-200">
         <font-awesome-icon icon="box" class="text-primary-600 text-xl" />
@@ -42,14 +33,14 @@
       </div>
     </div>
 
-    <!-- Price - Prominently Displayed -->
+    <!-- ===== Price Display ===== -->
     <div class="mb-4">
       <p class="text-2xl font-bold text-primary-600">
         {{ formatCurrency(price) }}
       </p>
     </div>
 
-    <!-- Stock Information -->
+    <!-- ===== Stock Information ===== -->
     <div class="mb-4">
       <div class="flex items-center justify-between">
         <span class="text-sm text-gray-600">Stock Level</span>
@@ -58,18 +49,15 @@
       <!-- Stock Progress Bar -->
       <div class="mt-2 w-full bg-gray-200 rounded-full h-2">
         <div 
-          :class="[
-            'h-2 rounded-full transition-all duration-300',
-            stockProgressClass
-          ]"
+          :class="['h-2 rounded-full transition-all duration-300', stockProgressClass]"
           :style="{ width: `${stockPercentage}%` }"
         ></div>
       </div>
     </div>
 
-    <!-- Action Buttons -->
+    <!-- ===== Action Buttons ===== -->
     <div class="flex gap-2 mt-4">
-      <!-- Quick Add to Sale Button -->
+      <!-- Add to Sale Button -->
       <button
         @click="emit('addToSale')"
         class="flex-1 bg-primary text-white px-4 py-3 rounded-lg font-medium hover:bg-primary-hover transition-colors duration-200 min-h-[48px] flex items-center justify-center"
@@ -99,6 +87,7 @@
       </button>
     </div>
 
+    <!-- ===== Stock Warnings ===== -->
     <!-- Low Stock Warning -->
     <div v-if="isLowStock" class="mt-3 p-3 bg-orange-50 border border-orange-200 rounded-lg">
       <div class="flex items-center">
@@ -115,7 +104,6 @@
       </div>
     </div>
   </div>
-  <!-- ===== [New Feature] END ===== -->
 </template>
 
 <script setup lang="ts">
@@ -127,20 +115,12 @@
  * - Hover animations and touch-friendly buttons
  * - Quick actions: Add to Sale, Edit, Delete
  * - Ghana-optimized: clear pricing in GHS, offline support
- * - Emits: 'edit', 'delete', 'addToSale' for parent handling
  */
 
 // ===== Imports =====
 import { computed } from 'vue'
 
 // ===== Types & Interfaces =====
-/**
- * Props for ProductCard component
- * - name: Product name
- * - sku: Stock Keeping Unit identifier
- * - price: Product price in Ghana Cedis
- * - stock: Current stock level
- */
 interface Props {
   name: string
   sku: string
@@ -151,12 +131,6 @@ interface Props {
 const props = defineProps<Props>()
 
 // ===== Emits =====
-/**
- * Events emitted by ProductCard
- * - edit: User wants to edit this product
- * - delete: User wants to delete this product
- * - addToSale: User wants to add this product to a sale
- */
 const emit = defineEmits<{
   (e: 'edit'): void
   (e: 'delete'): void
@@ -164,59 +138,36 @@ const emit = defineEmits<{
 }>()
 
 // ===== Constants =====
-/**
- * Stock level thresholds for color coding
- * - LOW_STOCK_THRESHOLD: Below this is considered low stock
- * - MAX_STOCK_FOR_PERCENTAGE: Maximum stock for percentage calculation
- */
 const LOW_STOCK_THRESHOLD = 10
 const MAX_STOCK_FOR_PERCENTAGE = 100
 
 // ===== Computed Properties =====
-/**
- * Determines if stock is low based on threshold
- */
 const isLowStock = computed(() => 
   props.stock > 0 && props.stock <= LOW_STOCK_THRESHOLD
 )
 
-/**
- * Stock percentage for progress bar (0-100%)
- */
 const stockPercentage = computed(() => 
   Math.min((props.stock / MAX_STOCK_FOR_PERCENTAGE) * 100, 100)
 )
 
-/**
- * Stock status text for badge
- */
 const stockStatusText = computed(() => {
   if (props.stock <= 0) return 'Out of Stock'
   if (props.stock <= LOW_STOCK_THRESHOLD) return 'Low Stock'
   return 'In Stock'
 })
 
-/**
- * CSS classes for stock status badge
- */
 const stockStatusClass = computed(() => {
   if (props.stock <= 0) return 'bg-red-100 text-red-800'
   if (props.stock <= LOW_STOCK_THRESHOLD) return 'bg-orange-100 text-orange-800'
   return 'bg-green-100 text-green-800'
 })
 
-/**
- * CSS classes for stock status dot
- */
 const stockDotClass = computed(() => {
   if (props.stock <= 0) return 'bg-red-500'
   if (props.stock <= LOW_STOCK_THRESHOLD) return 'bg-orange-500'
   return 'bg-green-500'
 })
 
-/**
- * CSS classes for stock progress bar
- */
 const stockProgressClass = computed(() => {
   if (props.stock <= 0) return 'bg-red-500'
   if (props.stock <= LOW_STOCK_THRESHOLD) return 'bg-orange-500'
@@ -224,23 +175,17 @@ const stockProgressClass = computed(() => {
 })
 
 // ===== Helper Functions =====
-/**
- * Formats price in Ghana Cedis format
- * @param amount - The amount to format
- */
 function formatCurrency(amount: number): string {
   return `GHS ${amount.toFixed(2)}`
 }
 </script>
 
 <style scoped>
-/* ===== [New Feature] START: Modern Card Animations ===== */
-/* Smooth transitions for all interactive elements */
+/* ===== Modern Card Animations ===== */
 .group {
   transition: all 0.2s ease-in-out;
 }
 
-/* Enhanced hover effects */
 .group:hover {
   transform: translateY(-2px);
 }
@@ -265,5 +210,4 @@ button:disabled {
 button:disabled:hover {
   transform: none;
 }
-/* ===== [New Feature] END ===== */
 </style>
