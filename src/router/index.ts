@@ -97,17 +97,17 @@ const routes: RouteRecordRaw[] = [
         meta: { title: 'User Profile' },
         component: () => import('../views/auth/UserProfileView.vue')
       }
-      // ,
-      // {
-      //   path: 'pricing',
-      //   name: 'pricing',
-      //   component: () => import('../views/PricingView.vue')
-      //   ,
-      //   meta: {
-      //     title: 'Pricing',
-      //     hideHeader: true
-      //   }
-      // }
+      ,
+      {
+        path: 'pricing',
+        name: 'pricing',
+        component: () => import('../views/PricingView.vue')
+        ,
+        meta: {
+          title: 'Pricing',
+          hideHeader: true
+        }
+      }
     ]
   },
   {

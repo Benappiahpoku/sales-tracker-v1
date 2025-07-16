@@ -84,7 +84,7 @@ import { useRoute } from 'vue-router'
 const navLinks = [
   { name: 'Home', path: '/' },
   { name: 'My Biz', path: '/dashboard' },
-  // { name: 'Pricing', path: '/pricing' },
+  { name: 'Pricing', path: '/pricing' },
   { name: 'About', path: '/about' },
   { name: 'Contact', path: '/contact' }
 ]

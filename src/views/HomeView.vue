@@ -212,7 +212,7 @@
     </section>
 
 
-    <!-- <PricingSection /> -->
+<PricingSection />
 
 
     <!-- ===== FAQ Section ===== -->
@@ -330,7 +330,7 @@
           </div>
 
           <!-- FAQ Item 6 -->
-          <!-- <div class="bg-white rounded-xl shadow-lg border border-gray-100">
+          <div class="bg-white rounded-xl shadow-lg border border-gray-100">
             <button @click="toggleFAQ(5)"
               class="w-full px-6 py-4 text-left flex items-center justify-between hover:bg-gray-50 rounded-xl transition-colors duration-200 min-h-[64px]"
               :aria-expanded="faqOpen[5]">
@@ -346,7 +346,7 @@
                 and get access to all Pro features. Payment can be made via Mobile Money or bank transfer.
               </p>
             </div>
-          </div> -->
+          </div>
         </div>
         <!-- ===== [New Feature] END ===== -->
       </div>
@@ -378,6 +378,8 @@ import { ref } from 'vue'
 
 import Footer from '@/components/common/Footer.vue'
 import HeroSection from '@/components/base/HeroSection.vue'
+import PricingSection from '@/components/base/PricingSection.vue'
+
 
 // ===== State Management =====
 
